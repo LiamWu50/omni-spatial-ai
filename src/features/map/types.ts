@@ -2,6 +2,10 @@ import type { LucideIcon } from 'lucide-react'
 
 import type { EngineType } from '@/lib/gis/schema'
 
+import type { ChatModelId } from '@/features/map/lib/models'
+
+export type ModelOptions = ChatModelId
+
 export interface MapCenter {
   lng: number
   lat: number

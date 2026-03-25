@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 import { useResizablePanel } from '../../hooks/use-resizable-panel'
 import { ASSISTANT_PANEL_DEFAULTS } from '../../lib/constants'
-import { AssistantThread } from './assistant-thread'
+import { AssistantThread } from './thread'
 import { Prompt } from './prompt'
 
 interface AssistantPanelProps {
@@ -44,7 +44,7 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         <button
           type='button'
           onClick={() => onOpenChange(false)}
-          className='absolute left-0 top-1/2 z-40 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/88 text-white/78 shadow-[0_12px_36px_rgba(0,0,0,0.42)] transition hover:border-white/18 hover:bg-black hover:text-white'
+          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/88 text-white/78 shadow-[0_12px_36px_rgba(0,0,0,0.42)] transition hover:border-white/18 hover:bg-black hover:text-white'
           aria-label='收起对话详情'
         >
           <PanelRightClose className='h-4 w-4' />

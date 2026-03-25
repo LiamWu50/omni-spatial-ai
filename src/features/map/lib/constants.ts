@@ -57,7 +57,7 @@ export const TOOLBAR_ACTIONS: Array<Omit<ShellToolbarAction, 'active'>> = [
 ]
 
 export const ASSISTANT_PANEL_DEFAULTS = {
-  defaultWidth: 420,
+  defaultWidth: 380,
   defaultWidthRatio: 0.34,
   minWidth: 320,
   maxWidthRatio: 0.4

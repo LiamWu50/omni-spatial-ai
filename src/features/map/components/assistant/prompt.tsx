@@ -5,6 +5,7 @@ import { ArrowUp, Sparkles } from 'lucide-react'
 import { type FocusEvent, useState } from 'react'
 
 import { cn } from '@/lib/utils'
+import { SelectModel } from './select-model'
 
 interface PromptProps {
   variant?: 'overlay' | 'docked'
@@ -26,14 +27,14 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
   return (
     <div
       className={cn(
-        isOverlay ? 'pointer-events-none absolute inset-x-0 bottom-12 z-20 flex justify-center px-4' : 'w-full'
+        isOverlay ? 'pointer-events-none absolute inset-x-0 bottom-12 z-20 flex justify-center px-2' : 'w-full'
       )}
     >
       <div
         className={cn(
           'w-full transition-[max-width,transform] duration-300 ease-out',
-          isOverlay ? 'pointer-events-auto max-w-[480px]' : 'max-w-none',
-          isOverlay && isExpanded ? 'max-w-[700px]' : ''
+          isOverlay ? 'pointer-events-auto max-w-[260px]' : 'max-w-none',
+          isOverlay && isExpanded ? 'max-w-[460px]' : ''
         )}
       >
         <ComposerPrimitive.Root
@@ -46,66 +47,53 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
           className={cn(
             'flex w-full flex-col border border-white/10 bg-black/88 text-white backdrop-blur-2xl transition-[min-height,border-radius,box-shadow,background-color,padding,gap] duration-300 ease-out',
             isOverlay
-              ? 'min-h-[72px] rounded-[20px] px-5 py-3 shadow-[0_18px_48px_rgba(0,0,0,0.36)]'
-              : 'min-h-[146px] gap-3 rounded-[28px] px-5 py-4 shadow-[0_22px_64px_rgba(0,0,0,0.42)]',
+              ? 'min-h-[36px] rounded-[12px] px-3.5 py-2 shadow-[0_12px_28px_rgba(0,0,0,0.28)]'
+              : 'min-h-[96px] gap-2 rounded-[20px] px-4 py-3 shadow-[0_16px_36px_rgba(0,0,0,0.32)]',
             isOverlay && isExpanded
-              ? 'min-h-[112px] gap-3 rounded-[24px] border-white/18 bg-black/92 px-5 py-4 shadow-[0_24px_64px_rgba(0,0,0,0.44)]'
+              ? 'min-h-[88px] gap-2 rounded-[16px] border-white/18 bg-black/92 px-3.5 py-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.34)]'
               : ''
           )}
         >
           <div
             className={cn(
-              'flex min-h-0 flex-1 gap-3',
+              'flex min-h-0 flex-1 gap-2',
               isOverlay ? (isExpanded ? 'items-start' : 'items-center') : 'items-start'
             )}
           >
-            {isOverlay ? (
-              <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/58'>
-                <Sparkles className='h-4 w-4' />
+            {isOverlay && !isExpanded ? (
+              <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white/58'>
+                <Sparkles className='h-3.5 w-3.5' />
               </span>
             ) : null}
 
             <ComposerPrimitive.Input
               placeholder='输入地图指令或问题...'
+              style={{ fontSize: '12px', lineHeight: '18px' }}
               className={cn(
-                'w-full resize-none overflow-y-auto bg-transparent p-0 text-white outline-none placeholder:text-white/56',
+                'w-full resize-none overflow-y-auto bg-transparent p-0 text-[12px]! text-white outline-none placeholder:text-white/56',
                 isOverlay
                   ? isExpanded
-                    ? 'min-h-[48px] max-h-[120px] text-[17px] leading-7'
-                    : 'h-7 min-h-7 max-h-7 text-[17px] leading-7'
-                  : 'min-h-[64px] max-h-[180px] text-[17px] leading-7'
+                    ? 'min-h-[36px] max-h-[88px] leading-[18px]!'
+                    : 'h-[18px] min-h-[18px] max-h-6 leading-[18px]!'
+                  : 'min-h-[48px] max-h-[112px] leading-[18px]!'
               )}
             />
           </div>
 
           {isExpanded ? (
-            <div className='mt-1 flex max-h-16 items-center justify-between gap-3 overflow-hidden transition-[max-height,opacity,margin] duration-300 ease-out'>
-              <button
-                type='button'
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-full text-white/88 transition',
-                  isOverlay ? 'h-8 px-1 text-[12px]' : 'h-9 px-1.5 text-sm'
-                )}
-                aria-label='当前模型'
-              >
-                {!isOverlay ? (
-                  <span className='flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white'>
-                    <Sparkles className='h-3.5 w-3.5' />
-                  </span>
-                ) : null}
-                <span className='font-semibold'>GPT-5.4 Nano</span>
-              </button>
+            <div className='mt-1 flex max-h-11 items-center justify-between gap-2 overflow-hidden transition-[max-height,opacity,margin] duration-300 ease-out'>
+              <SelectModel className='h-8 rounded-full px-2.5 text-[12px]! sm:text-[12px]!' />
 
               <ComposerPrimitive.Send asChild>
                 <button
                   type='submit'
                   className={cn(
-                    'inline-flex shrink-0 items-center justify-center rounded-[18px] bg-white/72 text-black transition hover:bg-white/82 disabled:cursor-not-allowed disabled:opacity-40',
-                    isOverlay ? 'h-11 w-11 rounded-[16px]' : 'h-12 w-12'
+                    'inline-flex shrink-0 items-center justify-center rounded-[2px] bg-white/72 text-black transition hover:bg-white/82 disabled:cursor-not-allowed disabled:opacity-40',
+                    isOverlay ? 'h-8 w-8 rounded-[12px]' : 'h-9 w-9 rounded-[14px]'
                   )}
                   aria-label='发送'
                 >
-                  <ArrowUp className={cn(isOverlay ? 'h-5 w-5' : 'h-5.5 w-5.5')} />
+                  <ArrowUp className={cn(isOverlay ? 'h-4 w-4' : 'h-4.5 w-4.5')} />
                 </button>
               </ComposerPrimitive.Send>
             </div>

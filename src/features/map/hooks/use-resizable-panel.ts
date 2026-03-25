@@ -18,7 +18,15 @@ function clampWidth(nextWidth: number, viewportWidth: number, { maxWidthRatio, m
 }
 
 export function useResizablePanel(options: UseResizablePanelOptions) {
-  const [width, setWidth] = useState(options.defaultWidth)
+  const [width, setWidth] = useState(() => {
+    if (typeof window === 'undefined') {
+      return options.defaultWidth
+    }
+
+    const preferred = Math.round(window.innerWidth * options.defaultWidthRatio)
+    const initialWidth = Math.min(options.defaultWidth, preferred)
+    return clampWidth(initialWidth, window.innerWidth, options)
+  })
   const [isResizing, setIsResizing] = useState(false)
 
   useEffect(() => {
@@ -27,11 +35,7 @@ export function useResizablePanel(options: UseResizablePanelOptions) {
     }
 
     const syncWidth = () => {
-      setWidth((current) => {
-        const preferred = Math.round(window.innerWidth * options.defaultWidthRatio)
-        const fallback = current === options.defaultWidth ? preferred : current
-        return clampWidth(fallback, window.innerWidth, options)
-      })
+      setWidth((current) => clampWidth(current, window.innerWidth, options))
     }
 
     syncWidth()
