@@ -1,19 +1,17 @@
 'use client'
 
 import { ThreadPrimitive } from '@assistant-ui/react'
-import type { ReactNode } from 'react'
 
 import { MapAssistantMessage, MapUserMessage } from './messages'
 
-interface AssistantProps {
+interface AssistantThreadProps {
   open: boolean
-  footer?: ReactNode
 }
 
-export function Assistant({ open, footer }: AssistantProps) {
+export function AssistantThread({ open }: AssistantThreadProps) {
   return (
-    <aside
-      className={`flex h-full min-h-0 flex-col bg-[rgba(6,8,12,0.94)] transition-opacity duration-300 ${
+    <div
+      className={`flex min-h-0 flex-1 flex-col transition-opacity duration-300 ${
         open ? 'opacity-100' : 'pointer-events-none opacity-0'
       }`}
     >
@@ -22,7 +20,7 @@ export function Assistant({ open, footer }: AssistantProps) {
           <div className='flex min-h-full flex-col'>
             <ThreadPrimitive.If empty>
               <div className='flex flex-1 items-center justify-center px-6 text-center text-[15px] text-white/52'>
-                Ask me anything about assistant-ui
+                试试输入：定位、切换影像底图、打开图层。
               </div>
             </ThreadPrimitive.If>
             <ThreadPrimitive.Messages
@@ -34,8 +32,6 @@ export function Assistant({ open, footer }: AssistantProps) {
           </div>
         </ThreadPrimitive.Viewport>
       </ThreadPrimitive.Root>
-
-      {footer ? <div className='px-5 pb-5'>{footer}</div> : null}
-    </aside>
+    </div>
   )
 }

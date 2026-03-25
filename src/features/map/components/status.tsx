@@ -1,10 +1,10 @@
 import type { StatusBarState } from '../types'
 
-interface StatusProps {
+interface MapStatusProps {
   state: StatusBarState
 }
 
-export function Status({ state }: StatusProps) {
+export function Status({ state }: MapStatusProps) {
   return (
     <footer className='absolute inset-x-0 bottom-0 z-20 flex h-8 items-center justify-between border-t border-white/6 bg-black/72 px-4 text-[10px] leading-none text-white/82 backdrop-blur-xl'>
       <div className='flex items-center gap-2 text-[10px] text-white/76'>

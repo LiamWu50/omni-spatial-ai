@@ -3,7 +3,7 @@
 import { Compass, Crosshair, Minus, Plus } from 'lucide-react'
 import type { ReactNode } from 'react'
 
-interface NavProps {
+interface MapNavProps {
   is3D: boolean
   onLocate: () => void
   onResetOrientation: () => void
@@ -12,9 +12,9 @@ interface NavProps {
   onZoomOut: () => void
 }
 
-export function Nav({ is3D, onLocate, onResetOrientation, onToggle3D, onZoomIn, onZoomOut }: NavProps) {
+export function Nav({ is3D, onLocate, onResetOrientation, onToggle3D, onZoomIn, onZoomOut }: MapNavProps) {
   return (
-    <div className='absolute right-8 bottom-16 z-30 flex items-center gap-3'>
+    <div className='absolute bottom-16 right-8 z-30 flex items-center gap-3'>
       <div className='flex items-center gap-2'>
         <RoundAction label='定位' onClick={onLocate}>
           <Crosshair className='h-4 w-4' />

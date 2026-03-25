@@ -4,40 +4,40 @@ import { Layers3, PanelLeftClose, PanelLeftOpen, Search, Sparkles } from 'lucide
 
 import { Switch } from '@/components/ui/switch'
 
-import type { LayerToggleItem, QuickLocation } from '../types'
+import type { LayerToggleItem, QuickLocation } from '../../types'
 
-interface DrawerProps {
+interface LayerManagerPanelProps {
   layers: LayerToggleItem[]
-  leftDrawerOpen: boolean
-  layerPanelOpen: boolean
+  layerManagerOpen: boolean
+  layerListOpen: boolean
   searchOpen: boolean
   visibleLayerCount: number
   quickLocations: QuickLocation[]
-  onToggleDrawer: () => void
-  onToggleLayerPanel: () => void
+  onToggleLayerManager: () => void
+  onToggleLayerList: () => void
   onToggleSearch: () => void
   onToggleLayer: (layerId: string) => void
   onOpenQuickLocation: (locationId: string) => void
 }
 
-export function Drawer({
+export function LayerManagerPanel({
   layers,
-  leftDrawerOpen,
-  layerPanelOpen,
+  layerManagerOpen,
+  layerListOpen,
   searchOpen,
   visibleLayerCount,
   quickLocations,
-  onToggleDrawer,
-  onToggleLayerPanel,
+  onToggleLayerManager,
+  onToggleLayerList,
   onToggleSearch,
   onToggleLayer,
   onOpenQuickLocation
-}: DrawerProps) {
+}: LayerManagerPanelProps) {
   return (
     <>
       <aside
-        className={`earth-panel absolute top-24 left-5 z-20 w-[360px] overflow-hidden rounded-[28px] transition-all duration-300 ${
-          leftDrawerOpen ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
+        className={`earth-panel absolute left-5 top-24 z-20 w-[360px] overflow-hidden rounded-[28px] transition-all duration-300 ${
+          layerManagerOpen ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
         }`}
       >
         <div className='flex items-center justify-between border-b border-white/8 px-5 py-4'>
@@ -47,9 +47,9 @@ export function Drawer({
           </div>
           <button
             type='button'
-            onClick={onToggleDrawer}
+            onClick={onToggleLayerManager}
             className='flex h-9 w-9 items-center justify-center rounded-full text-white/70 transition hover:bg-white/8 hover:text-white'
-            aria-label='关闭左侧抽屉'
+            aria-label='关闭图层管理面板'
           >
             <PanelLeftClose className='h-4 w-4' />
           </button>
@@ -91,7 +91,7 @@ export function Drawer({
             <div className='flex items-center justify-between'>
               <button
                 type='button'
-                onClick={onToggleLayerPanel}
+                onClick={onToggleLayerList}
                 className='flex items-center gap-2 text-sm font-medium text-white'
               >
                 <Layers3 className='h-4 w-4' />
@@ -100,7 +100,7 @@ export function Drawer({
               <span className='text-xs text-white/45'>{visibleLayerCount} 个可见</span>
             </div>
 
-            {layerPanelOpen ? (
+            {layerListOpen ? (
               <div className='mt-3 grid gap-2'>
                 {layers.map((layer) => (
                   <div
@@ -131,12 +131,12 @@ export function Drawer({
         </div>
       </aside>
 
-      {!leftDrawerOpen ? (
+      {!layerManagerOpen ? (
         <button
           type='button'
-          onClick={onToggleDrawer}
-          className='earth-panel absolute top-28 left-5 z-20 flex h-12 w-12 items-center justify-center rounded-full text-white/80 transition hover:bg-white/12 hover:text-white'
-          aria-label='打开左侧抽屉'
+          onClick={onToggleLayerManager}
+          className='earth-panel absolute left-5 top-28 z-20 flex h-12 w-12 items-center justify-center rounded-full text-white/80 transition hover:bg-white/12 hover:text-white'
+          aria-label='打开图层管理面板'
         >
           <PanelLeftOpen className='h-4 w-4' />
         </button>

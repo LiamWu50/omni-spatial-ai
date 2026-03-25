@@ -1,5 +1,5 @@
-import { MapShell } from '@/features/map'
+import { Container } from '@/features/map/components/container'
 
 export default function MapPage() {
-  return <MapShell />
+  return <Container />
 }

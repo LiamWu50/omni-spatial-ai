@@ -16,11 +16,19 @@ export interface LayerToggleItem {
 
 export type BaseLayerType = 'vector' | 'satellite' | 'terrain'
 
+export type MapTool = 'measure' | 'draw'
+
 export interface QuickLocation {
   id: string
   label: string
   center: MapCenter
   zoom: number
+}
+
+export interface BaseMapOption {
+  key: BaseLayerType
+  label: string
+  previewClassName: string
 }
 
 export interface MapViewportState {
@@ -34,18 +42,18 @@ export interface MapViewportState {
 }
 
 export interface ShellPanelState {
-  leftDrawerOpen: boolean
+  layerManagerOpen: boolean
   searchOpen: boolean
-  layerPanelOpen: boolean
-  aiPanelOpen: boolean
+  layerListOpen: boolean
+  assistantPanelOpen: boolean
 }
 
 export interface ShellToolbarAction {
-  id: string
+  id: MapTool
   label: string
   shortLabel: string
   icon: LucideIcon
-  group: 'history' | 'mode' | 'data' | 'system'
+  group: 'data'
   active?: boolean
 }
 

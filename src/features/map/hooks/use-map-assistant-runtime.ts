@@ -13,8 +13,8 @@ interface MapAssistantRuntimeOptions {
   onLocate: () => void
   onResetView: () => void
   onSwitchBaseLayer: (layer: BaseLayerType) => void
-  onToggleLayerPanel: () => void
-  onToggleAiPanel: (open?: boolean) => void
+  onToggleLayerList: () => void
+  onToggleAssistantPanel: (open?: boolean) => void
 }
 
 function getLatestUserText(messages: ReadonlyArray<{ role: string; content: unknown }>) {
@@ -44,10 +44,8 @@ function getLatestUserText(messages: ReadonlyArray<{ role: string; content: unkn
   return ''
 }
 
-function summarize(options: MapAssistantRuntimeOptions) {
-  const { viewport, activeBaseLayer, visibleLayerCount, panels } = options
-
-  return `中心点 ${viewport.center.lng.toFixed(5)}, ${viewport.center.lat.toFixed(5)}；缩放 ${viewport.zoom.toFixed(1)}；引擎 ${viewport.activeEngine}；底图 ${activeBaseLayer}；图层 ${visibleLayerCount}；抽屉 ${panels.leftDrawerOpen ? '开' : '关'}。`
+function summarize({ activeBaseLayer, panels, viewport, visibleLayerCount }: MapAssistantRuntimeOptions) {
+  return `中心点 ${viewport.center.lng.toFixed(5)}, ${viewport.center.lat.toFixed(5)}；缩放 ${viewport.zoom.toFixed(1)}；引擎 ${viewport.activeEngine}；底图 ${activeBaseLayer}；图层 ${visibleLayerCount}；图层管理 ${panels.layerManagerOpen ? '开' : '关'}。`
 }
 
 export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions) {
@@ -66,7 +64,7 @@ export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions) {
         const actions: string[] = []
 
         if (prompt) {
-          current.onToggleAiPanel(true)
+          current.onToggleAssistantPanel(true)
         }
 
         if (normalizedPrompt.includes('定位')) {
@@ -95,12 +93,12 @@ export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions) {
         }
 
         if (normalizedPrompt.includes('图层')) {
-          current.onToggleLayerPanel()
+          current.onToggleLayerList()
           actions.push('已切换图层面板')
         }
 
         if (normalizedPrompt.includes('助手') || normalizedPrompt.includes('聊天') || normalizedPrompt.includes('ai')) {
-          current.onToggleAiPanel(true)
+          current.onToggleAssistantPanel(true)
           actions.push('已打开 AI 面板')
         }
 
@@ -124,7 +122,7 @@ export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions) {
     initialMessages: [
       {
         role: 'assistant',
-        content: '地图助手已就绪。你可以让我帮你定位、切换影像底图、打开图层抽屉或展开 AI 面板。'
+        content: '地图助手已就绪。你可以让我帮你定位、切换影像底图、打开图层管理或展开 AI 面板。'
       }
     ]
   })

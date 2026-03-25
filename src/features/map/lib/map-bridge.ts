@@ -1,7 +1,5 @@
 'use client'
 
-import { useSyncExternalStore } from 'react'
-
 import { createActionMeta, defaultBaseMaps, type EngineType, type MapViewState } from '@/lib/gis/schema'
 import { CesiumAdapter } from '@/lib/map/adapters/cesium'
 import { LeafletAdapter } from '@/lib/map/adapters/leaflet'
@@ -176,10 +174,4 @@ export const mapBridge = {
   }
 }
 
-export function useMapBridge() {
-  return mapBridge
-}
-
-export function useMapSnapshot() {
-  return useSyncExternalStore(mapBridge.subscribe, mapBridge.getSnapshot, mapBridge.getSnapshot)
-}
+export type MapBridge = typeof mapBridge

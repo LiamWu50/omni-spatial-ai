@@ -1,10 +1,10 @@
 import type { BaseLayerType } from '../types'
 
-interface SceneProps {
+interface MapSceneProps {
   activeBaseLayer: BaseLayerType
 }
 
-export function Scene({ activeBaseLayer }: SceneProps) {
+export function Scene({ activeBaseLayer }: MapSceneProps) {
   return (
     <>
       <div

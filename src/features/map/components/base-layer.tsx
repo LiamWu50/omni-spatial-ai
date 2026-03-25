@@ -5,41 +5,20 @@ import { useState } from 'react'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
+import { BASE_MAP_OPTIONS } from '../lib/constants'
 import type { BaseLayerType } from '../types'
 
-interface BaseMapProps {
+interface BaseLayerProps {
   activeBaseLayer: BaseLayerType
   onChange: (layer: BaseLayerType) => void
 }
 
-const BASEMAP_OPTIONS: Array<{
-  key: BaseLayerType
-  label: string
-  previewClassName: string
-}> = [
-  {
-    key: 'satellite',
-    label: '影像',
-    previewClassName: 'bg-[linear-gradient(135deg,#86efac_0%,#38bdf8_42%,#1d4ed8_100%)]'
-  },
-  {
-    key: 'terrain',
-    label: '地形',
-    previewClassName: 'bg-[linear-gradient(135deg,#d9f99d_0%,#86efac_26%,#7dd3fc_56%,#cbd5e1_100%)]'
-  },
-  {
-    key: 'vector',
-    label: '矢量',
-    previewClassName: 'bg-[linear-gradient(135deg,#e2e8f0_0%,#cbd5e1_34%,#93c5fd_62%,#2563eb_100%)]'
-  }
-]
-
-export function BaseMap({ activeBaseLayer, onChange }: BaseMapProps) {
+export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
   const [open, setOpen] = useState(false)
-  const activeOption = BASEMAP_OPTIONS.find((option) => option.key === activeBaseLayer) ?? BASEMAP_OPTIONS[0]
+  const activeOption = BASE_MAP_OPTIONS.find((option) => option.key === activeBaseLayer) ?? BASE_MAP_OPTIONS[0]
 
   return (
-    <div className='absolute left-6 bottom-10 z-10'>
+    <div className='absolute bottom-10 left-6 z-10'>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -62,22 +41,20 @@ export function BaseMap({ activeBaseLayer, onChange }: BaseMapProps) {
               <Layers3 className='h-4 w-4 text-white/72' />
               <div className='text-sm font-semibold text-white'>基本地图设置</div>
             </div>
-            <div className='flex items-center gap-1'>
-              <button
-                type='button'
-                onClick={() => setOpen(false)}
-                className='flex h-8 w-8 items-center justify-center rounded-full text-white/72 transition hover:bg-white/8 hover:text-white'
-                aria-label='关闭底图设置'
-              >
-                <X className='h-4 w-4' />
-              </button>
-            </div>
+            <button
+              type='button'
+              onClick={() => setOpen(false)}
+              className='flex h-8 w-8 items-center justify-center rounded-full text-white/72 transition hover:bg-white/8 hover:text-white'
+              aria-label='关闭底图设置'
+            >
+              <X className='h-4 w-4' />
+            </button>
           </div>
 
           <div className='px-3 py-3'>
             <div className='mb-2 text-xs font-semibold text-white/88'>类型</div>
             <div className='grid gap-1.5'>
-              {BASEMAP_OPTIONS.map((option) => {
+              {BASE_MAP_OPTIONS.map((option) => {
                 const active = option.key === activeBaseLayer
 
                 return (
@@ -93,7 +70,7 @@ export function BaseMap({ activeBaseLayer, onChange }: BaseMapProps) {
                     }`}
                     aria-label={`切换到底图：${option.label}`}
                   >
-                    <PreviewCard active={active} option={option} large />
+                    <PreviewCard active={active} option={option} />
                     <div className='flex items-center gap-3'>
                       <span className={`text-base font-semibold ${active ? 'text-[#b9d0ff]' : 'text-white'}`}>
                         {option.label}
@@ -111,26 +88,14 @@ export function BaseMap({ activeBaseLayer, onChange }: BaseMapProps) {
   )
 }
 
-function PreviewCard({
-  active = false,
-  large = false,
-  option
-}: {
-  active?: boolean
-  large?: boolean
-  option: (typeof BASEMAP_OPTIONS)[number]
-}) {
+function PreviewCard({ active = false, option }: { active?: boolean; option: (typeof BASE_MAP_OPTIONS)[number] }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-[18px] border transition ${
-        large ? 'h-12 w-12' : 'h-12 w-12'
-      } ${active ? 'border-[#b9d0ff] shadow-[0_0_0_1px_rgba(185,208,255,0.2)]' : 'border-white/12'} ${option.previewClassName}`}
+      className={`relative h-12 w-12 overflow-hidden rounded-[18px] border transition ${
+        active ? 'border-[#b9d0ff] shadow-[0_0_0_1px_rgba(185,208,255,0.2)]' : 'border-white/12'
+      } ${option.previewClassName}`}
     >
-      <div
-        className={`absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.36)_1px,transparent_1px),linear-gradient(transparent_0%,rgba(255,255,255,0.36)_1px,transparent_1px)] ${
-          large ? 'bg-[size:14px_14px]' : 'bg-[size:14px_14px]'
-        } opacity-70`}
-      />
+      <div className='absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.36)_1px,transparent_1px),linear-gradient(transparent_0%,rgba(255,255,255,0.36)_1px,transparent_1px)] bg-[size:14px_14px] opacity-70' />
     </div>
   )
 }
