@@ -1,6 +1,13 @@
 'use client'
 
-import { createActionMeta, defaultBaseMaps, type EngineType, type MapViewState } from '@/lib/gis/schema'
+import {
+  type BBox,
+  createActionMeta,
+  defaultBaseMaps,
+  type EngineType,
+  type LayerDescriptor,
+  type MapViewState
+} from '@/lib/gis/schema'
 import { CesiumAdapter } from '@/lib/map/adapters/cesium'
 import { LeafletAdapter } from '@/lib/map/adapters/leaflet'
 import { MapboxAdapter } from '@/lib/map/adapters/mapbox'
@@ -173,6 +180,46 @@ export class MapBridgeService {
       type: 'SWITCH_BASEMAP',
       payload: {
         baseMap: BASE_LAYER_MAP[layer]
+      },
+      meta: createActionMeta('ui')
+    })
+  }
+
+  async addLayer(layer: LayerDescriptor) {
+    await this.controller.dispatch({
+      type: 'ADD_LAYER',
+      payload: {
+        layer
+      },
+      meta: createActionMeta('ui')
+    })
+  }
+
+  async updateLayer(layer: LayerDescriptor) {
+    await this.controller.dispatch({
+      type: 'UPDATE_LAYER',
+      payload: {
+        layer
+      },
+      meta: createActionMeta('ui')
+    })
+  }
+
+  async removeLayer(layerId: string) {
+    await this.controller.dispatch({
+      type: 'REMOVE_LAYER',
+      payload: {
+        layerId
+      },
+      meta: createActionMeta('ui')
+    })
+  }
+
+  async fitBounds(bounds: BBox) {
+    await this.controller.dispatch({
+      type: 'FIT_BOUNDS',
+      payload: {
+        bounds
       },
       meta: createActionMeta('ui')
     })

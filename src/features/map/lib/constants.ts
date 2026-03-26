@@ -1,25 +1,15 @@
 import { LineSquiggle, MapPin, Ruler } from 'lucide-react'
 
-import type { BaseMapOption, LayerToggleItem, QuickLocation, ShellPanelState, ShellToolbarAction } from '../types'
+import type { BaseMapOption, ShellPanelState, ShellToolbarAction } from '../types'
 
 export const INITIAL_PANEL_STATE: ShellPanelState = {
   layerManagerOpen: true,
-  searchOpen: false,
-  layerListOpen: true,
   assistantPanelOpen: false
 }
 
-export const INITIAL_LAYER_ITEMS: LayerToggleItem[] = [
-  { id: 'bridge-monitor', name: '桥梁监测', visible: true, description: '主桥梁、匝道与控制点' },
-  { id: 'slope-monitor', name: '边坡监测', visible: true, description: '滑坡体、位移桩与风险区' },
-  { id: 'settlement-monitor', name: '沉降监测', visible: false, description: '路基与站点沉降监测' }
-]
-
-export const QUICK_LOCATIONS: QuickLocation[] = [
-  { id: 'beijing', label: '北京城区', center: { lng: 116.39745, lat: 39.90918 }, zoom: 8.6 },
-  { id: 'xian', label: '西安走廊', center: { lng: 108.93977, lat: 34.34157 }, zoom: 7.9 },
-  { id: 'yanan', label: '延榆六标', center: { lng: 109.49027, lat: 36.58546 }, zoom: 9.4 }
-]
+export const USER_LAYER_ID_PREFIX = 'user-layer-'
+export const LAYER_UPLOAD_ACCEPT = '.geojson,.json'
+export const LAYER_UPLOAD_MAX_SIZE_MB = 100
 
 export const BASE_MAP_OPTIONS: BaseMapOption[] = [
   {

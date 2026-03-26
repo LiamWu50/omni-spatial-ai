@@ -137,7 +137,15 @@ const addLayerActionSchema = z.object({
   meta: actionMetaSchema.default({})
 })
 
-const updateLayerActionSchema = z.object({
+const replaceLayerActionSchema = z.object({
+  type: z.literal('UPDATE_LAYER'),
+  payload: z.object({
+    layer: layerDescriptorSchema
+  }),
+  meta: actionMetaSchema.default({})
+})
+
+const updateLayerStyleActionSchema = z.object({
   type: z.literal('SET_LAYER_STYLE'),
   payload: z.object({
     layerId: z.string(),
@@ -179,7 +187,8 @@ export const gisActionSchema = z.discriminatedUnion('type', [
   fitBoundsActionSchema,
   switchBaseMapActionSchema,
   addLayerActionSchema,
-  updateLayerActionSchema,
+  replaceLayerActionSchema,
+  updateLayerStyleActionSchema,
   removeLayerActionSchema,
   queryLayerActionSchema,
   calcBufferActionSchema

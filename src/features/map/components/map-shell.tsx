@@ -32,14 +32,17 @@ export function MapShell() {
   const {
     activeBaseLayer,
     activeTool,
-    layers,
+    focusUserLayer,
     panels,
-    quickLocations,
+    removeUserLayer,
     setActiveTool,
     setPanelState,
     statusBar,
-    toggleLayer,
     toolbarActions,
+    toggleUserLayer,
+    uploadStatus,
+    uploadUserLayers,
+    userLayers,
     viewport,
     visibleLayerCount
   } = useMapShell(snapshot)
@@ -48,7 +51,6 @@ export function MapShell() {
     handleAssistantPanelChange,
     handleLocate,
     handleOpenAssistantPanel,
-    handleOpenQuickLocation,
     handleResetOrientation,
     handleResetView,
     handleSwitchBaseLayer,
@@ -56,7 +58,6 @@ export function MapShell() {
     handleToggleAssistantPanel,
     handleToggleLayerList,
     handleToggleLayerManager,
-    handleToggleSearch,
     handleToolbarAction,
     handleZoomIn,
     handleZoomOut
@@ -64,7 +65,6 @@ export function MapShell() {
     bridge,
     activeTool,
     panels,
-    quickLocations,
     setActiveTool,
     setPanelState,
     viewport
@@ -98,17 +98,14 @@ export function MapShell() {
             />
 
             <LayerManagerPanel
-              layers={layers}
               layerManagerOpen={panels.layerManagerOpen}
-              layerListOpen={panels.layerListOpen}
-              searchOpen={panels.searchOpen}
-              visibleLayerCount={visibleLayerCount}
-              quickLocations={quickLocations}
+              uploadStatus={uploadStatus}
+              userLayers={userLayers}
               onToggleLayerManager={handleToggleLayerManager}
-              onToggleLayerList={handleToggleLayerList}
-              onToggleSearch={handleToggleSearch}
-              onToggleLayer={toggleLayer}
-              onOpenQuickLocation={handleOpenQuickLocation}
+              onUploadFiles={uploadUserLayers}
+              onToggleUserLayer={toggleUserLayer}
+              onFocusUserLayer={focusUserLayer}
+              onRemoveUserLayer={removeUserLayer}
             />
 
             <AssistantEntry visible={!panels.assistantPanelOpen} onOpen={handleOpenAssistantPanel} />

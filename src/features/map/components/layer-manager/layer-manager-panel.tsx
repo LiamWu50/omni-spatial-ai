@@ -1,39 +1,52 @@
 'use client'
 
-import { Layers3, Search, Sparkles, X } from 'lucide-react'
+import { Eye, EyeOff, FileUp, Search, Trash2, Upload, X } from 'lucide-react'
+import { type ReactNode, useRef, useState } from 'react'
 
+import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Switch } from '@/components/ui/switch'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 
-import type { LayerToggleItem, QuickLocation } from '../../types'
+import { LAYER_UPLOAD_ACCEPT, LAYER_UPLOAD_MAX_SIZE_MB } from '../../lib/constants'
+import type { UserLayerListItem } from '../../types'
 
 interface LayerManagerPanelProps {
-  layers: LayerToggleItem[]
   layerManagerOpen: boolean
-  layerListOpen: boolean
-  searchOpen: boolean
-  visibleLayerCount: number
-  quickLocations: QuickLocation[]
+  uploadStatus: string
+  userLayers: UserLayerListItem[]
   onToggleLayerManager: () => void
-  onToggleLayerList: () => void
-  onToggleSearch: () => void
-  onToggleLayer: (layerId: string) => void
-  onOpenQuickLocation: (locationId: string) => void
+  onUploadFiles: (files: File[]) => Promise<void> | void
+  onToggleUserLayer: (layerId: string) => Promise<void> | void
+  onFocusUserLayer: (layerId: string) => Promise<void> | void
+  onRemoveUserLayer: (layerId: string) => Promise<void> | void
 }
 
 export function LayerManagerPanel({
-  layers,
   layerManagerOpen,
-  layerListOpen,
-  searchOpen,
-  visibleLayerCount,
-  quickLocations,
+  uploadStatus,
+  userLayers,
   onToggleLayerManager,
-  onToggleLayerList,
-  onToggleSearch,
-  onToggleLayer,
-  onOpenQuickLocation
+  onUploadFiles,
+  onToggleUserLayer,
+  onFocusUserLayer,
+  onRemoveUserLayer
 }: LayerManagerPanelProps) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [dragging, setDragging] = useState(false)
+
+  const visibleLayerCount = userLayers.filter((layer) => layer.visible).length
+
+  async function handleFiles(files: FileList | File[]) {
+    const nextFiles = Array.from(files)
+
+    if (nextFiles.length === 0) {
+      return
+    }
+
+    await onUploadFiles(nextFiles)
+  }
+
   return (
     <aside
       className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[360px] flex-col overflow-hidden rounded-[28px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg)] shadow-[var(--module-panel-shadow)] backdrop-blur-[20px] transition-all duration-300 ${
@@ -41,9 +54,8 @@ export function LayerManagerPanel({
       }`}
     >
       <div className='flex items-center justify-between border-b border-[var(--module-panel-border)] px-5 py-4'>
-        <div>
-          <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>探索工作台</div>
-          <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>地图操作与图层入口</div>
+        <div className='flex-1 text-center'>
+          <div className='text-lg font-semibold text-neutral-900 dark:text-neutral-50'>Layer Management</div>
         </div>
         <button
           type='button'
@@ -56,82 +68,150 @@ export function LayerManagerPanel({
       </div>
 
       <ScrollArea className='min-h-0 flex-1'>
-        <div className='space-y-4 px-4 py-4'>
-          <button
-            type='button'
-            onClick={onToggleSearch}
-            className='flex w-full items-center justify-between rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-4 py-3 text-left text-[var(--module-panel-text)] transition-[background-color,border-color,color] duration-[180ms] hover:border-[var(--module-panel-border-strong)] hover:bg-[var(--module-button-hover-bg)]'
-          >
-            <span className='flex items-center gap-3'>
-              <Search className='h-4 w-4' />
-              <span className='text-sm'>搜索地点、项目、监测对象</span>
-            </span>
-            <span className='text-xs text-[var(--module-panel-text-muted)]'>{searchOpen ? '收起' : '展开'}</span>
-          </button>
-
-          {searchOpen ? (
-            <section className='rounded-3xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] p-4'>
-              <div className='mb-3 text-xs font-medium tracking-[0.18em] text-[var(--module-panel-text-muted)]'>
-                QUICK ACCESS
+        <div className='space-y-5 px-4 py-4'>
+          <section>
+            <div className='mb-3 text-sm font-semibold text-neutral-900 dark:text-neutral-50'>Upload Data</div>
+            <button
+              type='button'
+              onClick={() => inputRef.current?.click()}
+              onDragEnter={(event) => {
+                event.preventDefault()
+                setDragging(true)
+              }}
+              onDragOver={(event) => {
+                event.preventDefault()
+                setDragging(true)
+              }}
+              onDragLeave={(event) => {
+                event.preventDefault()
+                if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  return
+                }
+                setDragging(false)
+              }}
+              onDrop={(event) => {
+                event.preventDefault()
+                setDragging(false)
+                void handleFiles(event.dataTransfer.files)
+              }}
+              className={cn(
+                'flex min-h-36 w-full flex-col items-center justify-center rounded-[20px] border border-dashed px-5 py-6 text-center transition-[background-color,border-color,color] duration-200',
+                dragging
+                  ? 'border-[var(--module-panel-border-strong)] bg-[var(--module-button-hover-bg)]'
+                  : 'border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)]'
+              )}
+            >
+              <div className='flex h-12 w-12 items-center justify-center rounded-full bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
+                <Upload className='h-5 w-5' />
               </div>
-              <div className='grid gap-2'>
-                {quickLocations.map((location) => (
-                  <button
-                    key={location.id}
-                    type='button'
-                    onClick={() => onOpenQuickLocation(location.id)}
-                    className='flex items-center justify-between rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)] px-4 py-3 text-sm text-[var(--module-panel-text)] transition-[background-color,border-color,color] duration-[180ms] hover:border-[var(--module-panel-border-strong)] hover:bg-[var(--module-button-hover-bg)]'
-                  >
-                    <span>{location.label}</span>
-                    <span className='text-xs text-[var(--module-panel-text-muted)]'>飞行</span>
-                  </button>
-                ))}
+              <div className='mt-4 text-sm font-medium text-neutral-900 dark:text-neutral-50'>
+                Drag & drop or click to upload GeoJSON files
               </div>
-            </section>
-          ) : null}
+              <div className='mt-2 text-xs leading-5 text-[var(--module-panel-text-muted)]'>
+                Supports multiple files · Max size: {LAYER_UPLOAD_MAX_SIZE_MB} MB
+              </div>
+              <div className='text-xs leading-5 text-[var(--module-panel-text-muted)]'>Format: GeoJSON / JSON only</div>
+              <div className='mt-4 rounded-full bg-[var(--module-panel-bg-muted)] px-3 py-1 text-xs text-[var(--module-panel-text-muted)]'>
+                {uploadStatus}
+              </div>
+            </button>
+            <input
+              ref={inputRef}
+              type='file'
+              multiple
+              accept={LAYER_UPLOAD_ACCEPT}
+              className='hidden'
+              onChange={(event) => {
+                const files = event.target.files
+                if (files) {
+                  void handleFiles(files)
+                }
+                event.currentTarget.value = ''
+              }}
+            />
+          </section>
 
-          <section className='rounded-3xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] p-4'>
-            <div className='flex items-center justify-between'>
-              <button
-                type='button'
-                onClick={onToggleLayerList}
-                className='flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-neutral-50'
-              >
-                <Layers3 className='h-4 w-4' />
-                图层与数据
-              </button>
-              <span className='text-xs text-[var(--module-panel-text-muted)]'>{visibleLayerCount} 个可见</span>
+          <div className='border-t border-[var(--module-panel-border)]' />
+
+          <section>
+            <div className='mb-3 flex items-center justify-between'>
+              <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>User Layers</div>
+              <div className='text-xs text-[var(--module-panel-text-muted)]'>
+                {visibleLayerCount}/{userLayers.length} 可见
+              </div>
             </div>
 
-            {layerListOpen ? (
-              <div className='mt-3 grid gap-2'>
-                {layers.map((layer) => (
+            {userLayers.length > 0 ? (
+              <div className='space-y-3'>
+                {userLayers.map((layer) => (
                   <div
                     key={layer.id}
-                    className='flex items-center justify-between rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)] px-3 py-3'
+                    className='rounded-[20px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-4 py-3'
                   >
-                    <div className='pr-3'>
-                      <div className='text-sm text-neutral-900 dark:text-neutral-50'>{layer.name}</div>
-                      <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>
-                        {layer.description ?? layer.id}
+                    <div className='flex items-start justify-between gap-3'>
+                      <div className='min-w-0 flex-1'>
+                        <div className='flex items-center gap-2'>
+                          <div className='flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
+                            <FileUp className='h-4 w-4' />
+                          </div>
+                          <div className='min-w-0'>
+                            <div className='truncate text-sm font-medium text-neutral-900 dark:text-neutral-50'>
+                              {layer.name}
+                            </div>
+                            <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>
+                              {layer.featureCount} 个要素 · {formatGeometryLabel(layer.geometryType)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='rounded-full bg-[var(--module-panel-bg-muted)] px-2.5 py-1 text-[11px] text-[var(--module-panel-text-muted)]'>
+                        {layer.sourceType.toUpperCase()}
                       </div>
                     </div>
-                    <Switch checked={layer.visible} onCheckedChange={() => onToggleLayer(layer.id)} />
+
+                    <div className='mt-3 flex items-center gap-1'>
+                      <ActionButton
+                        label='定位图层'
+                        onClick={() => void onFocusUserLayer(layer.id)}
+                        icon={<Search className='h-4 w-4' />}
+                      />
+                      <ActionButton
+                        label={layer.visible ? '隐藏图层' : '显示图层'}
+                        onClick={() => void onToggleUserLayer(layer.id)}
+                        icon={layer.visible ? <Eye className='h-4 w-4' /> : <EyeOff className='h-4 w-4' />}
+                      />
+                      <ActionButton
+                        label='删除图层'
+                        onClick={() => void onRemoveUserLayer(layer.id)}
+                        icon={<Trash2 className='h-4 w-4' />}
+                        destructive
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
-            ) : null}
-          </section>
-
-          <section className='rounded-3xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] p-4'>
-            <div className='flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-neutral-50'>
-              <Sparkles className='h-4 w-4' />
-              今日建议
-            </div>
-            <div className='mt-3 grid gap-2'>
-              <SuggestionCard title='查看延榆六标项目' description='聚焦桥梁、边坡与沉降监测对象分布。' />
-              <SuggestionCard title='切换地形观察模式' description='提高起伏地形与走廊风险的空间感知。' />
-            </div>
+            ) : (
+              <div className='rounded-[20px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-4 py-8 text-center'>
+                <div className='mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
+                  <Upload className='h-5 w-5' />
+                </div>
+                <div className='mt-3 text-sm font-medium text-neutral-900 dark:text-neutral-50'>暂无用户图层</div>
+                <div className='mt-2 text-xs leading-5 text-[var(--module-panel-text-muted)]'>
+                  上传 GeoJSON 原始数据后，这里会展示你的图层列表。
+                </div>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='sm'
+                  onClick={() => inputRef.current?.click()}
+                  className='mt-4 rounded-full border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)]'
+                >
+                  <Upload className='h-4 w-4' />
+                  立即上传
+                </Button>
+              </div>
+            )}
           </section>
         </div>
       </ScrollArea>
@@ -139,11 +219,49 @@ export function LayerManagerPanel({
   )
 }
 
-function SuggestionCard({ description, title }: { description: string; title: string }) {
+function ActionButton({
+  destructive = false,
+  icon,
+  label,
+  onClick
+}: {
+  destructive?: boolean
+  icon: ReactNode
+  label: string
+  onClick: () => void
+}) {
   return (
-    <div className='rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)] px-4 py-3'>
-      <div className='text-sm font-medium text-neutral-900 dark:text-neutral-50'>{title}</div>
-      <div className='mt-1 text-xs leading-5 text-[var(--module-panel-text-muted)]'>{description}</div>
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type='button'
+          onClick={onClick}
+          className={cn(
+            'flex h-8 w-8 items-center justify-center rounded-full text-[var(--module-panel-icon)] transition-[background-color,color] duration-200 hover:bg-[var(--module-button-hover-bg)] hover:text-[var(--module-button-hover-text)]',
+            destructive ? 'text-rose-500 hover:bg-rose-500/10 hover:text-rose-500' : ''
+          )}
+          aria-label={label}
+        >
+          {icon}
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side='bottom'>{label}</TooltipContent>
+    </Tooltip>
   )
+}
+
+function formatGeometryLabel(geometryType: UserLayerListItem['geometryType']) {
+  if (geometryType === 'point') {
+    return '点'
+  }
+
+  if (geometryType === 'line') {
+    return '线'
+  }
+
+  if (geometryType === 'polygon') {
+    return '面'
+  }
+
+  return '混合几何'
 }

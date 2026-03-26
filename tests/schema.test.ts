@@ -28,3 +28,28 @@ test('GisAction schema 应拒绝缺失 center 的 MOVE_TO 动作', () => {
     })
   )
 })
+
+test('GisAction schema 应接受合法 UPDATE_LAYER 动作', () => {
+  const action = gisActionSchema.parse({
+    type: 'UPDATE_LAYER',
+    payload: {
+      layer: {
+        id: 'user-layer-demo',
+        name: '示例上传图层',
+        sourceType: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: []
+        },
+        geometryType: 'mixed',
+        visible: false,
+        style: {},
+        crs: 'WGS84'
+      }
+    },
+    meta: createActionMeta('ui')
+  })
+
+  assert.equal(action.type, 'UPDATE_LAYER')
+  assert.equal(action.payload.layer.visible, false)
+})

@@ -201,6 +201,12 @@ export class MapController {
           this.store.setState({ layers })
           return
         }
+        case 'UPDATE_LAYER': {
+          await this.activeEngine.updateLayer(action.payload.layer)
+          const layers = this.upsertLayer(action.payload.layer)
+          this.store.setState({ layers })
+          return
+        }
         case 'SET_LAYER_STYLE': {
           const current = this.store.getState().layers.find((layer) => layer.id === action.payload.layerId)
           if (!current) {

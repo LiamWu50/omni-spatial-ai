@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ChatModelId } from '@/features/map/lib/models'
-import type { EngineType } from '@/lib/gis/schema'
+import type { BBox, EngineType, LayerDescriptor } from '@/lib/gis/schema'
 
 export type ModelOptions = ChatModelId
 
@@ -9,22 +9,18 @@ export interface MapCenter {
   lat: number
 }
 
-export interface LayerToggleItem {
-  id: string
-  name: string
-  visible: boolean
-  description?: string
-}
-
 export type BaseLayerType = 'vector' | 'satellite' | 'terrain'
 
 export type MapTool = 'measure' | 'point' | 'geometry'
 
-export interface QuickLocation {
+export interface UserLayerListItem {
   id: string
-  label: string
-  center: MapCenter
-  zoom: number
+  name: string
+  visible: boolean
+  featureCount: number
+  sourceType: LayerDescriptor['sourceType']
+  geometryType: LayerDescriptor['geometryType']
+  bounds: BBox | null
 }
 
 export interface BaseMapOption {
@@ -45,8 +41,6 @@ export interface MapViewportState {
 
 export interface ShellPanelState {
   layerManagerOpen: boolean
-  searchOpen: boolean
-  layerListOpen: boolean
   assistantPanelOpen: boolean
 }
 
