@@ -74,7 +74,7 @@ export function Container() {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div className='earth-shell relative h-screen w-full overflow-hidden text-white'>
+      <div className='relative h-screen w-full overflow-hidden bg-[radial-gradient(circle_at_50%_18%,rgba(115,115,115,0.12),transparent_18%),linear-gradient(180deg,#171717_0%,#0a0a0a_40%,#000_100%)] text-white'>
         <div className='absolute inset-0 flex h-full w-full overflow-hidden'>
           <div className='relative h-full min-w-0 flex-1 overflow-hidden'>
             <section className='absolute inset-0 overflow-hidden'>

@@ -24,8 +24,8 @@ const INITIAL_VIEW: MapViewState = {
     lat: 38.75615
   },
   zoom: 2.8,
-  pitch: 42,
-  bearing: 18,
+  pitch: 0,
+  bearing: 0,
   altitude: 24490
 }
 
@@ -35,9 +35,9 @@ const controller = new MapController({
     cesium: new CesiumAdapter(),
     leaflet: new LeafletAdapter()
   },
-  initialEngine: 'mapbox',
+  initialEngine: 'leaflet',
   initialView: INITIAL_VIEW,
-  initialBaseMap: BASE_LAYER_MAP.satellite
+  initialBaseMap: BASE_LAYER_MAP.vector
 })
 
 let runtimeSnapshot = controller.store.getState()
@@ -147,7 +147,7 @@ export const mapBridge = {
   },
   async resetView() {
     await this.moveTo(INITIAL_VIEW)
-    await this.switchBaseLayer('satellite')
+    await this.switchBaseLayer('vector')
   },
   async resetOrientation() {
     const viewport = toViewportState(runtimeSnapshot)

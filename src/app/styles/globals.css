@@ -1,11 +1,8 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
   color-scheme: dark;
-  --earth-border: rgba(38, 38, 38, 0.9);
-  --earth-panel: rgba(10, 10, 10, 0.9);
-  --earth-toolbar: rgba(23, 23, 23, 0.92);
-  --earth-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
 }
 
 * {
@@ -39,103 +36,26 @@ a {
   text-decoration: none;
 }
 
-.earth-shell {
-  background:
-    radial-gradient(circle at 50% 18%, rgba(115, 115, 115, 0.12), transparent 18%),
-    linear-gradient(180deg, #171717 0%, #0a0a0a 40%, #000 100%);
+.leaflet-host,
+.leaflet-host .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #020617;
 }
 
-.earth-panel {
-  border: 1px solid var(--earth-border);
-  background: var(--earth-panel);
-  box-shadow: var(--earth-shadow);
-  backdrop-filter: blur(16px);
+.leaflet-host .leaflet-control-zoom a,
+.leaflet-host .leaflet-control-attribution {
+  border: 1px solid rgba(38, 38, 38, 0.9);
+  background: rgba(10, 10, 10, 0.78);
+  color: #e5e7eb;
+  backdrop-filter: blur(10px);
 }
 
-.earth-toolbar {
-  border: 1px solid var(--earth-border);
-  background: var(--earth-toolbar);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(16px);
+.leaflet-host .leaflet-control-zoom a:hover {
+  background: rgba(23, 23, 23, 0.94);
+  color: #fff;
 }
 
-.earth-grid {
-  background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.5), transparent 78%);
-}
-
-.earth-orbit {
-  border-radius: 9999px;
-  border: 1px solid rgba(96, 165, 250, 0.1);
-  box-shadow:
-    inset 0 0 120px rgba(125, 211, 252, 0.06),
-    0 0 120px rgba(59, 130, 246, 0.08);
-  filter: blur(0.2px);
-}
-
-.earth-globe {
-  border-radius: 9999px;
-  background:
-    radial-gradient(circle at 38% 18%, rgba(253, 240, 255, 0.95) 0%, rgba(253, 240, 255, 0.64) 9%, transparent 16%),
-    radial-gradient(circle at 30% 34%, rgba(244, 214, 182, 0.4) 0%, transparent 22%),
-    radial-gradient(circle at 62% 36%, rgba(27, 72, 150, 0.18) 0%, transparent 28%),
-    radial-gradient(circle at 56% 54%, rgba(48, 102, 191, 0.24) 0%, transparent 34%),
-    linear-gradient(140deg, #98b8ff 0%, #6d96e8 18%, #4d76cb 44%, #203f8a 74%, #06070b 100%);
-  box-shadow:
-    inset -120px -90px 130px rgba(0, 0, 0, 0.72),
-    inset 18px 18px 48px rgba(255, 255, 255, 0.18),
-    0 0 38px rgba(96, 165, 250, 0.42),
-    0 0 90px rgba(59, 130, 246, 0.2);
-  overflow: hidden;
-}
-
-.earth-globe::before {
-  content: "";
-  position: absolute;
-  inset: 12%;
-  border-radius: 9999px;
-  background:
-    radial-gradient(circle at 42% 26%, rgba(241, 245, 249, 0.56) 0%, transparent 12%),
-    radial-gradient(circle at 32% 46%, rgba(196, 181, 253, 0.18) 0%, transparent 12%),
-    radial-gradient(circle at 52% 28%, rgba(120, 160, 210, 0.32) 0%, transparent 16%),
-    radial-gradient(circle at 48% 48%, rgba(158, 189, 138, 0.42) 0%, transparent 16%),
-    radial-gradient(circle at 58% 58%, rgba(80, 123, 101, 0.5) 0%, transparent 16%),
-    radial-gradient(circle at 44% 64%, rgba(130, 171, 226, 0.3) 0%, transparent 18%),
-    radial-gradient(circle at 67% 46%, rgba(244, 201, 169, 0.36) 0%, transparent 11%);
-  filter: blur(18px) saturate(120%);
-  opacity: 0.96;
-}
-
-.earth-globe::after {
-  content: "";
-  position: absolute;
-  inset: -2%;
-  border-radius: 9999px;
-  border: 2px solid rgba(191, 219, 254, 0.38);
-  box-shadow:
-    0 0 48px rgba(147, 197, 253, 0.24),
-    inset 0 0 24px rgba(191, 219, 254, 0.24);
-}
-
-.earth-globe--terrain {
-  background:
-    radial-gradient(circle at 38% 18%, rgba(253, 240, 255, 0.92) 0%, rgba(253, 240, 255, 0.6) 9%, transparent 16%),
-    radial-gradient(circle at 34% 32%, rgba(245, 158, 11, 0.2) 0%, transparent 20%),
-    radial-gradient(circle at 56% 50%, rgba(74, 222, 128, 0.2) 0%, transparent 28%),
-    linear-gradient(145deg, #7ea4ef 0%, #5175be 28%, #3a5c8b 54%, #1f2937 84%, #050607 100%);
-}
-
-.earth-globe--vector {
-  background:
-    radial-gradient(circle at 38% 18%, rgba(253, 240, 255, 0.92) 0%, rgba(253, 240, 255, 0.58) 9%, transparent 16%),
-    linear-gradient(145deg, #8ec5ff 0%, #6394e2 24%, #315caa 54%, #101828 86%, #050607 100%);
-}
-
-.earth-shadow {
-  border-radius: 9999px;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.55) 0%, transparent 72%);
-  filter: blur(26px);
+.leaflet-host .leaflet-control-attribution a {
+  color: #93c5fd;
 }

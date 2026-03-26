@@ -9,5 +9,5 @@ export function Host() {
 
   useMapRuntime(containerRef)
 
-  return <div ref={containerRef} className='pointer-events-none absolute inset-0 opacity-0' />
+  return <div ref={containerRef} className='absolute inset-0 z-0' />
 }

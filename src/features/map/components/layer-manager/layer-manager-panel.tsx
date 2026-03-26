@@ -36,7 +36,7 @@ export function LayerManagerPanel({
   return (
     <>
       <aside
-        className={`earth-panel absolute left-5 top-24 z-20 w-[360px] overflow-hidden rounded-[28px] transition-all duration-300 ${
+        className={`absolute left-5 top-24 z-20 w-[360px] overflow-hidden rounded-[28px] border border-neutral-800/90 bg-neutral-950/90 shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-300 ${
           layerManagerOpen ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
         }`}
       >
@@ -135,7 +135,7 @@ export function LayerManagerPanel({
         <button
           type='button'
           onClick={onToggleLayerManager}
-          className='earth-panel absolute left-5 top-28 z-20 flex h-12 w-12 items-center justify-center rounded-full text-neutral-400 transition hover:bg-neutral-800 hover:text-neutral-50'
+          className='absolute left-5 top-28 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-neutral-800/90 bg-neutral-950/90 text-neutral-400 shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:bg-neutral-800 hover:text-neutral-50'
           aria-label='打开图层管理面板'
         >
           <PanelLeftOpen className='h-4 w-4' />

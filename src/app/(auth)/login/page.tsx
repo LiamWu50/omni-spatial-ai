@@ -1,7 +1,7 @@
 export default function LoginPage() {
   return (
     <main className='flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#262626_0%,#0a0a0a_45%,#000000_100%)] px-6 text-neutral-50'>
-      <section className='earth-panel w-full max-w-md rounded-[32px] p-8'>
+      <section className='w-full max-w-md rounded-[32px] border border-neutral-800/90 bg-neutral-950/90 p-8 shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl'>
         <div className='mb-8'>
           <div className='inline-flex rounded-full border border-neutral-800 bg-neutral-900 px-3 py-1 text-xs tracking-[0.18em] text-neutral-400'>
             AUTH PLACEHOLDER

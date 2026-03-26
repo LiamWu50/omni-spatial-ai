@@ -15,13 +15,13 @@ export function Toolbar({ actions, onAction }: MapToolbarProps) {
       <div className='pointer-events-auto flex items-center gap-3'>
         <button
           type='button'
-          className='earth-panel flex h-14 w-14 items-center justify-center rounded-full'
+          className='flex h-14 w-14 items-center justify-center rounded-full border border-neutral-800/90 bg-neutral-950/90 shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl'
           aria-label='OmniSpatial AI'
         >
           <div className='h-10 w-10 rounded-full bg-[radial-gradient(circle_at_32%_28%,#fafafa_0%,#737373_38%,#171717_100%)] shadow-[0_0_24px_rgba(255,255,255,0.12)]' />
         </button>
 
-        <div className='earth-toolbar flex h-14 items-center gap-3 rounded-full px-4'>
+        <div className='flex h-14 items-center gap-3 rounded-full border border-neutral-800/90 bg-neutral-900/90 px-4 shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-xl'>
           {actions.map((action) => {
             const Icon = action.icon
 
@@ -45,7 +45,7 @@ export function Toolbar({ actions, onAction }: MapToolbarProps) {
 
       <button
         type='button'
-        className='earth-panel pointer-events-auto flex h-11 min-w-11 items-center justify-center rounded-full px-3 text-sm font-medium text-neutral-50'
+        className='pointer-events-auto flex h-11 min-w-11 items-center justify-center rounded-full border border-neutral-800/90 bg-neutral-950/90 px-3 text-sm font-medium text-neutral-50 shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl'
       >
         OA
       </button>

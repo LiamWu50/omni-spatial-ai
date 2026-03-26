@@ -15,7 +15,7 @@ const controller = new MapController({
     cesium: new CesiumAdapter(),
     leaflet: new LeafletAdapter()
   },
-  initialEngine: 'mapbox',
+  initialEngine: 'leaflet',
   initialBaseMap: defaultBaseMaps().streets
 })
 

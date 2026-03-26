@@ -8,31 +8,17 @@ export function Scene({ activeBaseLayer }: MapSceneProps) {
   return (
     <>
       <div
-        className={`absolute inset-0 transition-colors duration-500 ${
+        className={`pointer-events-none absolute inset-0 z-[1] transition-colors duration-500 ${
           activeBaseLayer === 'satellite'
-            ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(59,130,246,0.14),transparent_28%),radial-gradient(circle_at_30%_20%,rgba(15,118,110,0.22),transparent_20%),linear-gradient(180deg,#030711_0%,#000000_100%)]'
+            ? 'bg-[radial-gradient(circle_at_50%_16%,rgba(14,165,233,0.18),transparent_22%),linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.42)_100%)]'
             : activeBaseLayer === 'terrain'
-              ? 'bg-[radial-gradient(circle_at_55%_26%,rgba(56,189,248,0.16),transparent_24%),radial-gradient(circle_at_42%_32%,rgba(245,158,11,0.12),transparent_22%),linear-gradient(180deg,#060a12_0%,#000000_100%)]'
-              : 'bg-[radial-gradient(circle_at_50%_24%,rgba(125,211,252,0.12),transparent_20%),linear-gradient(180deg,#04070d_0%,#000000_100%)]'
+              ? 'bg-[radial-gradient(circle_at_55%_18%,rgba(74,222,128,0.15),transparent_20%),linear-gradient(180deg,rgba(3,7,18,0.1)_0%,rgba(3,7,18,0.36)_100%)]'
+              : 'bg-[radial-gradient(circle_at_50%_18%,rgba(96,165,250,0.16),transparent_22%),linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.28)_100%)]'
         }`}
       />
 
-      <div className='earth-grid absolute inset-0 opacity-40' />
-      <div className='absolute inset-0 bg-[radial-gradient(circle_at_52%_44%,rgba(59,130,246,0.14),transparent_24%)]' />
-
-      <div className='pointer-events-none absolute left-1/2 top-[15%] h-[72vh] w-[72vh] max-h-[860px] max-w-[860px] -translate-x-[8%]'>
-        <div className='earth-orbit absolute inset-0' />
-        <div
-          className={`earth-globe absolute inset-[8%] ${
-            activeBaseLayer === 'terrain'
-              ? 'earth-globe--terrain'
-              : activeBaseLayer === 'vector'
-                ? 'earth-globe--vector'
-                : ''
-          }`}
-        />
-        <div className='earth-shadow absolute inset-[7%] translate-x-[16%] translate-y-[9%]' />
-      </div>
+      <div className='pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:64px_64px] opacity-15 [mask-image:radial-gradient(circle_at_center,rgba(255,255,255,0.5),transparent_78%)]' />
+      <div className='pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(circle_at_52%_44%,rgba(59,130,246,0.08),transparent_24%)]' />
     </>
   )
 }
