@@ -1,6 +1,7 @@
 'use client'
 
 import { AssistantRuntimeProvider } from '@assistant-ui/react'
+import { useEffect, useRef } from 'react'
 
 import { useMapAssistantRuntime } from '../hooks/use-map-assistant-runtime'
 import { useMapBridge, useMapSnapshot } from '../hooks/use-map-runtime'
@@ -9,16 +10,26 @@ import { useMapShellActions } from '../hooks/use-map-shell-actions'
 import { AssistantEntry } from './assistant/entry'
 import { AssistantPanel } from './assistant/panel'
 import { BaseLayer } from './base-layer'
-import { Host } from './host'
 import { LayerManagerPanel } from './layer-manager/layer-manager-panel'
 import { Nav } from './nav'
-import { Scene } from './scene'
 import { Status } from './status'
 import { Toolbar } from './toolbar'
 
-export function Container() {
+export function MapShell() {
+  const containerRef = useRef<HTMLDivElement>(null)
   const bridge = useMapBridge()
   const snapshot = useMapSnapshot()
+
+  useEffect(() => {
+    const container = containerRef.current
+
+    if (!container) {
+      return
+    }
+
+    return bridge.mount(container)
+  }, [bridge])
+
   const {
     activeBaseLayer,
     activeTool,
@@ -74,12 +85,11 @@ export function Container() {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div className='relative h-screen w-full overflow-hidden bg-[radial-gradient(circle_at_50%_18%,rgba(115,115,115,0.12),transparent_18%),linear-gradient(180deg,#171717_0%,#0a0a0a_40%,#000_100%)] text-white'>
+      <div className='relative h-screen w-full overflow-hidden bg-black text-white'>
         <div className='absolute inset-0 flex h-full w-full overflow-hidden'>
           <div className='relative h-full min-w-0 flex-1 overflow-hidden'>
             <section className='absolute inset-0 overflow-hidden'>
-              <Host />
-              <Scene activeBaseLayer={activeBaseLayer} />
+              <div ref={containerRef} className='absolute inset-0 z-0' />
               <BaseLayer activeBaseLayer={activeBaseLayer} onChange={handleSwitchBaseLayer} />
             </section>
 

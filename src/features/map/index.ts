@@ -1,1 +1,1 @@
-export { Container } from './components/container'
+export { MapShell } from './components/map-shell'

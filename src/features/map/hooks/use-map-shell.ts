@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react'
 
 import type { MapRuntimeState } from '@/lib/map/store'
 
+import { mapBridge } from '../helps/map-bridge-service'
 import { INITIAL_LAYER_ITEMS, INITIAL_PANEL_STATE, QUICK_LOCATIONS, TOOLBAR_ACTIONS } from '../lib/constants'
 import { formatAttribution, formatCoordinate, formatScale } from '../lib/formatters'
-import { getBaseLayerType, toViewportState } from '../lib/map-bridge'
 import type { LayerToggleItem, MapTool, ShellPanelState, ShellToolbarAction, StatusBarState } from '../types'
 
 export function useMapShell(snapshot: MapRuntimeState) {
@@ -14,8 +14,8 @@ export function useMapShell(snapshot: MapRuntimeState) {
   const [panels, setPanels] = useState<ShellPanelState>(INITIAL_PANEL_STATE)
   const [activeTool, setActiveTool] = useState<MapTool | null>(null)
 
-  const activeBaseLayer = getBaseLayerType(snapshot.baseMap)
-  const viewport = toViewportState(snapshot)
+  const activeBaseLayer = mapBridge.getBaseLayerType(snapshot.baseMap)
+  const viewport = mapBridge.toViewportState(snapshot)
 
   const visibleLayerCount = useMemo(() => layers.filter((layer) => layer.visible).length, [layers])
 

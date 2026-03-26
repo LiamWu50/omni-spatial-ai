@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react'
 
-import type { MapBridge } from '../lib/map-bridge'
+import type { MapBridge } from '../helps/map-bridge-service'
 import type { BaseLayerType, MapTool, MapViewportState, QuickLocation, ShellPanelState } from '../types'
 
 interface UseMapShellActionsOptions {
