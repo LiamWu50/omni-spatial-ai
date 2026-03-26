@@ -45,12 +45,12 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
           }}
           onBlurCapture={isOverlay ? handleBlurCapture : undefined}
           className={cn(
-            'flex w-full flex-col border border-neutral-200 bg-white/92 text-neutral-900 backdrop-blur-2xl transition-[min-height,border-radius,box-shadow,background-color,padding,gap] duration-300 ease-out dark:border-neutral-800 dark:bg-neutral-950/92 dark:text-neutral-50',
+            'flex w-full flex-col border border-(--module-panel-border) bg-(--module-panel-bg) text-neutral-900 shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-[min-height,border-radius,box-shadow,background-color,padding,gap] duration-300 ease-out dark:text-neutral-50',
             isOverlay
               ? 'min-h-[36px] rounded-[12px] px-3.5 py-2 shadow-[0_12px_28px_rgba(15,23,42,0.12)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.28)]'
               : 'min-h-[96px] gap-2 rounded-[20px] px-4 py-3 shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.32)]',
             isOverlay && isExpanded
-              ? 'min-h-[88px] gap-2 rounded-[16px] border-neutral-300 bg-white px-3.5 py-2.5 shadow-[0_18px_40px_rgba(15,23,42,0.16)] dark:border-neutral-700 dark:bg-neutral-950 dark:shadow-[0_18px_40px_rgba(0,0,0,0.34)]'
+              ? 'min-h-[88px] gap-2 rounded-[16px] px-3.5 py-2.5 shadow-[0_18px_40px_rgba(15,23,42,0.16)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.34)]'
               : ''
           )}
         >
@@ -88,7 +88,7 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
                 <button
                   type='submit'
                   className={cn(
-                    'inline-flex shrink-0 items-center justify-center rounded-[2px] bg-neutral-900 text-neutral-50 transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-200',
+                    'inline-flex shrink-0 items-center justify-center rounded-[2px] bg-(--module-primary-bg) text-(--module-primary-text) transition-[background-color,color,opacity] duration-180 hover:bg-(--module-primary-hover-bg) disabled:cursor-not-allowed disabled:opacity-40',
                     isOverlay ? 'h-8 w-8 rounded-[12px]' : 'h-9 w-9 rounded-[14px]'
                   )}
                   aria-label='发送'

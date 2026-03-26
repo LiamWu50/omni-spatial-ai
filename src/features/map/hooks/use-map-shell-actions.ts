@@ -66,8 +66,8 @@ export function useMapShellActions({
   }, [bridge, viewport.is3D])
 
   const handleToolbarAction = useCallback(
-    (actionId: string) => {
-      const nextTool = actionId === activeTool ? null : (actionId as MapTool)
+    (actionId: MapTool) => {
+      const nextTool = actionId === activeTool ? null : actionId
       setActiveTool(nextTool)
     },
     [activeTool, setActiveTool]

@@ -36,19 +36,19 @@ export function LayerManagerPanel({
 }: LayerManagerPanelProps) {
   return (
     <aside
-      className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[360px] flex-col overflow-hidden rounded-[28px] border border-neutral-200/90 bg-white/90 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-all duration-300 dark:border-neutral-800/90 dark:bg-neutral-950/90 dark:shadow-[0_10px_30px_rgba(0,0,0,0.32)] ${
+      className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[360px] flex-col overflow-hidden rounded-[28px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg)] shadow-[var(--module-panel-shadow)] backdrop-blur-[20px] transition-all duration-300 ${
         layerManagerOpen ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
       }`}
     >
-      <div className='flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-800'>
+      <div className='flex items-center justify-between border-b border-[var(--module-panel-border)] px-5 py-4'>
         <div>
           <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>探索工作台</div>
-          <div className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>地图操作与图层入口</div>
+          <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>地图操作与图层入口</div>
         </div>
         <button
           type='button'
           onClick={onToggleLayerManager}
-          className='flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white'
+          className='flex h-9 w-9 items-center justify-center rounded-full text-[var(--module-panel-icon)] transition-[background-color,border-color,color,box-shadow] duration-[180ms] hover:bg-[var(--module-button-hover-bg)] hover:text-[var(--module-button-hover-text)]'
           aria-label='关闭图层管理面板'
         >
           <X className='h-4 w-4' />
@@ -60,18 +60,18 @@ export function LayerManagerPanel({
           <button
             type='button'
             onClick={onToggleSearch}
-            className='flex w-full items-center justify-between rounded-2xl border border-neutral-200 bg-white/90 px-4 py-3 text-left text-neutral-800 transition hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-100 dark:hover:bg-neutral-800'
+            className='flex w-full items-center justify-between rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-4 py-3 text-left text-[var(--module-panel-text)] transition-[background-color,border-color,color] duration-[180ms] hover:border-[var(--module-panel-border-strong)] hover:bg-[var(--module-button-hover-bg)]'
           >
             <span className='flex items-center gap-3'>
               <Search className='h-4 w-4' />
               <span className='text-sm'>搜索地点、项目、监测对象</span>
             </span>
-            <span className='text-xs text-neutral-500 dark:text-neutral-400'>{searchOpen ? '收起' : '展开'}</span>
+            <span className='text-xs text-[var(--module-panel-text-muted)]'>{searchOpen ? '收起' : '展开'}</span>
           </button>
 
           {searchOpen ? (
-            <section className='rounded-3xl border border-neutral-200 bg-white/80 p-4 dark:border-neutral-800 dark:bg-neutral-950/70'>
-              <div className='mb-3 text-xs font-medium tracking-[0.18em] text-neutral-500 dark:text-neutral-400'>
+            <section className='rounded-3xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] p-4'>
+              <div className='mb-3 text-xs font-medium tracking-[0.18em] text-[var(--module-panel-text-muted)]'>
                 QUICK ACCESS
               </div>
               <div className='grid gap-2'>
@@ -80,17 +80,17 @@ export function LayerManagerPanel({
                     key={location.id}
                     type='button'
                     onClick={() => onOpenQuickLocation(location.id)}
-                    className='flex items-center justify-between rounded-2xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 text-sm text-neutral-800 transition hover:border-neutral-300 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/60 dark:text-neutral-100 dark:hover:border-neutral-700 dark:hover:bg-neutral-800'
+                    className='flex items-center justify-between rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)] px-4 py-3 text-sm text-[var(--module-panel-text)] transition-[background-color,border-color,color] duration-[180ms] hover:border-[var(--module-panel-border-strong)] hover:bg-[var(--module-button-hover-bg)]'
                   >
                     <span>{location.label}</span>
-                    <span className='text-xs text-neutral-500 dark:text-neutral-400'>飞行</span>
+                    <span className='text-xs text-[var(--module-panel-text-muted)]'>飞行</span>
                   </button>
                 ))}
               </div>
             </section>
           ) : null}
 
-          <section className='rounded-3xl border border-neutral-200 bg-white/80 p-4 dark:border-neutral-800 dark:bg-neutral-950/70'>
+          <section className='rounded-3xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] p-4'>
             <div className='flex items-center justify-between'>
               <button
                 type='button'
@@ -100,7 +100,7 @@ export function LayerManagerPanel({
                 <Layers3 className='h-4 w-4' />
                 图层与数据
               </button>
-              <span className='text-xs text-neutral-500 dark:text-neutral-400'>{visibleLayerCount} 个可见</span>
+              <span className='text-xs text-[var(--module-panel-text-muted)]'>{visibleLayerCount} 个可见</span>
             </div>
 
             {layerListOpen ? (
@@ -108,11 +108,11 @@ export function LayerManagerPanel({
                 {layers.map((layer) => (
                   <div
                     key={layer.id}
-                    className='flex items-center justify-between rounded-2xl border border-neutral-200 bg-neutral-50/80 px-3 py-3 dark:border-neutral-800 dark:bg-neutral-900/60'
+                    className='flex items-center justify-between rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)] px-3 py-3'
                   >
                     <div className='pr-3'>
                       <div className='text-sm text-neutral-900 dark:text-neutral-50'>{layer.name}</div>
-                      <div className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
+                      <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>
                         {layer.description ?? layer.id}
                       </div>
                     </div>
@@ -123,7 +123,7 @@ export function LayerManagerPanel({
             ) : null}
           </section>
 
-          <section className='rounded-3xl border border-neutral-200 bg-white/80 p-4 dark:border-neutral-800 dark:bg-neutral-950/70'>
+          <section className='rounded-3xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] p-4'>
             <div className='flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-neutral-50'>
               <Sparkles className='h-4 w-4' />
               今日建议
@@ -141,9 +141,9 @@ export function LayerManagerPanel({
 
 function SuggestionCard({ description, title }: { description: string; title: string }) {
   return (
-    <div className='rounded-2xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 dark:border-neutral-800 dark:bg-neutral-900/60'>
+    <div className='rounded-2xl border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-muted)] px-4 py-3'>
       <div className='text-sm font-medium text-neutral-900 dark:text-neutral-50'>{title}</div>
-      <div className='mt-1 text-xs leading-5 text-neutral-500 dark:text-neutral-400'>{description}</div>
+      <div className='mt-1 text-xs leading-5 text-[var(--module-panel-text-muted)]'>{description}</div>
     </div>
   )
 }

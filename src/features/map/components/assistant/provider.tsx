@@ -42,7 +42,5 @@ export function MapAssistantProvider({
     onToggleAssistantPanel
   })
 
-  return (
-    <AssistantRuntimeProvider runtime={runtime}>{children}</AssistantRuntimeProvider>
-  )
+  return <AssistantRuntimeProvider runtime={runtime}>{children}</AssistantRuntimeProvider>
 }

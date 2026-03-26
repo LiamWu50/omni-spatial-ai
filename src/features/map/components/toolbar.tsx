@@ -4,13 +4,13 @@ import { Layers } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-import type { ShellToolbarAction } from '../types'
+import type { MapTool, ShellToolbarAction } from '../types'
 import { UserAvatarTrigger } from './user/user-avatar-trigger'
 
 interface MapToolbarProps {
   actions: ShellToolbarAction[]
   layerManagerOpen: boolean
-  onAction: (actionId: string) => void
+  onAction: (actionId: MapTool) => void
   onToggleLayerManager: () => void
 }
 
@@ -20,16 +20,16 @@ export function Toolbar({ actions, layerManagerOpen, onAction, onToggleLayerMana
       <div className='pointer-events-auto flex items-center gap-3'>
         <UserAvatarTrigger />
 
-        <div className='flex h-10 items-center gap-3 rounded-full border border-neutral-200/90 bg-white/90 px-4 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-neutral-800/90 dark:bg-neutral-950/90 dark:shadow-[0_10px_30px_rgba(0,0,0,0.32)]'>
+        <div className='flex items-center gap-1 rounded-full p-1 border border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'>
           <button
             type='button'
             onClick={onToggleLayerManager}
             title={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
             aria-label={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
             className={cn(
-              'flex h-9 w-9 items-center justify-center rounded-full text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
+              'flex h-9 w-9 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)',
               layerManagerOpen
-                ? 'bg-neutral-900 text-neutral-50 shadow-[inset_0_0_0_1px_rgba(38,38,38,0.16)] dark:bg-neutral-800 dark:shadow-[inset_0_0_0_1px_rgba(64,64,64,0.9)]'
+                ? 'bg-(--module-button-active-bg) text-(--module-button-active-text) shadow-(--module-button-active-ring)'
                 : ''
             )}
           >
@@ -46,9 +46,9 @@ export function Toolbar({ actions, layerManagerOpen, onAction, onToggleLayerMana
                 onClick={() => onAction(action.id)}
                 title={action.label}
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
+                  'flex h-10 w-10 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)',
                   action.active
-                    ? 'bg-neutral-900 text-neutral-50 shadow-[inset_0_0_0_1px_rgba(38,38,38,0.16)] dark:bg-neutral-800 dark:shadow-[inset_0_0_0_1px_rgba(64,64,64,0.9)]'
+                    ? 'bg-(--module-button-active-bg) text-(--module-button-active-text) shadow-(--module-button-active-ring)'
                     : ''
                 )}
               >

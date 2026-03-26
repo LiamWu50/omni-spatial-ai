@@ -41,7 +41,7 @@ export function UserAvatarTrigger() {
         <DropdownMenuTrigger asChild>
           <button
             type='button'
-            className='flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200/90 bg-white/90 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-neutral-800/90 dark:bg-neutral-950/90 dark:shadow-[0_10px_30px_rgba(0,0,0,0.32)]'
+            className='flex h-10 w-10 items-center justify-center rounded-full border border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'
             aria-label='打开页面设置'
           >
             <Avatar className='h-9 w-9 cursor-pointer rounded-full grayscale'>

@@ -6,10 +6,46 @@
 
 :root {
   color-scheme: light;
+  --module-panel-bg: rgba(255, 255, 255, 0.9);
+  --module-panel-bg-solid: #ffffff;
+  --module-panel-bg-subtle: rgba(255, 255, 255, 0.82);
+  --module-panel-bg-muted: rgba(245, 245, 245, 0.86);
+  --module-panel-border: rgba(229, 229, 229, 0.9);
+  --module-panel-border-strong: rgba(212, 212, 212, 0.95);
+  --module-panel-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  --module-panel-text: #171717;
+  --module-panel-text-muted: #737373;
+  --module-panel-icon: #525252;
+  --module-button-hover-bg: rgba(245, 245, 245, 0.96);
+  --module-button-hover-text: #171717;
+  --module-button-active-bg: #171717;
+  --module-button-active-text: #fafafa;
+  --module-button-active-ring: inset 0 0 0 1px rgba(38, 38, 38, 0.16);
+  --module-primary-bg: #171717;
+  --module-primary-hover-bg: #262626;
+  --module-primary-text: #fafafa;
 }
 
 .dark {
   color-scheme: dark;
+  --module-panel-bg: rgba(10, 10, 10, 0.9);
+  --module-panel-bg-solid: #0a0a0a;
+  --module-panel-bg-subtle: rgba(10, 10, 10, 0.74);
+  --module-panel-bg-muted: rgba(23, 23, 23, 0.72);
+  --module-panel-border: rgba(38, 38, 38, 0.9);
+  --module-panel-border-strong: rgba(64, 64, 64, 0.92);
+  --module-panel-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+  --module-panel-text: #fafafa;
+  --module-panel-text-muted: #a3a3a3;
+  --module-panel-icon: #e5e5e5;
+  --module-button-hover-bg: rgba(38, 38, 38, 0.92);
+  --module-button-hover-text: #ffffff;
+  --module-button-active-bg: #262626;
+  --module-button-active-text: #fafafa;
+  --module-button-active-ring: inset 0 0 0 1px rgba(64, 64, 64, 0.9);
+  --module-primary-bg: #fafafa;
+  --module-primary-hover-bg: #e5e5e5;
+  --module-primary-text: #171717;
 }
 
 * {

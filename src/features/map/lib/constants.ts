@@ -1,4 +1,4 @@
-import { PencilRuler, Ruler } from 'lucide-react'
+import { LineSquiggle, MapPin, Ruler } from 'lucide-react'
 
 import type { BaseMapOption, LayerToggleItem, QuickLocation, ShellPanelState, ShellToolbarAction } from '../types'
 
@@ -39,22 +39,29 @@ export const BASE_MAP_OPTIONS: BaseMapOption[] = [
   }
 ]
 
-export const TOOLBAR_ACTIONS: Array<Omit<ShellToolbarAction, 'active'>> = [
+export const TOOLBAR_ACTIONS = [
   {
     id: 'measure',
-    label: '测量工具',
+    label: '测量',
     shortLabel: '测量',
     icon: Ruler,
     group: 'data'
   },
   {
-    id: 'draw',
-    label: '绘制工具',
-    shortLabel: '绘制',
-    icon: PencilRuler,
+    id: 'point',
+    label: '添加点位',
+    shortLabel: '点位',
+    icon: MapPin,
+    group: 'data'
+  },
+  {
+    id: 'geometry',
+    label: '添加线 / 多边形',
+    shortLabel: '线/面',
+    icon: LineSquiggle,
     group: 'data'
   }
-]
+] satisfies Array<Omit<ShellToolbarAction, 'active'>>
 
 export const ASSISTANT_PANEL_DEFAULTS = {
   defaultWidth: 380,

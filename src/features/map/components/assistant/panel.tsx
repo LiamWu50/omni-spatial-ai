@@ -37,21 +37,21 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         aria-label='调整对话详情宽度'
         aria-orientation='vertical'
       >
-        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700' />
+        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-(--module-panel-border) transition-opacity hover:opacity-80' />
       </div>
 
       {open ? (
         <button
           type='button'
           onClick={() => onOpenChange(false)}
-          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500 shadow-lg transition hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-400 dark:hover:border-neutral-700 dark:hover:bg-neutral-900 dark:hover:text-neutral-50'
+          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-(--module-panel-border) bg-(--module-panel-bg-solid) text-(--module-panel-icon) shadow-(--module-panel-shadow) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)'
           aria-label='收起对话详情'
         >
           <PanelRightClose className='h-4 w-4' />
         </button>
       ) : null}
 
-      <div className='flex h-full min-h-0 min-w-[320px] flex-col bg-white dark:bg-neutral-950'>
+      <div className='flex h-full min-h-0 min-w-[320px] flex-col rounded-none border-0 bg-(--module-panel-bg-solid) shadow-none'>
         <AssistantThread open={open} />
         <div className='px-5 pb-5'>
           <Prompt variant='docked' />

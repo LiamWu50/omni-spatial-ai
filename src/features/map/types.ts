@@ -18,7 +18,7 @@ export interface LayerToggleItem {
 
 export type BaseLayerType = 'vector' | 'satellite' | 'terrain'
 
-export type MapTool = 'measure' | 'draw'
+export type MapTool = 'measure' | 'point' | 'geometry'
 
 export interface QuickLocation {
   id: string
