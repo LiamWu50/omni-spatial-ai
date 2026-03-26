@@ -23,7 +23,7 @@ export function Nav({ is3D, onLocate, onResetOrientation, onToggle3D, onZoomIn, 
           <span className='text-sm font-semibold'>{is3D ? '3D' : '2D'}</span>
         </RoundAction>
         <RoundAction label='罗盘' onClick={onResetOrientation}>
-          <Compass className='h-4 w-4 text-orange-300' />
+          <Compass className='h-4 w-4' />
         </RoundAction>
       </div>
 
@@ -31,16 +31,16 @@ export function Nav({ is3D, onLocate, onResetOrientation, onToggle3D, onZoomIn, 
         <button
           type='button'
           onClick={onZoomOut}
-          className='flex h-10 w-10 items-center justify-center rounded-full text-white/72 transition hover:bg-white/10 hover:text-white'
+          className='flex h-10 w-10 items-center justify-center rounded-full text-neutral-400 transition hover:bg-neutral-800 hover:text-neutral-50'
           aria-label='缩小'
         >
           <Minus className='h-4 w-4' />
         </button>
-        <div className='mx-1 h-6 w-px bg-white/12' />
+        <div className='mx-1 h-6 w-px bg-neutral-800' />
         <button
           type='button'
           onClick={onZoomIn}
-          className='flex h-10 w-10 items-center justify-center rounded-full text-white/72 transition hover:bg-white/10 hover:text-white'
+          className='flex h-10 w-10 items-center justify-center rounded-full text-neutral-400 transition hover:bg-neutral-800 hover:text-neutral-50'
           aria-label='放大'
         >
           <Plus className='h-4 w-4' />
@@ -66,8 +66,8 @@ function RoundAction({
       type='button'
       onClick={onClick}
       aria-label={label}
-      className={`earth-panel flex h-10 w-10 items-center justify-center rounded-full text-white/72 transition hover:bg-white/10 hover:text-white ${
-        active ? 'bg-white/14' : 'bg-white/8'
+      className={`earth-panel flex h-10 w-10 items-center justify-center rounded-full text-neutral-400 transition hover:bg-neutral-800 hover:text-neutral-50 ${
+        active ? 'bg-neutral-800 text-neutral-50' : ''
       }`}
     >
       {children}

@@ -5,8 +5,8 @@ import { useMemo } from 'react'
 
 import { useResizablePanel } from '../../hooks/use-resizable-panel'
 import { ASSISTANT_PANEL_DEFAULTS } from '../../lib/constants'
-import { AssistantThread } from './thread'
 import { Prompt } from './prompt'
+import { AssistantThread } from './thread'
 
 interface AssistantPanelProps {
   open: boolean
@@ -25,8 +25,8 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
 
   return (
     <div
-      className={`relative shrink-0 overflow-hidden border-l border-white/0 transition-[width,border-color] duration-300 ease-out ${
-        open ? 'border-white/8' : ''
+      className={`relative shrink-0 overflow-hidden border-l border-neutral-800/0 transition-[width,border-color] duration-300 ease-out ${
+        open ? 'border-neutral-800' : ''
       } ${isResizing ? 'transition-none' : ''}`}
       style={assistantPanelStyle}
     >
@@ -37,21 +37,21 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         aria-label='调整对话详情宽度'
         aria-orientation='vertical'
       >
-        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/12 transition-colors hover:bg-white/28' />
+        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-neutral-800 transition-colors hover:bg-neutral-700' />
       </div>
 
       {open ? (
         <button
           type='button'
           onClick={() => onOpenChange(false)}
-          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/88 text-white/78 shadow-[0_12px_36px_rgba(0,0,0,0.42)] transition hover:border-white/18 hover:bg-black hover:text-white'
+          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-800 bg-neutral-950 text-neutral-400 shadow-lg transition hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50'
           aria-label='收起对话详情'
         >
           <PanelRightClose className='h-4 w-4' />
         </button>
       ) : null}
 
-      <div className='flex h-full min-h-0 min-w-[320px] flex-col bg-[rgba(6,8,12,0.94)]'>
+      <div className='flex h-full min-h-0 min-w-[320px] flex-col bg-neutral-950'>
         <AssistantThread open={open} />
         <div className='px-5 pb-5'>
           <Prompt variant='docked' />

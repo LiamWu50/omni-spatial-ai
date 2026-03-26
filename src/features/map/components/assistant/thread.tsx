@@ -19,7 +19,7 @@ export function AssistantThread({ open }: AssistantThreadProps) {
         <ThreadPrimitive.Viewport className='min-h-0 flex-1 px-5 py-6'>
           <div className='flex min-h-full flex-col'>
             <ThreadPrimitive.If empty>
-              <div className='flex flex-1 items-center justify-center px-6 text-center text-[15px] text-white/52'>
+              <div className='flex flex-1 items-center justify-center px-6 text-center text-[15px] text-neutral-500'>
                 试试输入：定位、切换影像底图、打开图层。
               </div>
             </ThreadPrimitive.If>

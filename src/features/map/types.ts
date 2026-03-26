@@ -1,8 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
-
-import type { EngineType } from '@/lib/gis/schema'
-
 import type { ChatModelId } from '@/features/map/lib/models'
+import type { EngineType } from '@/lib/gis/schema'
 
 export type ModelOptions = ChatModelId
 
