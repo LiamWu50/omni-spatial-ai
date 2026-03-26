@@ -1,14 +1,13 @@
 'use client'
 
-import { AssistantRuntimeProvider } from '@assistant-ui/react'
 import { useEffect, useRef } from 'react'
 
-import { useMapAssistantRuntime } from '../hooks/use-map-assistant-runtime'
 import { useMapBridge, useMapSnapshot } from '../hooks/use-map-runtime'
 import { useMapShell } from '../hooks/use-map-shell'
 import { useMapShellActions } from '../hooks/use-map-shell-actions'
 import { AssistantEntry } from './assistant/entry'
 import { AssistantPanel } from './assistant/panel'
+import { MapAssistantProvider } from './assistant/provider'
 import { BaseLayer } from './base-layer'
 import { LayerManagerPanel } from './layer-manager/layer-manager-panel'
 import { Nav } from './nav'
@@ -71,21 +70,19 @@ export function MapShell() {
     viewport
   })
 
-  const runtime = useMapAssistantRuntime({
-    viewport,
-    activeBaseLayer,
-    panels,
-    visibleLayerCount,
-    onLocate: handleLocate,
-    onResetView: handleResetView,
-    onSwitchBaseLayer: handleSwitchBaseLayer,
-    onToggleLayerList: handleToggleLayerList,
-    onToggleAssistantPanel: handleToggleAssistantPanel
-  })
-
   return (
-    <AssistantRuntimeProvider runtime={runtime}>
-      <div className='relative h-screen w-full overflow-hidden bg-black text-white'>
+    <MapAssistantProvider
+      viewport={viewport}
+      activeBaseLayer={activeBaseLayer}
+      panels={panels}
+      visibleLayerCount={visibleLayerCount}
+      onLocate={handleLocate}
+      onResetView={handleResetView}
+      onSwitchBaseLayer={handleSwitchBaseLayer}
+      onToggleLayerList={handleToggleLayerList}
+      onToggleAssistantPanel={handleToggleAssistantPanel}
+    >
+      <div className='relative h-screen w-full overflow-hidden text-neutral-900 dark:text-white'>
         <div className='absolute inset-0 flex h-full w-full overflow-hidden'>
           <div className='relative h-full min-w-0 flex-1 overflow-hidden'>
             <section className='absolute inset-0 overflow-hidden'>
@@ -93,7 +90,12 @@ export function MapShell() {
               <BaseLayer activeBaseLayer={activeBaseLayer} onChange={handleSwitchBaseLayer} />
             </section>
 
-            <Toolbar actions={toolbarActions} onAction={handleToolbarAction} />
+            <Toolbar
+              actions={toolbarActions}
+              layerManagerOpen={panels.layerManagerOpen}
+              onAction={handleToolbarAction}
+              onToggleLayerManager={handleToggleLayerManager}
+            />
 
             <LayerManagerPanel
               layers={layers}
@@ -126,6 +128,6 @@ export function MapShell() {
           <AssistantPanel open={panels.assistantPanelOpen} onOpenChange={handleAssistantPanelChange} />
         </div>
       </div>
-    </AssistantRuntimeProvider>
+    </MapAssistantProvider>
   )
 }

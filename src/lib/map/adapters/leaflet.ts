@@ -65,12 +65,6 @@ export class LeafletAdapter extends BaseDomMapEngine {
     this.dataLayerGroup = L.layerGroup().addTo(this.map)
 
     L.control
-      .zoom({
-        position: 'bottomright'
-      })
-      .addTo(this.map)
-
-    L.control
       .attribution({
         position: 'bottomleft',
         prefix: false

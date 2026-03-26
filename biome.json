@@ -82,5 +82,10 @@
     "formatter": {
       "whitespaceSensitivity": "strict"
     }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   }
 }

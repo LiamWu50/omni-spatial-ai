@@ -1,7 +1,14 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
+/* Tailwind v4 默认按系统媒体查询处理 dark，这里显式切到 `.dark` 类驱动 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
+  color-scheme: light;
+}
+
+.dark {
   color-scheme: dark;
 }
 
@@ -13,11 +20,23 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  background: #0a0a0a;
+  background: #fafafa;
 }
 
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #171717;
+}
+
+.dark html,
+.dark body,
+html.dark,
+body.dark {
+  background: #0a0a0a;
+}
+
+.dark body,
+body.dark {
   color: #fafafa;
 }
 
@@ -40,22 +59,24 @@ a {
 .leaflet-host .leaflet-container {
   height: 100%;
   width: 100%;
-  background: #020617;
 }
-
-.leaflet-host .leaflet-control-zoom a,
 .leaflet-host .leaflet-control-attribution {
-  border: 1px solid rgba(38, 38, 38, 0.9);
-  background: rgba(10, 10, 10, 0.78);
-  color: #e5e7eb;
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  background: rgba(255, 255, 255, 0.82);
+  color: #404040;
   backdrop-filter: blur(10px);
 }
 
-.leaflet-host .leaflet-control-zoom a:hover {
-  background: rgba(23, 23, 23, 0.94);
-  color: #fff;
+.leaflet-host .leaflet-control-attribution a {
+  color: #2563eb;
 }
 
-.leaflet-host .leaflet-control-attribution a {
+.dark .leaflet-host .leaflet-control-attribution {
+  border: 1px solid rgba(38, 38, 38, 0.9);
+  background: rgba(10, 10, 10, 0.78);
+  color: #e5e7eb;
+}
+
+.dark .leaflet-host .leaflet-control-attribution a {
   color: #93c5fd;
 }
