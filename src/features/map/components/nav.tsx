@@ -11,7 +11,7 @@ interface MapNavProps {
 
 export function Nav({ onLocate, onZoomIn, onZoomOut }: MapNavProps) {
   return (
-    <div className='absolute bottom-12 right-4 z-30 flex items-center gap-3'>
+    <div className='absolute bottom-16 right-4 z-30 flex items-center gap-3'>
       <div className='flex items-center gap-2'>
         <RoundAction label='定位' onClick={onLocate}>
           <Crosshair className='h-4 w-4' />
