@@ -68,12 +68,13 @@ function createMarkerIcon(leaflet: LeafletModule): DivIcon {
 function createPathStyle(layer: LayerDescriptor) {
   const isDrawResult = isDrawLayer(layer)
   const isMeasureResult = isMeasureLayer(layer)
-  const fillOpacity = isDrawResult ? 0.18 : isMeasureResult ? 0.14 : 0.24
+  const isPolygon = layer.geometryType === 'polygon'
+  const fillOpacity = !isPolygon ? 0 : isDrawResult ? 0.18 : isMeasureResult ? 0.14 : 0.24
 
   return {
     color: layer.style.color ?? '#60a5fa',
     fillColor: layer.style.color ?? '#60a5fa',
-    fill: true,
+    fill: isPolygon,
     opacity: layer.style.opacity ?? 0.95,
     fillOpacity,
     stroke: true,

@@ -414,16 +414,17 @@ export function createMeasureLayerFromResult(options: {
   sequence: number
   uniqueToken: string
 }): LayerDescriptor | null {
-  const coordinates = closeRing(options.result.points)
+  const coordinates = options.result.points
   if (coordinates.length === 0) {
     return null
   }
 
   const isAreaMeasurement = options.result.area > 0 && coordinates.length >= 3
+  const polygonCoordinates = isAreaMeasurement ? closeRing(coordinates) : coordinates
   const geometry: Geometry = isAreaMeasurement
     ? {
         type: 'Polygon',
-        coordinates: [coordinates]
+        coordinates: [polygonCoordinates]
       }
     : coordinates.length >= 2
       ? {

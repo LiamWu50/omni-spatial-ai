@@ -76,6 +76,10 @@ test('createMeasureLayerFromResult 应生成距离测量图层摘要', () => {
   assert.match(layer.id, /^measure-layer-distance-/)
   assert.equal(layer.name, '距离测量 01')
   assert.equal(layer.geometryType, 'line')
+  assert.deepEqual(layer.data.features[0]?.geometry.coordinates, [
+    [120, 30],
+    [121, 31]
+  ])
 
   const listItem = toUserLayerListItem(layer)
   assert.equal(listItem.origin, 'measure')
