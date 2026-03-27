@@ -2,9 +2,11 @@
 
 import { ComposerPrimitive } from '@assistant-ui/react'
 import { ArrowUp, Sparkles } from 'lucide-react'
-import { type FocusEvent, useState } from 'react'
+import { type FocusEvent, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
+
+import { SelectModel } from './select-model'
 
 interface PromptProps {
   variant?: 'overlay' | 'docked'
@@ -13,14 +15,34 @@ interface PromptProps {
 export function Prompt({ variant = 'overlay' }: PromptProps) {
   const isOverlay = variant === 'overlay'
   const [overlayExpanded, setOverlayExpanded] = useState(false)
+  const [modelMenuOpen, setModelMenuOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
   const isExpanded = !isOverlay || overlayExpanded
 
   const handleBlurCapture = (event: FocusEvent<HTMLFormElement>) => {
+    if (modelMenuOpen) {
+      return
+    }
+
     if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
       return
     }
 
     setOverlayExpanded(false)
+  }
+
+  const handleModelMenuOpenChange = (open: boolean) => {
+    setModelMenuOpen(open)
+
+    if (!open && isOverlay) {
+      window.setTimeout(() => {
+        const activeElement = document.activeElement
+
+        if (!rootRef.current?.contains(activeElement)) {
+          setOverlayExpanded(false)
+        }
+      }, 0)
+    }
   }
 
   return (
@@ -30,6 +52,7 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
       )}
     >
       <div
+        ref={rootRef}
         className={cn(
           'w-full transition-[max-width,transform] duration-300 ease-out',
           isOverlay ? 'pointer-events-auto max-w-[260px]' : 'max-w-none',
@@ -80,7 +103,8 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
           </div>
 
           {isExpanded ? (
-            <div className='mt-1 flex max-h-11 items-center justify-end gap-2 overflow-hidden transition-[max-height,opacity,margin] duration-300 ease-out'>
+            <div className='mt-1 flex max-h-11 items-center justify-between gap-2 overflow-hidden transition-[max-height,opacity,margin] duration-300 ease-out'>
+              <SelectModel className='mr-auto shrink-0' onOpenChange={handleModelMenuOpenChange} />
               <ComposerPrimitive.Send asChild>
                 <button
                   type='submit'
