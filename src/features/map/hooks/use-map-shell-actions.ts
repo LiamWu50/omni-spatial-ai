@@ -4,17 +4,16 @@ import { useCallback } from 'react'
 import { toast } from 'sonner'
 
 import type { MapRuntime } from '../services/map-runtime'
-import type { BaseLayerType, MapTool, ShellPanelState } from '../types'
+import type { BaseLayerType, MapTool } from '../types'
+import type { UseMapShellResult } from './use-map-shell'
 
 interface UseMapShellActionsOptions {
   runtime: MapRuntime
-  activeTool: MapTool | null
-  panels: ShellPanelState
-  setPanelState: (updater: Partial<ShellPanelState>) => void
+  shell: Pick<UseMapShellResult, 'actions' | 'state'>
 }
 
-export function useMapShellActions({ runtime, activeTool, panels, setPanelState }: UseMapShellActionsOptions) {
-  const handleLocate = useCallback(() => {
+export function useMapShellActions({ runtime, shell }: UseMapShellActionsOptions) {
+  const locate = useCallback(() => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       toast.error('当前浏览器不支持定位能力')
       return
@@ -36,72 +35,74 @@ export function useMapShellActions({ runtime, activeTool, panels, setPanelState 
     )
   }, [runtime])
 
-  const handleResetView = useCallback(() => {
+  const resetView = useCallback(() => {
     void runtime.resetView()
   }, [runtime])
 
-  const handleToolbarAction = useCallback(
+  const toolbarAction = useCallback(
     (actionId: MapTool) => {
-      const nextTool = actionId === activeTool ? null : actionId
+      const nextTool = actionId === shell.state.activeTool ? null : actionId
       runtime.setActiveTool(nextTool)
     },
-    [activeTool, runtime]
+    [runtime, shell.state.activeTool]
   )
 
-  const handleSwitchBaseLayer = useCallback(
+  const switchBaseLayer = useCallback(
     (layer: BaseLayerType) => {
       void runtime.switchBaseLayer(layer)
     },
     [runtime]
   )
 
-  const handleToggleLayerManager = useCallback(() => {
-    setPanelState({ layerManagerOpen: !panels.layerManagerOpen })
-  }, [panels.layerManagerOpen, setPanelState])
+  const toggleLayerManager = useCallback(() => {
+    shell.actions.setPanelState({ layerManagerOpen: !shell.state.panels.layerManagerOpen })
+  }, [shell.actions, shell.state.panels.layerManagerOpen])
 
-  const handleToggleLayerList = useCallback(() => {
-    setPanelState({
+  const toggleLayerList = useCallback(() => {
+    shell.actions.setPanelState({
       layerManagerOpen: true
     })
-  }, [setPanelState])
+  }, [shell.actions])
 
-  const handleOpenAssistantPanel = useCallback(() => {
-    setPanelState({ assistantPanelOpen: true })
-  }, [setPanelState])
+  const openAssistantPanel = useCallback(() => {
+    shell.actions.setPanelState({ assistantPanelOpen: true })
+  }, [shell.actions])
 
-  const handleAssistantPanelChange = useCallback(
+  const assistantPanelChange = useCallback(
     (open: boolean) => {
-      setPanelState({ assistantPanelOpen: open })
+      shell.actions.setPanelState({ assistantPanelOpen: open })
     },
-    [setPanelState]
+    [shell.actions]
   )
 
-  const handleToggleAssistantPanel = useCallback(
+  const toggleAssistantPanel = useCallback(
     (open?: boolean) => {
-      setPanelState({ assistantPanelOpen: open ?? !panels.assistantPanelOpen })
+      shell.actions.setPanelState({ assistantPanelOpen: open ?? !shell.state.panels.assistantPanelOpen })
     },
-    [panels.assistantPanelOpen, setPanelState]
+    [shell.actions, shell.state.panels.assistantPanelOpen]
   )
 
-  const handleZoomIn = useCallback(() => {
+  const zoomIn = useCallback(() => {
     void runtime.zoomIn()
   }, [runtime])
 
-  const handleZoomOut = useCallback(() => {
+  const zoomOut = useCallback(() => {
     void runtime.zoomOut()
   }, [runtime])
 
   return {
-    handleAssistantPanelChange,
-    handleLocate,
-    handleOpenAssistantPanel,
-    handleResetView,
-    handleSwitchBaseLayer,
-    handleToggleAssistantPanel,
-    handleToggleLayerList,
-    handleToggleLayerManager,
-    handleToolbarAction,
-    handleZoomIn,
-    handleZoomOut
+    actions: {
+      assistantPanelChange,
+      locate,
+      openAssistantPanel,
+      resetView,
+      switchBaseLayer,
+      toggleAssistantPanel,
+      toggleLayerList,
+      toggleLayerManager,
+      toolbarAction,
+      zoomIn,
+      zoomOut
+    }
   }
 }

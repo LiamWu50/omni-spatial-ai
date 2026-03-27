@@ -10,20 +10,46 @@ import { isManagedLayer, parseUserLayerFile, toUserLayerListItem } from '../lib/
 import { type MapRuntimeState, mapRuntime } from '../services/map-runtime'
 import type { MapTool, ShellPanelState, ShellToolbarAction, StatusBarState } from '../types'
 
-export function useMapShell(snapshot: MapRuntimeState) {
+export interface UseMapShellState {
+  activeBaseLayer: ReturnType<typeof mapRuntime.getBaseLayerType>
+  activeTool: MapTool | null
+  importStatus: string
+  panels: ShellPanelState
+  viewport: ReturnType<typeof mapRuntime.toViewportState>
+}
+
+export interface UseMapShellDerived {
+  layers: ReturnType<typeof toUserLayerListItem>[]
+  statusBar: StatusBarState
+  toolbarActions: ShellToolbarAction[]
+  visibleLayerCount: number
+}
+
+export interface UseMapShellActions {
+  setPanelState: (updater: Partial<ShellPanelState>) => void
+  importLayers: (files: File[]) => Promise<void>
+  toggleLayer: (layerId: string) => Promise<void>
+  focusLayer: (layerId: string) => Promise<void>
+  removeLayer: (layerId: string) => Promise<void>
+}
+
+export interface UseMapShellResult {
+  state: UseMapShellState
+  derived: UseMapShellDerived
+  actions: UseMapShellActions
+}
+
+export function useMapShell(snapshot: MapRuntimeState): UseMapShellResult {
   const [panels, setPanels] = useState<ShellPanelState>(INITIAL_PANEL_STATE)
-  const [uploadStatus, setUploadStatus] = useState('支持拖拽或点击上传 GeoJSON / JSON 文件')
+  const [importStatus, setImportStatus] = useState('支持拖拽或点击上传 GeoJSON / JSON 文件')
 
   const activeBaseLayer = mapRuntime.getBaseLayerType(snapshot.baseMap)
   const viewport = mapRuntime.toViewportState(snapshot)
   const activeTool = snapshot.activeTool as MapTool | null
 
-  const managedLayers = useMemo(
-    () => snapshot.layers.filter(isManagedLayer).map(toUserLayerListItem),
-    [snapshot.layers]
-  )
+  const layers = useMemo(() => snapshot.layers.filter(isManagedLayer).map(toUserLayerListItem), [snapshot.layers])
 
-  const visibleLayerCount = useMemo(() => managedLayers.filter((layer) => layer.visible).length, [managedLayers])
+  const visibleLayerCount = useMemo(() => layers.filter((layer) => layer.visible).length, [layers])
 
   const statusBar = useMemo<StatusBarState>(
     () => ({
@@ -44,16 +70,11 @@ export function useMapShell(snapshot: MapRuntimeState) {
     [activeTool]
   )
 
-  return {
-    activeBaseLayer,
-    activeTool,
-    panels,
+  const actions: UseMapShellActions = {
     setPanelState(updater: Partial<ShellPanelState>) {
       setPanels((current) => ({ ...current, ...updater }))
     },
-    statusBar,
-    uploadStatus,
-    async uploadUserLayers(files: File[]) {
+    async importLayers(files: File[]) {
       if (files.length === 0) {
         return
       }
@@ -62,7 +83,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
       const importedLayers: LayerDescriptor[] = []
       const failedFiles: string[] = []
 
-      setUploadStatus(`正在导入 ${files.length} 个文件...`)
+      setImportStatus(`正在导入 ${files.length} 个文件...`)
 
       for (const [index, file] of files.entries()) {
         try {
@@ -77,34 +98,34 @@ export function useMapShell(snapshot: MapRuntimeState) {
 
       if (importedLayers.length === 0) {
         const message = failedFiles[0] ?? '未导入任何图层'
-        setUploadStatus(message)
+        setImportStatus(message)
         toast.error(message)
         return
       }
 
       const latestLayer = importedLayers[importedLayers.length - 1]
-      const latestManagedLayer = toUserLayerListItem(latestLayer)
+      const latestLayerItem = toUserLayerListItem(latestLayer)
 
-      if (latestManagedLayer.bounds) {
-        await mapRuntime.fitBounds(latestManagedLayer.bounds)
+      if (latestLayerItem.bounds) {
+        await mapRuntime.fitBounds(latestLayerItem.bounds)
       }
 
       const successMessage =
         importedLayers.length === 1
-          ? `已导入 ${latestLayer.name}，共 ${latestManagedLayer.featureCount} 个要素`
+          ? `已导入 ${latestLayer.name}，共 ${latestLayerItem.featureCount} 个要素`
           : `已导入 ${importedLayers.length} 个图层`
 
       const statusMessage =
         failedFiles.length > 0 ? `${successMessage}，${failedFiles.length} 个文件失败` : successMessage
 
-      setUploadStatus(statusMessage)
+      setImportStatus(statusMessage)
       toast.success(successMessage)
 
       if (failedFiles.length > 0) {
         toast.error(`部分文件导入失败：${failedFiles[0]}`)
       }
     },
-    async toggleManagedLayer(layerId: string) {
+    async toggleLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
 
       if (!target) {
@@ -116,23 +137,23 @@ export function useMapShell(snapshot: MapRuntimeState) {
         visible: !target.visible
       })
     },
-    async focusManagedLayer(layerId: string) {
+    async focusLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
 
       if (!target) {
         return
       }
 
-      const managedLayer = toUserLayerListItem(target)
+      const layerItem = toUserLayerListItem(target)
 
-      if (!managedLayer.bounds) {
+      if (!layerItem.bounds) {
         toast.info('当前图层缺少可定位范围')
         return
       }
 
-      await mapRuntime.fitBounds(managedLayer.bounds)
+      await mapRuntime.fitBounds(layerItem.bounds)
     },
-    async removeManagedLayer(layerId: string) {
+    async removeLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
 
       if (!target) {
@@ -141,10 +162,23 @@ export function useMapShell(snapshot: MapRuntimeState) {
 
       await mapRuntime.removeLayer(layerId)
       toast.success(`已删除图层：${target.name}`)
+    }
+  }
+
+  return {
+    state: {
+      activeBaseLayer,
+      activeTool,
+      importStatus,
+      panels,
+      viewport
     },
-    toolbarActions,
-    managedLayers,
-    viewport,
-    visibleLayerCount
+    derived: {
+      layers,
+      statusBar,
+      toolbarActions,
+      visibleLayerCount
+    },
+    actions
   }
 }
