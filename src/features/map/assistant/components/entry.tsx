@@ -14,7 +14,7 @@ export function AssistantEntry({ visible, onOpen }: AssistantEntryProps) {
 
   return (
     <>
-      <Prompt variant='overlay' />
+      <Prompt variant='overlay' onSubmitted={onOpen} />
       <AssistantEdgeTrigger onOpen={onOpen} />
     </>
   )

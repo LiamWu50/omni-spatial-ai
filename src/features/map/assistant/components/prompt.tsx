@@ -2,7 +2,7 @@
 
 import { ComposerPrimitive } from '@assistant-ui/react'
 import { ArrowUp, Sparkles } from 'lucide-react'
-import { type FocusEvent, useRef, useState } from 'react'
+import { type FocusEvent, type FormEvent, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -10,9 +10,10 @@ import { SelectModel } from './select-model'
 
 interface PromptProps {
   variant?: 'overlay' | 'docked'
+  onSubmitted?: () => void
 }
 
-export function Prompt({ variant = 'overlay' }: PromptProps) {
+export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
   const isOverlay = variant === 'overlay'
   const [overlayExpanded, setOverlayExpanded] = useState(false)
   const [modelMenuOpen, setModelMenuOpen] = useState(false)
@@ -45,6 +46,25 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
     }
   }
 
+  const handleSubmitCapture = (event: FormEvent<HTMLFormElement>) => {
+    if (!isOverlay || !onSubmitted) {
+      return
+    }
+
+    const field = event.currentTarget.querySelector('textarea, input')
+    const nextValue =
+      field instanceof HTMLTextAreaElement || field instanceof HTMLInputElement ? field.value.trim() : ''
+
+    if (!nextValue) {
+      return
+    }
+
+    window.setTimeout(() => {
+      onSubmitted()
+      setOverlayExpanded(false)
+    }, 0)
+  }
+
   return (
     <div
       className={cn(
@@ -65,6 +85,7 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
               setOverlayExpanded(true)
             }
           }}
+          onSubmitCapture={handleSubmitCapture}
           onBlurCapture={isOverlay ? handleBlurCapture : undefined}
           className={cn(
             'flex w-full flex-col border border-(--module-panel-border) bg-(--module-panel-bg) text-neutral-900 shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-[min-height,border-radius,box-shadow,background-color,padding,gap] duration-300 ease-out dark:text-neutral-50',

@@ -1,6 +1,6 @@
 # OmniSpatial AI
 
-OmniSpatial AI 是一个基于 Next.js 16、TypeScript、Leaflet 与 assistant-ui 构建的空间智能工作台 MVP。
+OmniSpatial AI 是一个基于 Next.js 16、TypeScript、Leaflet、assistant-ui 与 AI SDK 构建的空间智能工作台 MVP。
 
 当前仓库已经收敛为 **Leaflet 单引擎架构**，地图功能、助手运行时和页面装配统一收口在 `src/features/map`。
 
@@ -56,7 +56,9 @@ src/
 
 - Leaflet 单实例运行时门面：`src/features/map/services/map-runtime.ts`
 - 地图工作台入口：`src/features/map/components/map-shell.tsx`
-- assistant-ui 地图助手 runtime：`src/features/map/assistant/runtime/use-map-assistant-runtime.ts`
+- assistant-ui + AI SDK 地图助手 runtime：`src/features/map/assistant/runtime/use-map-assistant-runtime.ts`
+- 地图本地指令分流：定位、重置视角、切换底图、切换图层面板
+- 临时多轮 AI 对话：普通问答走 `/api/chat`，刷新页面后不保留历史
 - GeoJSON / JSON 图层上传、图层管理、底图切换
 
 ## 环境变量
@@ -64,6 +66,7 @@ src/
 | 变量 | 说明 |
 |---|---|
 | `APP_URL` | 本地访问地址，默认 `http://localhost:3000` |
+| `DASHSCOPE_API_KEY` | DashScope/Qwen 兼容 OpenAI 接口的 API Key，用于 AI 对话 |
 
 ## 架构概览
 
@@ -71,7 +74,7 @@ src/
 2. `MapShell` 负责页面装配、图层管理、助手面板与地图挂载。
 3. `MapRuntime` 负责 Leaflet 初始化、地图实例暴露、快照订阅以及底图/视角/图层管理。
 4. `BaseMapManager`、`ViewportManager`、`LayerManager`、`ToolRegistry` 在运行时内部协作。
-5. assistant-ui runtime 在地图 feature 内就地消费当前视口、底图与面板状态。
+5. 地图助手在前端保留本地地图指令分流，普通问答通过 `/api/chat` 流式返回。
 
 ## 开发约定
 

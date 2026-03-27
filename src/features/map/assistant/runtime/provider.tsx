@@ -1,7 +1,9 @@
 'use client'
 
 import { AssistantRuntimeProvider } from '@assistant-ui/react'
-import type { PropsWithChildren } from 'react'
+import { createContext, type Dispatch, type PropsWithChildren, type SetStateAction, useContext, useMemo } from 'react'
+
+import type { ChatModelId } from '../../lib/models'
 import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
 import { useMapAssistantRuntime } from './use-map-assistant-runtime'
 
@@ -17,6 +19,13 @@ type MapAssistantProviderProps = PropsWithChildren<{
   onToggleAssistantPanel: (open?: boolean) => void
 }>
 
+interface MapAssistantChatContextValue {
+  selectedModel: ChatModelId
+  setSelectedModel: Dispatch<SetStateAction<ChatModelId>>
+}
+
+const MapAssistantChatContext = createContext<MapAssistantChatContextValue | null>(null)
+
 export function MapAssistantProvider({
   children,
   viewport,
@@ -29,7 +38,7 @@ export function MapAssistantProvider({
   onToggleLayerList,
   onToggleAssistantPanel
 }: MapAssistantProviderProps) {
-  const runtime = useMapAssistantRuntime({
+  const { runtime, selectedModel, setSelectedModel } = useMapAssistantRuntime({
     viewport,
     activeBaseLayer,
     panels,
@@ -41,5 +50,27 @@ export function MapAssistantProvider({
     onToggleAssistantPanel
   })
 
-  return <AssistantRuntimeProvider runtime={runtime}>{children}</AssistantRuntimeProvider>
+  const contextValue = useMemo(
+    () => ({
+      selectedModel,
+      setSelectedModel
+    }),
+    [selectedModel, setSelectedModel]
+  )
+
+  return (
+    <MapAssistantChatContext.Provider value={contextValue}>
+      <AssistantRuntimeProvider runtime={runtime}>{children}</AssistantRuntimeProvider>
+    </MapAssistantChatContext.Provider>
+  )
+}
+
+export function useMapAssistantChatContext() {
+  const context = useContext(MapAssistantChatContext)
+
+  if (!context) {
+    throw new Error('useMapAssistantChatContext must be used within a MapAssistantProvider')
+  }
+
+  return context
 }

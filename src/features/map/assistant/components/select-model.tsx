@@ -1,12 +1,13 @@
 'use client'
 
 import { ChevronDown } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { useMapAssistantChatContext } from '@/features/map/assistant/runtime/provider'
 import type { ChatModelId } from '@/features/map/lib/models'
-import { CHAT_MODEL_OPTIONS, DEFAULT_CHAT_MODEL } from '@/features/map/lib/models'
+import { CHAT_MODEL_OPTIONS } from '@/features/map/lib/models'
 import { cn } from '@/lib/utils'
 
 interface SelectModelProps {
@@ -15,7 +16,7 @@ interface SelectModelProps {
 }
 
 export const SelectModelComponent = ({ className, onOpenChange }: SelectModelProps) => {
-  const [selectedModel, setSelectedModel] = useState<ChatModelId>(DEFAULT_CHAT_MODEL)
+  const { selectedModel, setSelectedModel } = useMapAssistantChatContext()
 
   const selectedModelLabel = CHAT_MODEL_OPTIONS.find((model) => model.id === selectedModel)?.label ?? selectedModel
 
@@ -42,7 +43,7 @@ export const SelectModelComponent = ({ className, onOpenChange }: SelectModelPro
               'my-1 cursor-pointer rounded-lg px-2.5 py-1.5 text-[12px]',
               selectedModel === model.id ? 'bg-accent text-accent-foreground' : ''
             )}
-            onSelect={() => setSelectedModel(model.id)}
+            onSelect={() => setSelectedModel(model.id as ChatModelId)}
           >
             {model.label}
           </DropdownMenuItem>

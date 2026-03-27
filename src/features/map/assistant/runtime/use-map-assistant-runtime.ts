@@ -1,129 +1,150 @@
 'use client'
 
-import { type ChatModelAdapter, useLocalRuntime } from '@assistant-ui/react'
-import { useEffect, useMemo, useRef } from 'react'
+import { useChat } from '@ai-sdk/react'
+import type { AssistantRuntime } from '@assistant-ui/react'
+import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-sdk'
+import { createUIMessageStream, type UIMessage } from 'ai'
+import { type Dispatch, type SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
-import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
+import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../lib/models'
+import { executeLocalMapCommand, getLatestUserText, type LocalMapCommandContext } from '../lib/local-map-command'
 
-interface MapAssistantRuntimeOptions {
-  viewport: MapViewportState
-  activeBaseLayer: BaseLayerType
-  panels: ShellPanelState
-  visibleLayerCount: number
-  onLocate: () => void
-  onResetView: () => void
-  onSwitchBaseLayer: (layer: BaseLayerType) => void
-  onToggleLayerList: () => void
-  onToggleAssistantPanel: (open?: boolean) => void
+interface MapAssistantRuntimeOptions extends LocalMapCommandContext {}
+
+interface MapAssistantRuntimeState {
+  runtime: AssistantRuntime
+  selectedModel: ChatModelId
+  setSelectedModel: Dispatch<SetStateAction<ChatModelId>>
 }
 
-function getLatestUserText(messages: ReadonlyArray<{ role: string; content: unknown }>) {
-  const latestUserMessage = [...messages].reverse().find((message) => message.role === 'user')
+const INITIAL_MESSAGES: UIMessage[] = [
+  {
+    id: 'map-assistant-welcome',
+    role: 'assistant',
+    parts: [
+      {
+        type: 'text',
+        text: '地图助手已就绪。你可以让我帮你定位、切换影像底图、打开图层管理，也可以直接问我普通问题。',
+        state: 'done'
+      }
+    ]
+  }
+]
 
-  if (!latestUserMessage) {
-    return ''
+function createClientId(prefix: string) {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `${prefix}-${crypto.randomUUID()}`
   }
 
-  if (typeof latestUserMessage.content === 'string') {
-    return latestUserMessage.content.trim()
-  }
+  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`
+}
 
-  if (Array.isArray(latestUserMessage.content)) {
-    return latestUserMessage.content
-      .map((part) => {
-        if (part && typeof part === 'object' && 'type' in part && 'text' in part && part.type === 'text') {
-          return String(part.text)
-        }
+function createLocalAssistantStream(text: string) {
+  const messageId = createClientId('assistant')
+  const textPartId = createClientId('text')
 
-        return ''
+  return createUIMessageStream<UIMessage>({
+    execute: ({ writer }) => {
+      writer.write({
+        type: 'start',
+        messageId
       })
-      .join(' ')
-      .trim()
+      writer.write({
+        type: 'text-start',
+        id: textPartId
+      })
+      writer.write({
+        type: 'text-delta',
+        id: textPartId,
+        delta: text
+      })
+      writer.write({
+        type: 'text-end',
+        id: textPartId
+      })
+      writer.write({
+        type: 'finish',
+        finishReason: 'stop'
+      })
+    }
+  })
+}
+
+class MapAssistantChatTransport extends AssistantChatTransport<UIMessage> {
+  constructor(
+    private readonly resolveLocalResponse: (messages: UIMessage[]) => string | null,
+    resolveModel: () => ChatModelId
+  ) {
+    super({
+      api: '/api/chat',
+      body: {
+        get model() {
+          return resolveModel()
+        }
+      }
+    })
   }
 
-  return ''
+  override async sendMessages(options: Parameters<AssistantChatTransport<UIMessage>['sendMessages']>[0]) {
+    if (options.trigger !== 'submit-message') {
+      return super.sendMessages(options)
+    }
+
+    const localResponse = this.resolveLocalResponse(options.messages)
+
+    if (!localResponse) {
+      return super.sendMessages(options)
+    }
+
+    return createLocalAssistantStream(localResponse)
+  }
 }
 
-function summarize({ activeBaseLayer, panels, viewport, visibleLayerCount }: MapAssistantRuntimeOptions) {
-  return `中心点 ${viewport.center.lng.toFixed(5)}, ${viewport.center.lat.toFixed(5)}；缩放 ${viewport.zoom.toFixed(1)}；底图 ${activeBaseLayer}；图层 ${visibleLayerCount}；图层管理 ${panels.layerManagerOpen ? '开' : '关'}。`
-}
-
-export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions) {
+export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions): MapAssistantRuntimeState {
+  const [selectedModel, setSelectedModel] = useState<ChatModelId>(DEFAULT_CHAT_MODEL)
   const optionsRef = useRef(options)
+  const selectedModelRef = useRef(selectedModel)
 
   useEffect(() => {
     optionsRef.current = options
   }, [options])
 
-  const chatModel = useMemo<ChatModelAdapter>(
-    () => ({
-      async run({ messages }) {
-        const current = optionsRef.current
-        const prompt = getLatestUserText(messages as ReadonlyArray<{ role: string; content: unknown }>)
-        const normalizedPrompt = prompt.toLowerCase()
-        const actions: string[] = []
+  useEffect(() => {
+    selectedModelRef.current = selectedModel
+  }, [selectedModel])
 
-        if (prompt) {
-          current.onToggleAssistantPanel(true)
-        }
-
-        if (normalizedPrompt.includes('定位')) {
-          current.onLocate()
-          actions.push('已执行定位')
-        }
-
-        if (
-          normalizedPrompt.includes('初始化') ||
-          normalizedPrompt.includes('重置') ||
-          normalizedPrompt.includes('回到默认')
-        ) {
-          current.onResetView()
-          actions.push('已重置视角')
-        }
-
-        if (normalizedPrompt.includes('影像') || normalizedPrompt.includes('卫星')) {
-          current.onSwitchBaseLayer('satellite')
-          actions.push('已切换到影像底图')
-        } else if (normalizedPrompt.includes('地形')) {
-          current.onSwitchBaseLayer('terrain')
-          actions.push('已切换到地形底图')
-        } else if (normalizedPrompt.includes('矢量')) {
-          current.onSwitchBaseLayer('vector')
-          actions.push('已切换到矢量底图')
-        }
-
-        if (normalizedPrompt.includes('图层')) {
-          current.onToggleLayerList()
-          actions.push('已切换图层面板')
-        }
-
-        if (normalizedPrompt.includes('助手') || normalizedPrompt.includes('聊天') || normalizedPrompt.includes('ai')) {
-          current.onToggleAssistantPanel(true)
-          actions.push('已打开 AI 面板')
-        }
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text:
-                actions.length > 0
-                  ? `${actions.join('，')}。\n${summarize(current)}`
-                  : `已收到指令「${prompt || '（空）'}」。\n你可以继续输入：定位、影像底图、打开图层、打开助手。\n${summarize(current)}`
-            }
-          ]
-        }
-      }
-    }),
+  const transport = useMemo(
+    () =>
+      new MapAssistantChatTransport(
+        (messages) => {
+          const prompt = getLatestUserText(messages)
+          const result = executeLocalMapCommand(prompt, optionsRef.current)
+          return result?.responseText ?? null
+        },
+        () => selectedModelRef.current
+      ),
     []
   )
 
-  return useLocalRuntime(chatModel, {
-    initialMessages: [
-      {
-        role: 'assistant',
-        content: '地图助手已就绪。你可以让我帮你定位、切换影像底图、打开图层管理或展开 AI 面板。'
-      }
-    ]
+  const chat = useChat<UIMessage>({
+    messages: INITIAL_MESSAGES,
+    transport,
+    onError: (error) => {
+      console.error('Map assistant chat error:', error)
+      toast.error(error.message || 'AI 对话失败，请稍后重试')
+    }
   })
+
+  const runtime = useAISDKRuntime(chat)
+
+  useEffect(() => {
+    transport.setRuntime(runtime)
+  }, [runtime, transport])
+
+  return {
+    runtime,
+    selectedModel,
+    setSelectedModel
+  }
 }
