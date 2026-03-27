@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import type { LayerDescriptor } from '@/lib/gis/schema'
-import { INITIAL_PANEL_STATE, TOOLBAR_ACTIONS } from '../lib/constants'
+import { INITIAL_PANEL_STATE, LAYER_UPLOAD_MAX_SIZE_MB, TOOLBAR_ACTIONS } from '../lib/constants'
 import { formatAttribution, formatCoordinate, formatScale } from '../lib/formatters'
 import { isManagedLayer, parseUserLayerFile, toUserLayerListItem } from '../lib/user-layers'
 import { type MapRuntimeState, mapRuntime } from '../services/map-runtime'
@@ -41,7 +41,7 @@ export interface UseMapShellResult {
 
 export function useMapShell(snapshot: MapRuntimeState): UseMapShellResult {
   const [panels, setPanels] = useState<ShellPanelState>(INITIAL_PANEL_STATE)
-  const [importStatus, setImportStatus] = useState('支持拖拽或点击上传 GeoJSON / JSON 文件')
+  const [importStatus, setImportStatus] = useState(`点击或拖拽上传，最多 ${LAYER_UPLOAD_MAX_SIZE_MB} MB`)
 
   const activeBaseLayer = mapRuntime.getBaseLayerType(snapshot.baseMap)
   const viewport = mapRuntime.toViewportState(snapshot)
