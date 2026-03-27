@@ -107,11 +107,31 @@ export function formatLength(lengthMeters: number) {
 }
 
 export function formatArea(areaSquareMeters: number) {
+  if (areaSquareMeters >= 1000000) {
+    return `${formatNumber(areaSquareMeters / 1000000, 2)} 平方千米`
+  }
+
   if (areaSquareMeters >= 10000) {
     return `${formatNumber(areaSquareMeters / 10000, 2)} 公顷`
   }
 
   return `${formatNumber(areaSquareMeters, 0)} 平方米`
+}
+
+export function getFeatureCentroid(feature: Feature<Geometry>): Position | null {
+  if (feature.geometry.type === 'Point') {
+    return feature.geometry.coordinates as Position
+  }
+
+  if (feature.geometry.type === 'LineString') {
+    return getLineMidpoint(feature.geometry.coordinates as Position[])
+  }
+
+  if (feature.geometry.type === 'Polygon') {
+    return getPolygonCentroid(feature.geometry.coordinates[0] as Position[])
+  }
+
+  return null
 }
 
 export function calculatePathLength(points: LatLng[], closeLoop = false) {
@@ -190,4 +210,98 @@ function closeRing(points: Position[]) {
 
 function toRadians(value: number) {
   return (value * Math.PI) / 180
+}
+
+function getLineMidpoint(points: Position[]) {
+  if (points.length === 0) {
+    return null
+  }
+
+  if (points.length === 1) {
+    return points[0]
+  }
+
+  const segments = points.slice(1).map((point, index) => {
+    const start = points[index]
+    const length = Math.hypot(point[0] - start[0], point[1] - start[1])
+
+    return {
+      end: point,
+      length,
+      start
+    }
+  })
+  const totalLength = segments.reduce((sum, segment) => sum + segment.length, 0)
+
+  if (totalLength === 0) {
+    return points[Math.floor(points.length / 2)]
+  }
+
+  const midpointDistance = totalLength / 2
+  let traversedLength = 0
+
+  for (const segment of segments) {
+    if (traversedLength + segment.length < midpointDistance) {
+      traversedLength += segment.length
+      continue
+    }
+
+    const ratio = (midpointDistance - traversedLength) / segment.length
+
+    return [
+      segment.start[0] + (segment.end[0] - segment.start[0]) * ratio,
+      segment.start[1] + (segment.end[1] - segment.start[1]) * ratio
+    ] as Position
+  }
+
+  return points[points.length - 1]
+}
+
+function getPolygonCentroid(points: Position[]) {
+  const ring = points.length > 1 && isSamePosition(points[0], points[points.length - 1]) ? points.slice(0, -1) : points
+
+  if (ring.length === 0) {
+    return null
+  }
+
+  if (ring.length < 3) {
+    return getArithmeticCenter(ring)
+  }
+
+  let areaFactor = 0
+  let centroidX = 0
+  let centroidY = 0
+
+  for (let index = 0; index < ring.length; index += 1) {
+    const current = ring[index]
+    const next = ring[(index + 1) % ring.length]
+    const factor = current[0] * next[1] - next[0] * current[1]
+
+    areaFactor += factor
+    centroidX += (current[0] + next[0]) * factor
+    centroidY += (current[1] + next[1]) * factor
+  }
+
+  if (areaFactor === 0) {
+    return getArithmeticCenter(ring)
+  }
+
+  return [centroidX / (3 * areaFactor), centroidY / (3 * areaFactor)] as Position
+}
+
+function getArithmeticCenter(points: Position[]) {
+  if (points.length === 0) {
+    return null
+  }
+
+  const [sumX, sumY] = points.reduce(
+    (accumulator, point) => [accumulator[0] + point[0], accumulator[1] + point[1]],
+    [0, 0]
+  )
+
+  return [sumX / points.length, sumY / points.length] as Position
+}
+
+function isSamePosition(source: Position, target: Position) {
+  return source[0] === target[0] && source[1] === target[1]
 }

@@ -1,3 +1,4 @@
+import type { Feature, Geometry } from 'geojson'
 import type { DivIcon, FeatureGroup, Layer, LayerGroup, Map as LeafletMap } from 'leaflet'
 
 import type { GeoJsonFeatureCollection, LayerDescriptor } from '@/lib/gis/schema'
@@ -6,6 +7,8 @@ import {
   buildDrawMarkerIconHtml,
   createDrawLayerFromFeature,
   createMeasureLayerFromResult,
+  extractBoundsFromLayer,
+  getLayerSummary,
   isDrawLayer,
   isMeasureLayer,
   readManagedOriginFromFeature
@@ -15,6 +18,7 @@ import {
   buildFeatureFromPath,
   buildMeasureMetrics,
   buildPointFeature,
+  getFeatureCentroid,
   getPathGeometryType,
   isClosedPath
 } from './tool-geometry'
@@ -42,6 +46,7 @@ interface RenderSyncOptions {
   group: FeatureGroup | null
   layers: Iterable<LayerDescriptor>
   leaflet: LeafletModule | null
+  includeMeasureLabel?: boolean
   useMarkerForPoint?: boolean
 }
 
@@ -61,11 +66,17 @@ function createMarkerIcon(leaflet: LeafletModule): DivIcon {
 }
 
 function createPathStyle(layer: LayerDescriptor) {
+  const isDrawResult = isDrawLayer(layer)
+  const isMeasureResult = isMeasureLayer(layer)
+  const fillOpacity = isDrawResult ? 0.18 : isMeasureResult ? 0.14 : 0.24
+
   return {
     color: layer.style.color ?? '#60a5fa',
     fillColor: layer.style.color ?? '#60a5fa',
-    fillOpacity: layer.style.opacity ?? 0.24,
+    fill: true,
     opacity: layer.style.opacity ?? 0.95,
+    fillOpacity,
+    stroke: true,
     weight: Math.max(1, layer.style.lineWidth ?? 2)
   }
 }
@@ -101,8 +112,29 @@ function createRenderableLeafletLayer(leaflet: LeafletModule, layer: LayerDescri
   return extractSingleLayer(geoJsonLayer)
 }
 
+function createMeasureLabelLayer(leaflet: LeafletModule, layer: LayerDescriptor) {
+  const summary = getLayerSummary(layer)
+  const latlng = getMeasureLabelLatLng(leaflet, layer)
+
+  if (!summary || !latlng) {
+    return null
+  }
+
+  const labelHtml = summary.replaceAll(' · ', '<span class="map-measure-label-separator">·</span><br />')
+
+  return leaflet.marker(latlng, {
+    interactive: false,
+    keyboard: false,
+    icon: leaflet.divIcon({
+      className: 'map-measure-label-wrapper',
+      html: `<span class="map-measure-label">${labelHtml}</span>`,
+      iconSize: undefined
+    })
+  })
+}
+
 function syncVisibleLayers(options: RenderSyncOptions) {
-  const { group, layers, leaflet, useMarkerForPoint = false } = options
+  const { group, layers, leaflet, includeMeasureLabel = false, useMarkerForPoint = false } = options
 
   if (!group || !leaflet) {
     return
@@ -120,6 +152,14 @@ function syncVisibleLayers(options: RenderSyncOptions) {
     if (renderedLayer) {
       group.addLayer(renderedLayer)
     }
+
+    if (includeMeasureLabel) {
+      const labelLayer = createMeasureLabelLayer(leaflet, layer)
+
+      if (labelLayer) {
+        group.addLayer(labelLayer)
+      }
+    }
   }
 }
 
@@ -131,6 +171,24 @@ function getPixelDistance(map: LeafletMap, source: import('leaflet').LatLng, tar
   const sourcePoint = map.latLngToContainerPoint(source)
   const targetPoint = map.latLngToContainerPoint(target)
   return sourcePoint.distanceTo(targetPoint)
+}
+
+function getMeasureLabelLatLng(leaflet: LeafletModule, layer: LayerDescriptor) {
+  const collection = layer.data as GeoJsonFeatureCollection
+  const feature = collection.features[0]
+
+  if (!feature) {
+    return null
+  }
+
+  const centroid = getFeatureCentroid(feature as Feature<Geometry>)
+
+  if (centroid) {
+    return leaflet.latLng(centroid[1], centroid[0])
+  }
+
+  const bounds = extractBoundsFromLayer(layer)
+  return bounds ? leaflet.latLng((bounds[1] + bounds[3]) / 2, (bounds[0] + bounds[2]) / 2) : null
 }
 
 class PointDrawSession {
@@ -574,6 +632,7 @@ export class MeasureToolController implements MapToolController {
 
     syncVisibleLayers({
       group: this.resultGroup,
+      includeMeasureLabel: true,
       layers: this.currentLayers.values(),
       leaflet: this.leaflet
     })

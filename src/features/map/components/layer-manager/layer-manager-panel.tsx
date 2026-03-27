@@ -143,52 +143,54 @@ export function LayerManagerPanel({
             </div>
 
             {managedLayers.length > 0 ? (
-              <div className='space-y-3'>
+              <div className='space-y-2'>
                 {managedLayers.map((layer) => (
                   <div
                     key={layer.id}
-                    className='rounded-[20px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-4 py-3'
+                    className='rounded-[18px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-3 py-2.5'
                   >
-                    <div className='flex items-start justify-between gap-3'>
+                    <div className='flex items-start justify-between gap-2.5'>
                       <div className='min-w-0 flex-1'>
                         <div className='flex items-center gap-2'>
-                          <div className='flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
-                            <FileUp className='h-4 w-4' />
+                          <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
+                            <FileUp className='h-3.5 w-3.5' />
                           </div>
                           <div className='min-w-0'>
-                            <div className='truncate text-sm font-medium text-neutral-900 dark:text-neutral-50'>
+                            <div className='truncate text-[13px] font-medium leading-5 text-neutral-900 dark:text-neutral-50'>
                               {layer.name}
                             </div>
-                            <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>
+                            <div className='text-[11px] leading-4 text-[var(--module-panel-text-muted)]'>
                               {layer.featureCount} 个要素 · {formatGeometryLabel(layer.geometryType)}
                             </div>
                             {layer.summary ? (
-                              <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>{layer.summary}</div>
+                              <div className='mt-0.5 text-[11px] leading-4 text-[var(--module-panel-text-muted)]'>
+                                {layer.summary}
+                              </div>
                             ) : null}
                           </div>
                         </div>
                       </div>
 
-                      <div className='rounded-full bg-[var(--module-panel-bg-muted)] px-2.5 py-1 text-[11px] text-[var(--module-panel-text-muted)]'>
+                      <div className='rounded-full bg-[var(--module-panel-bg-muted)] px-2 py-0.5 text-[10px] leading-4 text-[var(--module-panel-text-muted)]'>
                         {originToLabel(layer.origin)}
                       </div>
                     </div>
 
-                    <div className='mt-3 flex items-center gap-1'>
+                    <div className='mt-2 flex items-center gap-0.5'>
                       <ActionButton
                         label='定位图层'
                         onClick={() => void onFocusManagedLayer(layer.id)}
-                        icon={<Search className='h-4 w-4' />}
+                        icon={<Search className='h-3.5 w-3.5' />}
                       />
                       <ActionButton
                         label={layer.visible ? '隐藏图层' : '显示图层'}
                         onClick={() => void onToggleManagedLayer(layer.id)}
-                        icon={layer.visible ? <Eye className='h-4 w-4' /> : <EyeOff className='h-4 w-4' />}
+                        icon={layer.visible ? <Eye className='h-3.5 w-3.5' /> : <EyeOff className='h-3.5 w-3.5' />}
                       />
                       <ActionButton
                         label='删除图层'
                         onClick={() => void onRemoveManagedLayer(layer.id)}
-                        icon={<Trash2 className='h-4 w-4' />}
+                        icon={<Trash2 className='h-3.5 w-3.5' />}
                         destructive
                       />
                     </div>
@@ -241,7 +243,7 @@ function ActionButton({
           type='button'
           onClick={onClick}
           className={cn(
-            'flex h-8 w-8 items-center justify-center rounded-full text-[var(--module-panel-icon)] transition-[background-color,color] duration-200 hover:bg-[var(--module-button-hover-bg)] hover:text-[var(--module-button-hover-text)]',
+            'flex h-7 w-7 items-center justify-center rounded-full text-[var(--module-panel-icon)] transition-[background-color,color] duration-200 hover:bg-[var(--module-button-hover-bg)] hover:text-[var(--module-button-hover-text)]',
             destructive ? 'text-rose-500 hover:bg-rose-500/10 hover:text-rose-500' : ''
           )}
           aria-label={label}

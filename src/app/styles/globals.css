@@ -144,3 +144,35 @@ a {
 .leaflet-host .map-tool-preview-vertex {
   filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.22));
 }
+
+.leaflet-host .map-measure-label-wrapper {
+  background: transparent;
+  border: 0;
+}
+
+.leaflet-host .map-measure-label {
+  display: inline-block;
+  min-width: max-content;
+  transform: translate(-50%, -100%);
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.95),
+    0 0 8px rgba(255, 255, 255, 0.92);
+}
+
+.leaflet-host .map-measure-label-separator {
+  display: none;
+}
+
+.dark .leaflet-host .map-measure-label {
+  color: #fde68a;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.92),
+    0 0 8px rgba(0, 0, 0, 0.88);
+}

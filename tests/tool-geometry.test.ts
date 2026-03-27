@@ -8,6 +8,7 @@ import {
   buildMeasureMetrics,
   formatArea,
   formatLength,
+  getFeatureCentroid,
   getPathGeometryType,
   isClosedPath
 } from '../src/features/map/services/runtime/tool-geometry'
@@ -81,4 +82,38 @@ test('长度与面积格式化应切换单位', () => {
   assert.equal(formatLength(1234), '1.23 千米')
   assert.equal(formatArea(400), '400 平方米')
   assert.equal(formatArea(24567), '2.46 公顷')
+  assert.equal(formatArea(2500000), '2.5 平方千米')
+})
+
+test('getFeatureCentroid 应返回线和面的重心位置', () => {
+  const lineCentroid = getFeatureCentroid({
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'LineString',
+      coordinates: [
+        [120, 30],
+        [122, 30]
+      ]
+    }
+  })
+  const polygonCentroid = getFeatureCentroid({
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [120, 30],
+          [122, 30],
+          [122, 32],
+          [120, 32],
+          [120, 30]
+        ]
+      ]
+    }
+  })
+
+  assert.deepEqual(lineCentroid, [121, 30])
+  assert.deepEqual(polygonCentroid, [121, 31])
 })
