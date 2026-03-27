@@ -40,16 +40,16 @@ export function MapShell() {
   const {
     activeBaseLayer,
     activeTool,
-    focusUserLayer,
+    focusManagedLayer,
+    managedLayers,
     panels,
-    removeUserLayer,
+    removeManagedLayer,
     setPanelState,
     statusBar,
     toolbarActions,
-    toggleUserLayer,
+    toggleManagedLayer,
     uploadStatus,
     uploadUserLayers,
-    userLayers,
     viewport,
     visibleLayerCount
   } = useMapShell(snapshot)
@@ -103,17 +103,22 @@ export function MapShell() {
             <LayerManagerPanel
               layerManagerOpen={panels.layerManagerOpen}
               uploadStatus={uploadStatus}
-              userLayers={userLayers}
+              managedLayers={managedLayers}
               onToggleLayerManager={handleToggleLayerManager}
               onUploadFiles={uploadUserLayers}
-              onToggleUserLayer={toggleUserLayer}
-              onFocusUserLayer={focusUserLayer}
-              onRemoveUserLayer={removeUserLayer}
+              onToggleManagedLayer={toggleManagedLayer}
+              onFocusManagedLayer={focusManagedLayer}
+              onRemoveManagedLayer={removeManagedLayer}
             />
 
             <AssistantEntry visible={!panels.assistantPanelOpen} onOpen={handleOpenAssistantPanel} />
 
-            <Nav onLocate={handleLocate} onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
+            <Nav
+              onLocate={handleLocate}
+              onResetView={handleResetView}
+              onZoomIn={handleZoomIn}
+              onZoomOut={handleZoomOut}
+            />
 
             <Status state={statusBar} />
           </div>

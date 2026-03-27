@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-
-import type { LayerDescriptor } from '../src/lib/gis/schema'
 import { MapRuntime } from '../src/features/map/services/map-runtime'
+import type { LayerDescriptor } from '../src/lib/gis/schema'
 
 function createLayer(id = 'demo'): LayerDescriptor {
   return {

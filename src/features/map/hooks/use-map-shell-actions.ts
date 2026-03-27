@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
+import { toast } from 'sonner'
 
 import type { MapRuntime } from '../services/map-runtime'
 import type { BaseLayerType, MapTool, ShellPanelState } from '../types'
@@ -12,23 +13,27 @@ interface UseMapShellActionsOptions {
   setPanelState: (updater: Partial<ShellPanelState>) => void
 }
 
-export function useMapShellActions({
-  runtime,
-  activeTool,
-  panels,
-  setPanelState
-}: UseMapShellActionsOptions) {
+export function useMapShellActions({ runtime, activeTool, panels, setPanelState }: UseMapShellActionsOptions) {
   const handleLocate = useCallback(() => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      toast.error('当前浏览器不支持定位能力')
       return
     }
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      void runtime.locate({
-        lng: Number(position.coords.longitude.toFixed(5)),
-        lat: Number(position.coords.latitude.toFixed(5))
-      })
-    })
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        void runtime.locate({
+          lng: Number(position.coords.longitude.toFixed(5)),
+          lat: Number(position.coords.latitude.toFixed(5))
+        })
+      },
+      (error) => {
+        const message =
+          error.code === error.PERMISSION_DENIED ? '定位权限被拒绝，请检查浏览器授权' : '定位失败，请稍后重试'
+
+        toast.error(message)
+      }
+    )
   }, [runtime])
 
   const handleResetView = useCallback(() => {

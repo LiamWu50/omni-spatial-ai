@@ -1,6 +1,12 @@
 'use client'
 
-import { defaultBaseMaps, type BBox, type FeatureQuery, type LayerDescriptor, type MapViewState } from '@/lib/gis/schema'
+import {
+  type BBox,
+  defaultBaseMaps,
+  type FeatureQuery,
+  type LayerDescriptor,
+  type MapViewState
+} from '@/lib/gis/schema'
 
 import type { BaseLayerType, MapCenter, MapTool, MapViewportState } from '../types'
 import { BaseMapManager } from './runtime/base-map-manager'
@@ -82,6 +88,7 @@ export class MapRuntime {
 
     this.layerManager = new LayerManager({
       onLayersChange: (layers) => {
+        this.toolRegistry.syncLayers(layers)
         this.setState({ layers })
       }
     })
@@ -89,7 +96,11 @@ export class MapRuntime {
     this.toolRegistry = new ToolRegistry({
       onActiveToolChange: (activeTool) => {
         this.setState({ activeTool })
-      }
+      },
+      onAddLayer: (layer) => this.addLayer(layer),
+      onRemoveLayer: (layerId) => this.removeLayer(layerId),
+      onRequestToolChange: (tool) => this.toolRegistry.setActiveTool(tool),
+      onUpdateLayer: (layer) => this.updateLayer(layer)
     })
   }
 
@@ -131,6 +142,7 @@ export class MapRuntime {
     this.layerManager.attach(this.map, this.leaflet)
     this.viewportManager.attach(this.map)
     this.toolRegistry.attach(this.map, this.leaflet)
+    this.toolRegistry.syncLayers(this.state.layers)
 
     return () => {
       void this.unmount()

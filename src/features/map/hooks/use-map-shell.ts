@@ -4,11 +4,10 @@ import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import type { LayerDescriptor } from '@/lib/gis/schema'
-
-import { mapRuntime, type MapRuntimeState } from '../services/map-runtime'
 import { INITIAL_PANEL_STATE, TOOLBAR_ACTIONS } from '../lib/constants'
 import { formatAttribution, formatCoordinate, formatScale } from '../lib/formatters'
-import { isUserUploadedLayer, parseUserLayerFile, toUserLayerListItem } from '../lib/user-layers'
+import { isManagedLayer, parseUserLayerFile, toUserLayerListItem } from '../lib/user-layers'
+import { type MapRuntimeState, mapRuntime } from '../services/map-runtime'
 import type { MapTool, ShellPanelState, ShellToolbarAction, StatusBarState } from '../types'
 
 export function useMapShell(snapshot: MapRuntimeState) {
@@ -19,12 +18,12 @@ export function useMapShell(snapshot: MapRuntimeState) {
   const viewport = mapRuntime.toViewportState(snapshot)
   const activeTool = snapshot.activeTool as MapTool | null
 
-  const userLayers = useMemo(
-    () => snapshot.layers.filter(isUserUploadedLayer).map(toUserLayerListItem),
+  const managedLayers = useMemo(
+    () => snapshot.layers.filter(isManagedLayer).map(toUserLayerListItem),
     [snapshot.layers]
   )
 
-  const visibleLayerCount = useMemo(() => userLayers.filter((layer) => layer.visible).length, [userLayers])
+  const visibleLayerCount = useMemo(() => managedLayers.filter((layer) => layer.visible).length, [managedLayers])
 
   const statusBar = useMemo<StatusBarState>(
     () => ({
@@ -84,15 +83,15 @@ export function useMapShell(snapshot: MapRuntimeState) {
       }
 
       const latestLayer = importedLayers[importedLayers.length - 1]
-      const latestUserLayer = toUserLayerListItem(latestLayer)
+      const latestManagedLayer = toUserLayerListItem(latestLayer)
 
-      if (latestUserLayer.bounds) {
-        await mapRuntime.fitBounds(latestUserLayer.bounds)
+      if (latestManagedLayer.bounds) {
+        await mapRuntime.fitBounds(latestManagedLayer.bounds)
       }
 
       const successMessage =
         importedLayers.length === 1
-          ? `已导入 ${latestLayer.name}，共 ${latestUserLayer.featureCount} 个要素`
+          ? `已导入 ${latestLayer.name}，共 ${latestManagedLayer.featureCount} 个要素`
           : `已导入 ${importedLayers.length} 个图层`
 
       const statusMessage =
@@ -105,7 +104,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
         toast.error(`部分文件导入失败：${failedFiles[0]}`)
       }
     },
-    async toggleUserLayer(layerId: string) {
+    async toggleManagedLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
 
       if (!target) {
@@ -117,23 +116,23 @@ export function useMapShell(snapshot: MapRuntimeState) {
         visible: !target.visible
       })
     },
-    async focusUserLayer(layerId: string) {
+    async focusManagedLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
 
       if (!target) {
         return
       }
 
-      const userLayer = toUserLayerListItem(target)
+      const managedLayer = toUserLayerListItem(target)
 
-      if (!userLayer.bounds) {
+      if (!managedLayer.bounds) {
         toast.info('当前图层缺少可定位范围')
         return
       }
 
-      await mapRuntime.fitBounds(userLayer.bounds)
+      await mapRuntime.fitBounds(managedLayer.bounds)
     },
-    async removeUserLayer(layerId: string) {
+    async removeManagedLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
 
       if (!target) {
@@ -144,7 +143,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
       toast.success(`已删除图层：${target.name}`)
     },
     toolbarActions,
-    userLayers,
+    managedLayers,
     viewport,
     visibleLayerCount
   }

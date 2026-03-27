@@ -9,33 +9,34 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { cn } from '@/lib/utils'
 
 import { LAYER_UPLOAD_ACCEPT, LAYER_UPLOAD_MAX_SIZE_MB } from '../../lib/constants'
+import { originToLabel } from '../../lib/user-layers'
 import type { UserLayerListItem } from '../../types'
 
 interface LayerManagerPanelProps {
   layerManagerOpen: boolean
   uploadStatus: string
-  userLayers: UserLayerListItem[]
+  managedLayers: UserLayerListItem[]
   onToggleLayerManager: () => void
   onUploadFiles: (files: File[]) => Promise<void> | void
-  onToggleUserLayer: (layerId: string) => Promise<void> | void
-  onFocusUserLayer: (layerId: string) => Promise<void> | void
-  onRemoveUserLayer: (layerId: string) => Promise<void> | void
+  onToggleManagedLayer: (layerId: string) => Promise<void> | void
+  onFocusManagedLayer: (layerId: string) => Promise<void> | void
+  onRemoveManagedLayer: (layerId: string) => Promise<void> | void
 }
 
 export function LayerManagerPanel({
   layerManagerOpen,
   uploadStatus,
-  userLayers,
+  managedLayers,
   onToggleLayerManager,
   onUploadFiles,
-  onToggleUserLayer,
-  onFocusUserLayer,
-  onRemoveUserLayer
+  onToggleManagedLayer,
+  onFocusManagedLayer,
+  onRemoveManagedLayer
 }: LayerManagerPanelProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = useState(false)
 
-  const visibleLayerCount = userLayers.filter((layer) => layer.visible).length
+  const visibleLayerCount = managedLayers.filter((layer) => layer.visible).length
 
   async function handleFiles(files: FileList | File[]) {
     const nextFiles = Array.from(files)
@@ -135,15 +136,15 @@ export function LayerManagerPanel({
 
           <section>
             <div className='mb-3 flex items-center justify-between'>
-              <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>User Layers</div>
+              <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>图层列表</div>
               <div className='text-xs text-[var(--module-panel-text-muted)]'>
-                {visibleLayerCount}/{userLayers.length} 可见
+                {visibleLayerCount}/{managedLayers.length} 可见
               </div>
             </div>
 
-            {userLayers.length > 0 ? (
+            {managedLayers.length > 0 ? (
               <div className='space-y-3'>
-                {userLayers.map((layer) => (
+                {managedLayers.map((layer) => (
                   <div
                     key={layer.id}
                     className='rounded-[20px] border border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)] px-4 py-3'
@@ -161,29 +162,32 @@ export function LayerManagerPanel({
                             <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>
                               {layer.featureCount} 个要素 · {formatGeometryLabel(layer.geometryType)}
                             </div>
+                            {layer.summary ? (
+                              <div className='mt-1 text-xs text-[var(--module-panel-text-muted)]'>{layer.summary}</div>
+                            ) : null}
                           </div>
                         </div>
                       </div>
 
                       <div className='rounded-full bg-[var(--module-panel-bg-muted)] px-2.5 py-1 text-[11px] text-[var(--module-panel-text-muted)]'>
-                        {layer.sourceType.toUpperCase()}
+                        {originToLabel(layer.origin)}
                       </div>
                     </div>
 
                     <div className='mt-3 flex items-center gap-1'>
                       <ActionButton
                         label='定位图层'
-                        onClick={() => void onFocusUserLayer(layer.id)}
+                        onClick={() => void onFocusManagedLayer(layer.id)}
                         icon={<Search className='h-4 w-4' />}
                       />
                       <ActionButton
                         label={layer.visible ? '隐藏图层' : '显示图层'}
-                        onClick={() => void onToggleUserLayer(layer.id)}
+                        onClick={() => void onToggleManagedLayer(layer.id)}
                         icon={layer.visible ? <Eye className='h-4 w-4' /> : <EyeOff className='h-4 w-4' />}
                       />
                       <ActionButton
                         label='删除图层'
-                        onClick={() => void onRemoveUserLayer(layer.id)}
+                        onClick={() => void onRemoveManagedLayer(layer.id)}
                         icon={<Trash2 className='h-4 w-4' />}
                         destructive
                       />
@@ -196,9 +200,9 @@ export function LayerManagerPanel({
                 <div className='mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
                   <Upload className='h-5 w-5' />
                 </div>
-                <div className='mt-3 text-sm font-medium text-neutral-900 dark:text-neutral-50'>暂无用户图层</div>
+                <div className='mt-3 text-sm font-medium text-neutral-900 dark:text-neutral-50'>暂无可管理图层</div>
                 <div className='mt-2 text-xs leading-5 text-[var(--module-panel-text-muted)]'>
-                  上传 GeoJSON 原始数据后，这里会展示你的图层列表。
+                  上传、绘制或测量后，这里会展示你的图层列表。
                 </div>
                 <Button
                   type='button'

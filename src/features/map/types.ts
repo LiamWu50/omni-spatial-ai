@@ -10,6 +10,8 @@ export type BaseLayerType = 'vector' | 'satellite' | 'terrain'
 
 export type MapTool = 'measure' | 'point' | 'geometry'
 
+export type LayerOrigin = 'upload' | 'measure' | 'draw'
+
 export interface UserLayerListItem {
   id: string
   name: string
@@ -18,6 +20,8 @@ export interface UserLayerListItem {
   sourceType: LayerDescriptor['sourceType']
   geometryType: LayerDescriptor['geometryType']
   bounds: BBox | null
+  origin: LayerOrigin
+  summary: string | null
 }
 
 export interface BaseMapOption {

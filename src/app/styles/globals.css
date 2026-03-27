@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
-
 /* Tailwind v4 默认按系统媒体查询处理 dark，这里显式切到 `.dark` 类驱动 */
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -115,4 +114,33 @@ a {
 
 .dark .leaflet-host .leaflet-control-attribution a {
   color: #93c5fd;
+}
+
+.leaflet-host .map-draw-marker {
+  background: transparent;
+  border: 0;
+}
+
+.leaflet-host .map-draw-marker-dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  background: #8b5cf6;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.28);
+}
+
+.leaflet-host .map-tool-preview-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 6;
+}
+
+.leaflet-host .map-tool-preview-polygon {
+  stroke-linejoin: round;
+}
+
+.leaflet-host .map-tool-preview-vertex {
+  filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.22));
 }

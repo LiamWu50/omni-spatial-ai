@@ -2,6 +2,8 @@ import type { FeatureCollection } from 'geojson'
 
 import type { FeatureQuery, GeoJsonFeatureCollection, LayerDescriptor } from '@/lib/gis/schema'
 
+import { shouldRenderInGenericLayerManager } from './tool-controllers'
+
 type LeafletModule = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map
 type LeafletGeoJSON = import('leaflet').GeoJSON
@@ -96,12 +98,18 @@ export class LayerManager {
       return
     }
 
+    const leaflet = this.leaflet
     const activeLayerIds = new Set<string>()
 
     for (const layer of this.layers.values()) {
       activeLayerIds.add(layer.id)
 
-      if (!layer.visible || layer.sourceType !== 'geojson' || !layer.data) {
+      if (
+        !shouldRenderInGenericLayerManager(layer) ||
+        !layer.visible ||
+        layer.sourceType !== 'geojson' ||
+        !layer.data
+      ) {
         this.renderedLayers.get(layer.id)?.remove()
         this.renderedLayers.delete(layer.id)
         continue
@@ -109,9 +117,9 @@ export class LayerManager {
 
       this.renderedLayers.get(layer.id)?.remove()
 
-      const geoJsonLayer = this.leaflet.geoJSON(layer.data as GeoJsonFeatureCollection, {
+      const geoJsonLayer = leaflet.geoJSON(layer.data as GeoJsonFeatureCollection, {
         pointToLayer: (_feature, latlng) =>
-          this.leaflet!.circleMarker(latlng, {
+          leaflet.circleMarker(latlng, {
             color: layer.style.color ?? '#60a5fa',
             fillColor: layer.style.color ?? '#60a5fa',
             fillOpacity: layer.style.opacity ?? 0.75,
@@ -147,6 +155,7 @@ export class LayerManager {
       return
     }
 
+    const leaflet = this.leaflet
     this.highlightLayer?.remove()
     this.highlightLayer = null
 
@@ -154,30 +163,32 @@ export class LayerManager {
       return
     }
 
-    this.highlightLayer = this.leaflet.geoJSON(
-      {
-        type: 'FeatureCollection',
-        features
-      } as FeatureCollection,
-      {
-        pointToLayer: (_feature, latlng) =>
-          this.leaflet!.circleMarker(latlng, {
-            color: '#f8fafc',
+    this.highlightLayer = leaflet
+      .geoJSON(
+        {
+          type: 'FeatureCollection',
+          features
+        } as FeatureCollection,
+        {
+          pointToLayer: (_feature, latlng) =>
+            leaflet.circleMarker(latlng, {
+              color: '#f8fafc',
+              fillColor: '#facc15',
+              fillOpacity: 0.92,
+              opacity: 1,
+              radius: 8,
+              weight: 2
+            }),
+          style: () => ({
+            color: '#facc15',
             fillColor: '#facc15',
-            fillOpacity: 0.92,
+            fillOpacity: 0.18,
             opacity: 1,
-            radius: 8,
-            weight: 2
-          }),
-        style: () => ({
-          color: '#facc15',
-          fillColor: '#facc15',
-          fillOpacity: 0.18,
-          opacity: 1,
-          weight: 3
-        })
-      }
-    ).addTo(this.map)
+            weight: 3
+          })
+        }
+      )
+      .addTo(this.map)
   }
 
   private filterGeoJsonFeatures(collection: GeoJsonFeatureCollection, query: FeatureQuery) {

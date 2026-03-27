@@ -1,20 +1,24 @@
 'use client'
 
-import { Crosshair, Minus, Plus } from 'lucide-react'
+import { Crosshair, Home, Minus, Plus } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 interface MapNavProps {
   onLocate: () => void
+  onResetView: () => void
   onZoomIn: () => void
   onZoomOut: () => void
 }
 
-export function Nav({ onLocate, onZoomIn, onZoomOut }: MapNavProps) {
+export function Nav({ onLocate, onResetView, onZoomIn, onZoomOut }: MapNavProps) {
   return (
     <div className='absolute bottom-16 right-4 z-30 flex items-center gap-3'>
       <div className='flex items-center gap-2'>
         <RoundAction label='定位' onClick={onLocate}>
           <Crosshair className='h-4 w-4' />
+        </RoundAction>
+        <RoundAction label='重置视角' onClick={onResetView}>
+          <Home className='h-4 w-4' />
         </RoundAction>
       </div>
 

@@ -8,6 +8,8 @@ export const INITIAL_PANEL_STATE: ShellPanelState = {
 }
 
 export const USER_LAYER_ID_PREFIX = 'user-layer-'
+export const MEASURE_LAYER_ID_PREFIX = 'measure-layer-'
+export const DRAW_LAYER_ID_PREFIX = 'draw-layer-'
 export const LAYER_UPLOAD_ACCEPT = '.geojson,.json'
 export const LAYER_UPLOAD_MAX_SIZE_MB = 100
 

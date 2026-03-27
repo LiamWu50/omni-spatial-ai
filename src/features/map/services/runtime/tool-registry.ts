@@ -1,69 +1,80 @@
+import type { LayerDescriptor } from '@/lib/gis/schema'
+
 import type { MapTool } from '../../types'
+import { DrawToolController, MeasureToolController } from './tool-controllers'
 
 type LeafletModule = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map
 
 export interface MapToolController {
   attach(map: LeafletMap, leaflet: LeafletModule): void
-  activate(): void
+  activate(tool: MapTool): void
   deactivate(): void
   destroy(): void
+  syncLayers(layers: LayerDescriptor[]): void
 }
 
 interface ToolRegistryOptions {
   onActiveToolChange: (tool: MapTool | null) => void
-}
-
-class NoopToolController implements MapToolController {
-  attach(_map: LeafletMap, _leaflet: LeafletModule) {}
-
-  activate() {}
-
-  deactivate() {}
-
-  destroy() {}
+  onAddLayer: (layer: LayerDescriptor) => Promise<void> | void
+  onRemoveLayer: (layerId: string) => Promise<void> | void
+  onRequestToolChange: (tool: MapTool | null) => void
+  onUpdateLayer: (layer: LayerDescriptor) => Promise<void> | void
 }
 
 export class ToolRegistry {
-  private readonly tools: Record<MapTool, MapToolController> = {
-    geometry: new NoopToolController(),
-    measure: new NoopToolController(),
-    point: new NoopToolController()
-  }
+  private readonly drawToolController: DrawToolController
+
+  private readonly measureToolController: MeasureToolController
+
+  private readonly tools: Record<MapTool, MapToolController>
 
   private activeTool: MapTool | null = null
-
-  private map: LeafletMap | null = null
-
-  private leaflet: LeafletModule | null = null
 
   private readonly onActiveToolChange: ToolRegistryOptions['onActiveToolChange']
 
   constructor(options: ToolRegistryOptions) {
     this.onActiveToolChange = options.onActiveToolChange
+    this.drawToolController = new DrawToolController({
+      onAddLayer: options.onAddLayer,
+      onRemoveLayer: options.onRemoveLayer,
+      onRequestToolChange: options.onRequestToolChange,
+      onUpdateLayer: options.onUpdateLayer
+    })
+    this.measureToolController = new MeasureToolController({
+      onAddLayer: options.onAddLayer,
+      onRemoveLayer: options.onRemoveLayer,
+      onRequestToolChange: options.onRequestToolChange,
+      onUpdateLayer: options.onUpdateLayer
+    })
+    this.tools = {
+      geometry: this.drawToolController,
+      measure: this.measureToolController,
+      point: this.drawToolController
+    }
   }
 
   attach(map: LeafletMap, leaflet: LeafletModule) {
-    this.map = map
-    this.leaflet = leaflet
-
-    for (const tool of Object.values(this.tools)) {
+    for (const tool of this.uniqueControllers()) {
       tool.attach(map, leaflet)
     }
   }
 
   detach() {
-    for (const tool of Object.values(this.tools)) {
+    for (const tool of this.uniqueControllers()) {
       tool.deactivate()
       tool.destroy()
     }
-
-    this.map = null
-    this.leaflet = null
   }
 
   getActiveTool() {
     return this.activeTool
+  }
+
+  syncLayers(layers: LayerDescriptor[]) {
+    for (const tool of this.uniqueControllers()) {
+      tool.syncLayers(layers)
+    }
   }
 
   setActiveTool(nextTool: MapTool | null) {
@@ -74,9 +85,13 @@ export class ToolRegistry {
     this.activeTool = nextTool
 
     if (this.activeTool) {
-      this.tools[this.activeTool].activate()
+      this.tools[this.activeTool].activate(this.activeTool)
     }
 
     this.onActiveToolChange(this.activeTool)
+  }
+
+  private uniqueControllers() {
+    return [...new Set(Object.values(this.tools))]
   }
 }

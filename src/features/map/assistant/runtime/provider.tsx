@@ -2,9 +2,8 @@
 
 import { AssistantRuntimeProvider } from '@assistant-ui/react'
 import type { PropsWithChildren } from 'react'
-
-import { useMapAssistantRuntime } from './use-map-assistant-runtime'
 import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
+import { useMapAssistantRuntime } from './use-map-assistant-runtime'
 
 type MapAssistantProviderProps = PropsWithChildren<{
   viewport: MapViewportState

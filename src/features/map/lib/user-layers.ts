@@ -1,8 +1,30 @@
+import type { Feature, Geometry, Position } from 'geojson'
+import type { Layer } from 'leaflet'
+
 import type { BBox, GeoJsonFeatureCollection, LayerDescriptor } from '@/lib/gis/schema'
 import { geoJsonFeatureCollectionSchema } from '@/lib/gis/schema'
 
-import type { UserLayerListItem } from '../types'
-import { LAYER_UPLOAD_MAX_SIZE_MB, USER_LAYER_ID_PREFIX } from './constants'
+import type { LayerOrigin, UserLayerListItem } from '../types'
+import {
+  DRAW_LAYER_ID_PREFIX,
+  LAYER_UPLOAD_MAX_SIZE_MB,
+  MEASURE_LAYER_ID_PREFIX,
+  USER_LAYER_ID_PREFIX
+} from './constants'
+
+const DRAW_LAYER_STYLE: LayerDescriptor['style'] = {
+  color: '#8b5cf6',
+  opacity: 0.92,
+  lineWidth: 3,
+  radius: 6
+}
+
+const MEASURE_LAYER_STYLE: LayerDescriptor['style'] = {
+  color: '#f59e0b',
+  opacity: 0.9,
+  lineWidth: 3,
+  radius: 5
+}
 
 const USER_LAYER_STYLE: LayerDescriptor['style'] = {
   color: '#38bdf8',
@@ -11,7 +33,22 @@ const USER_LAYER_STYLE: LayerDescriptor['style'] = {
   radius: 6
 }
 
+const INTERNAL_META_KEYS = {
+  kind: '__managedKind',
+  origin: '__managedOrigin',
+  summary: '__managedSummary'
+} as const
+
 type GeometryCategory = Exclude<LayerDescriptor['geometryType'], 'mixed'>
+
+export interface MeasurementResult {
+  area: number
+  areaDisplay: string
+  length: number
+  lengthDisplay: string
+  pointCount: number
+  points: Position[]
+}
 
 function isCoordinatePair(value: unknown): value is [number, number] {
   return (
@@ -67,7 +104,49 @@ function normalizeFileBasename(fileName: string) {
   )
 }
 
-function extractBounds(collection: GeoJsonFeatureCollection): BBox | null {
+function formatSequence(sequence: number) {
+  return sequence.toString().padStart(2, '0')
+}
+
+function withBounds(collection: GeoJsonFeatureCollection) {
+  const bounds = extractBounds(collection)
+
+  return {
+    data: {
+      ...collection,
+      ...(bounds ? { bbox: bounds } : {})
+    },
+    bounds
+  }
+}
+
+function withMeta(
+  collection: GeoJsonFeatureCollection,
+  meta: {
+    kind: string
+    origin: LayerOrigin
+    summary?: string | null
+  }
+): GeoJsonFeatureCollection {
+  return {
+    ...collection,
+    features: collection.features.map((feature, index) => ({
+      ...feature,
+      properties: {
+        ...feature.properties,
+        ...(index === 0
+          ? {
+              [INTERNAL_META_KEYS.kind]: meta.kind,
+              [INTERNAL_META_KEYS.origin]: meta.origin,
+              ...(meta.summary ? { [INTERNAL_META_KEYS.summary]: meta.summary } : {})
+            }
+          : {})
+      }
+    }))
+  }
+}
+
+export function extractBounds(collection: GeoJsonFeatureCollection): BBox | null {
   const coordinates: Array<[number, number]> = []
 
   for (const feature of collection.features) {
@@ -84,7 +163,7 @@ function extractBounds(collection: GeoJsonFeatureCollection): BBox | null {
   return [Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)]
 }
 
-function extractGeometryType(collection: GeoJsonFeatureCollection): LayerDescriptor['geometryType'] {
+export function extractGeometryType(collection: GeoJsonFeatureCollection): LayerDescriptor['geometryType'] {
   const categories = new Set<GeometryCategory>()
 
   for (const feature of collection.features) {
@@ -104,7 +183,7 @@ function extractGeometryType(collection: GeoJsonFeatureCollection): LayerDescrip
   return 'mixed'
 }
 
-function extractBoundsFromLayer(layer: LayerDescriptor) {
+export function extractBoundsFromLayer(layer: LayerDescriptor) {
   const data = layer.data as { bbox?: unknown }
 
   if (
@@ -123,13 +202,21 @@ function extractBoundsFromLayer(layer: LayerDescriptor) {
   return extractBounds(parsed.data)
 }
 
-function extractFeatureCount(layer: LayerDescriptor) {
+export function extractFeatureCount(layer: LayerDescriptor) {
   const parsed = geoJsonFeatureCollectionSchema.safeParse(layer.data)
   return parsed.success ? parsed.data.features.length : 0
 }
 
 function createUserLayerId(fileName: string, uniqueToken: string) {
   return `${USER_LAYER_ID_PREFIX}${normalizeFileBasename(fileName)}-${uniqueToken}`
+}
+
+function createDrawLayerId(kind: string, uniqueToken: string) {
+  return `${DRAW_LAYER_ID_PREFIX}${kind}-${uniqueToken}`
+}
+
+function createMeasureLayerId(kind: string, uniqueToken: string) {
+  return `${MEASURE_LAYER_ID_PREFIX}${kind}-${uniqueToken}`
 }
 
 function ensureGeoJsonFile(file: File) {
@@ -141,6 +228,120 @@ function ensureGeoJsonFile(file: File) {
 
   if (file.size > LAYER_UPLOAD_MAX_SIZE_MB * 1024 * 1024) {
     throw new Error(`文件大小不能超过 ${LAYER_UPLOAD_MAX_SIZE_MB} MB`)
+  }
+}
+
+function asFeatureCollection(feature: Feature) {
+  const normalizedFeature = {
+    ...feature,
+    properties: feature.properties ?? {}
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: [normalizedFeature]
+  } as GeoJsonFeatureCollection
+}
+
+function closeRing(points: Position[]) {
+  if (points.length === 0) {
+    return points
+  }
+
+  const firstPoint = points[0]
+  const lastPoint = points[points.length - 1]
+
+  if (firstPoint[0] === lastPoint[0] && firstPoint[1] === lastPoint[1]) {
+    return points
+  }
+
+  return [...points, [firstPoint[0], firstPoint[1]]]
+}
+
+function readFeatureCollection(layer: LayerDescriptor) {
+  const parsed = geoJsonFeatureCollectionSchema.safeParse(layer.data)
+  return parsed.success ? parsed.data : null
+}
+
+function readLayerMetaValue(layer: LayerDescriptor, key: string) {
+  const collection = readFeatureCollection(layer)
+  return collection?.features[0]?.properties?.[key]
+}
+
+function geometryKindLabel(kind: LayerDescriptor['geometryType']) {
+  if (kind === 'point') {
+    return '点位'
+  }
+
+  if (kind === 'line') {
+    return '线段'
+  }
+
+  if (kind === 'polygon') {
+    return '多边形'
+  }
+
+  return '图形'
+}
+
+export function getLayerOrigin(layer: LayerDescriptor): LayerOrigin | null {
+  if (layer.id.startsWith(USER_LAYER_ID_PREFIX)) {
+    return 'upload'
+  }
+
+  if (layer.id.startsWith(MEASURE_LAYER_ID_PREFIX)) {
+    return 'measure'
+  }
+
+  if (layer.id.startsWith(DRAW_LAYER_ID_PREFIX)) {
+    return 'draw'
+  }
+
+  return null
+}
+
+export function isUserUploadedLayer(layer: LayerDescriptor) {
+  return getLayerOrigin(layer) === 'upload'
+}
+
+export function isMeasureLayer(layer: LayerDescriptor) {
+  return getLayerOrigin(layer) === 'measure'
+}
+
+export function isDrawLayer(layer: LayerDescriptor) {
+  return getLayerOrigin(layer) === 'draw'
+}
+
+export function isManagedLayer(layer: LayerDescriptor) {
+  return getLayerOrigin(layer) !== null
+}
+
+export function isToolManagedLayer(layer: LayerDescriptor) {
+  const origin = getLayerOrigin(layer)
+  return origin === 'draw' || origin === 'measure'
+}
+
+export function getLayerSummary(layer: LayerDescriptor) {
+  const summary = readLayerMetaValue(layer, INTERNAL_META_KEYS.summary)
+  return typeof summary === 'string' && summary.trim().length > 0 ? summary : null
+}
+
+export function getLayerKind(layer: LayerDescriptor) {
+  const kind = readLayerMetaValue(layer, INTERNAL_META_KEYS.kind)
+  return typeof kind === 'string' && kind.trim().length > 0 ? kind : null
+}
+
+export function toUserLayerListItem(layer: LayerDescriptor): UserLayerListItem {
+  return {
+    id: layer.id,
+    name: layer.name,
+    visible: layer.visible,
+    featureCount: extractFeatureCount(layer),
+    sourceType: layer.sourceType,
+    geometryType: layer.geometryType,
+    bounds: extractBoundsFromLayer(layer),
+    origin: getLayerOrigin(layer) ?? 'upload',
+    summary: getLayerSummary(layer)
   }
 }
 
@@ -165,35 +366,149 @@ export async function parseUserLayerFile(file: File, uniqueToken: string): Promi
     throw new Error('无有效要素')
   }
 
-  const bounds = extractBounds(parsedCollection.data)
+  const collection = withMeta(parsedCollection.data, {
+    kind: 'upload',
+    origin: 'upload'
+  })
+  const { data } = withBounds(collection)
 
   return {
     id: createUserLayerId(file.name, uniqueToken),
     name: file.name,
     sourceType: 'geojson',
-    data: {
-      ...parsedCollection.data,
-      ...(bounds ? { bbox: bounds } : {})
-    },
-    geometryType: extractGeometryType(parsedCollection.data),
+    data,
+    geometryType: extractGeometryType(collection),
     visible: true,
     style: USER_LAYER_STYLE,
     crs: 'WGS84'
   }
 }
 
-export function isUserUploadedLayer(layer: LayerDescriptor) {
-  return layer.id.startsWith(USER_LAYER_ID_PREFIX)
+export function createDrawLayerFromFeature(options: {
+  feature: Feature<Geometry>
+  sequence: number
+  uniqueToken: string
+}): LayerDescriptor {
+  const collection = withMeta(asFeatureCollection(options.feature), {
+    kind: geometryKindLabel(geometryToCategory(options.feature.geometry.type)),
+    origin: 'draw'
+  })
+  const geometryType = extractGeometryType(collection)
+  const { data } = withBounds(collection)
+  const kindLabel = geometryKindLabel(geometryType)
+
+  return {
+    id: createDrawLayerId(geometryType, options.uniqueToken),
+    name: `${kindLabel} ${formatSequence(options.sequence)}`,
+    sourceType: 'geojson',
+    data,
+    geometryType,
+    visible: true,
+    style: DRAW_LAYER_STYLE,
+    crs: 'WGS84'
+  }
 }
 
-export function toUserLayerListItem(layer: LayerDescriptor): UserLayerListItem {
-  return {
-    id: layer.id,
-    name: layer.name,
-    visible: layer.visible,
-    featureCount: extractFeatureCount(layer),
-    sourceType: layer.sourceType,
-    geometryType: layer.geometryType,
-    bounds: extractBoundsFromLayer(layer)
+export function createMeasureLayerFromResult(options: {
+  result: MeasurementResult
+  sequence: number
+  uniqueToken: string
+}): LayerDescriptor | null {
+  const coordinates = closeRing(options.result.points)
+  if (coordinates.length === 0) {
+    return null
   }
+
+  const isAreaMeasurement = options.result.area > 0 && coordinates.length >= 3
+  const geometry: Geometry = isAreaMeasurement
+    ? {
+        type: 'Polygon',
+        coordinates: [coordinates]
+      }
+    : coordinates.length >= 2
+      ? {
+          type: 'LineString',
+          coordinates
+        }
+      : {
+          type: 'Point',
+          coordinates: coordinates[0]
+        }
+
+  const summary = isAreaMeasurement
+    ? `面积 ${options.result.areaDisplay} · 周长 ${options.result.lengthDisplay}`
+    : `距离 ${options.result.lengthDisplay}`
+  const kindLabel = isAreaMeasurement ? '面积测量' : '距离测量'
+
+  const collection = withMeta(
+    asFeatureCollection({
+      type: 'Feature',
+      properties: {},
+      geometry
+    } as Feature),
+    {
+      kind: kindLabel,
+      origin: 'measure',
+      summary
+    }
+  )
+  const geometryType = extractGeometryType(collection)
+  const { data } = withBounds(collection)
+
+  return {
+    id: createMeasureLayerId(isAreaMeasurement ? 'area' : 'distance', options.uniqueToken),
+    name: `${kindLabel} ${formatSequence(options.sequence)}`,
+    sourceType: 'geojson',
+    data,
+    geometryType,
+    visible: true,
+    style: MEASURE_LAYER_STYLE,
+    crs: 'WGS84'
+  }
+}
+
+export function toLeafletFeature(layer: LayerDescriptor) {
+  const collection = readFeatureCollection(layer)
+  const feature = collection?.features[0]
+
+  if (!feature) {
+    return null
+  }
+
+  return feature
+}
+
+export function originToLabel(origin: LayerOrigin) {
+  if (origin === 'draw') {
+    return '绘制'
+  }
+
+  if (origin === 'measure') {
+    return '测量'
+  }
+
+  return '上传'
+}
+
+export function buildDrawMarkerIconHtml() {
+  return '<span class="map-draw-marker-dot"></span>'
+}
+
+export function readManagedOriginFromFeature(layer: LayerDescriptor) {
+  const origin = readLayerMetaValue(layer, INTERNAL_META_KEYS.origin)
+  return origin === 'upload' || origin === 'measure' || origin === 'draw' ? origin : getLayerOrigin(layer)
+}
+
+export function layerToGeoJsonData(layer: Layer) {
+  if (!('toGeoJSON' in layer) || typeof layer.toGeoJSON !== 'function') {
+    return null
+  }
+
+  const geoJson = layer.toGeoJSON() as Feature<Geometry> | GeoJsonFeatureCollection
+
+  if ('type' in geoJson && geoJson.type === 'FeatureCollection') {
+    return geoJson
+  }
+
+  return asFeatureCollection(geoJson)
 }
