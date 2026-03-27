@@ -25,7 +25,7 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
 
   return (
     <div
-      className={`relative shrink-0 overflow-hidden border-l border-neutral-200/0 transition-[width,border-color] duration-300 ease-out dark:border-neutral-800/0 ${
+      className={`relative shrink-0 overflow-visible border-l border-neutral-200/0 transition-[width,border-color] duration-300 ease-out dark:border-neutral-800/0 ${
         open ? 'border-neutral-200 dark:border-neutral-800' : ''
       } ${isResizing ? 'transition-none' : ''}`}
       style={assistantPanelStyle}
@@ -37,7 +37,7 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         aria-label='调整对话详情宽度'
         aria-orientation='vertical'
       >
-        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-(--module-panel-border) transition-opacity hover:opacity-80' />
+        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-(--module-panel-border) transition-opacity' />
       </div>
 
       {open ? (
@@ -51,10 +51,12 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         </button>
       ) : null}
 
-      <div className='flex h-full min-h-0 min-w-[320px] flex-col rounded-none border-0 bg-(--module-panel-bg-solid) shadow-none'>
-        <AssistantThread open={open} />
-        <div className='px-5 pb-5'>
-          <Prompt variant='docked' />
+      <div className='h-full overflow-hidden'>
+        <div className='flex h-full min-h-0 min-w-[320px] flex-col rounded-none border-0 bg-(--module-panel-bg-solid) shadow-none'>
+          <AssistantThread open={open} />
+          <div className='px-5 pb-5'>
+            <Prompt variant='docked' />
+          </div>
         </div>
       </div>
     </div>
