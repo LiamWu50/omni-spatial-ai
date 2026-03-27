@@ -2,16 +2,16 @@
 
 import { useSyncExternalStore } from 'react'
 
-import { mapBridge } from '../helps/map-bridge-service'
+import { mapRuntime } from '../services/map-runtime'
 
-export function useMapBridge() {
-  return mapBridge
+export function useMapRuntime() {
+  return mapRuntime
 }
 
-export function useMapSnapshot() {
+export function useMapRuntimeSnapshot() {
   return useSyncExternalStore(
-    (listener) => mapBridge.subscribe(listener),
-    () => mapBridge.getSnapshot(),
-    () => mapBridge.getSnapshot()
+    (listener) => mapRuntime.subscribe(listener),
+    () => mapRuntime.getSnapshot(),
+    () => mapRuntime.getSnapshot()
   )
 }

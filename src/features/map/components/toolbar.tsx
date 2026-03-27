@@ -46,7 +46,7 @@ export function Toolbar({ actions, layerManagerOpen, onAction, onToggleLayerMana
                 onClick={() => onAction(action.id)}
                 title={action.label}
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)',
+                  'flex h-9 w-9 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)',
                   action.active
                     ? 'bg-(--module-button-active-bg) text-(--module-button-active-text) shadow-(--module-button-active-ring)'
                     : ''

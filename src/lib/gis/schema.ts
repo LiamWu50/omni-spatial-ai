@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const engineTypeSchema = z.enum(['mapbox', 'cesium', 'leaflet'])
+export const engineTypeSchema = z.enum(['leaflet'])
 export type EngineType = z.infer<typeof engineTypeSchema>
 
 export const lngLatSchema = z.object({
@@ -26,7 +26,7 @@ export type MapViewState = z.infer<typeof mapViewStateSchema>
 export const baseMapDescriptorSchema = z.object({
   id: z.string(),
   name: z.string(),
-  provider: z.enum(['mapbox', 'tianditu', 'osm', 'custom']),
+  provider: z.enum(['tianditu', 'osm', 'custom']),
   styleUrl: z.string().optional(),
   imageryUrl: z.string().optional(),
   note: z.string().optional()
@@ -234,8 +234,8 @@ export function defaultBaseMaps(): Record<string, BaseMapDescriptor> {
   return {
     streets: {
       id: 'streets',
-      name: 'Mapbox Streets',
-      provider: 'mapbox',
+      name: 'CARTO Dark',
+      provider: 'osm',
       imageryUrl: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
       note: '默认暗黑底图，适用于 Leaflet 2D 视图'
     },

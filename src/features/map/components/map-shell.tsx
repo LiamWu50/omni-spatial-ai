@@ -2,12 +2,12 @@
 
 import { useEffect, useRef } from 'react'
 
-import { useMapBridge, useMapSnapshot } from '../hooks/use-map-runtime'
+import { AssistantEntry } from '../assistant/components/entry'
+import { AssistantPanel } from '../assistant/components/panel'
+import { MapAssistantProvider } from '../assistant/runtime/provider'
+import { useMapRuntime, useMapRuntimeSnapshot } from '../hooks/use-map-runtime'
 import { useMapShell } from '../hooks/use-map-shell'
 import { useMapShellActions } from '../hooks/use-map-shell-actions'
-import { AssistantEntry } from './assistant/entry'
-import { AssistantPanel } from './assistant/panel'
-import { MapAssistantProvider } from './assistant/provider'
 import { BaseLayer } from './base-layer'
 import { LayerManagerPanel } from './layer-manager/layer-manager-panel'
 import { Nav } from './nav'
@@ -16,8 +16,8 @@ import { Toolbar } from './toolbar'
 
 export function MapShell() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const bridge = useMapBridge()
-  const snapshot = useMapSnapshot()
+  const runtime = useMapRuntime()
+  const snapshot = useMapRuntimeSnapshot()
 
   useEffect(() => {
     const container = containerRef.current
@@ -26,8 +26,16 @@ export function MapShell() {
       return
     }
 
-    return bridge.mount(container)
-  }, [bridge])
+    let cleanup: (() => void) | undefined
+
+    void runtime.mount(container).then((nextCleanup) => {
+      cleanup = nextCleanup
+    })
+
+    return () => {
+      cleanup?.()
+    }
+  }, [runtime])
 
   const {
     activeBaseLayer,
@@ -35,7 +43,6 @@ export function MapShell() {
     focusUserLayer,
     panels,
     removeUserLayer,
-    setActiveTool,
     setPanelState,
     statusBar,
     toolbarActions,
@@ -51,10 +58,8 @@ export function MapShell() {
     handleAssistantPanelChange,
     handleLocate,
     handleOpenAssistantPanel,
-    handleResetOrientation,
     handleResetView,
     handleSwitchBaseLayer,
-    handleToggle3D,
     handleToggleAssistantPanel,
     handleToggleLayerList,
     handleToggleLayerManager,
@@ -62,12 +67,10 @@ export function MapShell() {
     handleZoomIn,
     handleZoomOut
   } = useMapShellActions({
-    bridge,
+    runtime,
     activeTool,
     panels,
-    setActiveTool,
-    setPanelState,
-    viewport
+    setPanelState
   })
 
   return (
@@ -110,14 +113,7 @@ export function MapShell() {
 
             <AssistantEntry visible={!panels.assistantPanelOpen} onOpen={handleOpenAssistantPanel} />
 
-            <Nav
-              is3D={viewport.is3D}
-              onLocate={handleLocate}
-              onResetOrientation={handleResetOrientation}
-              onToggle3D={handleToggle3D}
-              onZoomIn={handleZoomIn}
-              onZoomOut={handleZoomOut}
-            />
+            <Nav onLocate={handleLocate} onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
 
             <Status state={statusBar} />
           </div>

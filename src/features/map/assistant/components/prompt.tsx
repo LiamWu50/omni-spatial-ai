@@ -5,7 +5,6 @@ import { ArrowUp, Sparkles } from 'lucide-react'
 import { type FocusEvent, useState } from 'react'
 
 import { cn } from '@/lib/utils'
-import { SelectModel } from './select-model'
 
 interface PromptProps {
   variant?: 'overlay' | 'docked'
@@ -81,9 +80,7 @@ export function Prompt({ variant = 'overlay' }: PromptProps) {
           </div>
 
           {isExpanded ? (
-            <div className='mt-1 flex max-h-11 items-center justify-between gap-2 overflow-hidden transition-[max-height,opacity,margin] duration-300 ease-out'>
-              <SelectModel className='h-8 rounded-full px-2.5 text-[12px]! sm:text-[12px]!' />
-
+            <div className='mt-1 flex max-h-11 items-center justify-end gap-2 overflow-hidden transition-[max-height,opacity,margin] duration-300 ease-out'>
               <ComposerPrimitive.Send asChild>
                 <button
                   type='submit'

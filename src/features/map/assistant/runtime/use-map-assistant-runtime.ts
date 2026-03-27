@@ -3,7 +3,7 @@
 import { type ChatModelAdapter, useLocalRuntime } from '@assistant-ui/react'
 import { useEffect, useMemo, useRef } from 'react'
 
-import type { BaseLayerType, MapViewportState, ShellPanelState } from '../types'
+import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
 
 interface MapAssistantRuntimeOptions {
   viewport: MapViewportState
@@ -45,7 +45,7 @@ function getLatestUserText(messages: ReadonlyArray<{ role: string; content: unkn
 }
 
 function summarize({ activeBaseLayer, panels, viewport, visibleLayerCount }: MapAssistantRuntimeOptions) {
-  return `中心点 ${viewport.center.lng.toFixed(5)}, ${viewport.center.lat.toFixed(5)}；缩放 ${viewport.zoom.toFixed(1)}；引擎 ${viewport.activeEngine}；底图 ${activeBaseLayer}；图层 ${visibleLayerCount}；图层管理 ${panels.layerManagerOpen ? '开' : '关'}。`
+  return `中心点 ${viewport.center.lng.toFixed(5)}, ${viewport.center.lat.toFixed(5)}；缩放 ${viewport.zoom.toFixed(1)}；底图 ${activeBaseLayer}；图层 ${visibleLayerCount}；图层管理 ${panels.layerManagerOpen ? '开' : '关'}。`
 }
 
 export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions) {

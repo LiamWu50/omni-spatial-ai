@@ -4,9 +4,8 @@ import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import type { LayerDescriptor } from '@/lib/gis/schema'
-import type { MapRuntimeState } from '@/lib/map/store'
 
-import { mapBridge } from '../helps/map-bridge-service'
+import { mapRuntime, type MapRuntimeState } from '../services/map-runtime'
 import { INITIAL_PANEL_STATE, TOOLBAR_ACTIONS } from '../lib/constants'
 import { formatAttribution, formatCoordinate, formatScale } from '../lib/formatters'
 import { isUserUploadedLayer, parseUserLayerFile, toUserLayerListItem } from '../lib/user-layers'
@@ -14,11 +13,11 @@ import type { MapTool, ShellPanelState, ShellToolbarAction, StatusBarState } fro
 
 export function useMapShell(snapshot: MapRuntimeState) {
   const [panels, setPanels] = useState<ShellPanelState>(INITIAL_PANEL_STATE)
-  const [activeTool, setActiveTool] = useState<MapTool | null>(null)
   const [uploadStatus, setUploadStatus] = useState('支持拖拽或点击上传 GeoJSON / JSON 文件')
 
-  const activeBaseLayer = mapBridge.getBaseLayerType(snapshot.baseMap)
-  const viewport = mapBridge.toViewportState(snapshot)
+  const activeBaseLayer = mapRuntime.getBaseLayerType(snapshot.baseMap)
+  const viewport = mapRuntime.toViewportState(snapshot)
+  const activeTool = snapshot.activeTool as MapTool | null
 
   const userLayers = useMemo(
     () => snapshot.layers.filter(isUserUploadedLayer).map(toUserLayerListItem),
@@ -31,10 +30,8 @@ export function useMapShell(snapshot: MapRuntimeState) {
     () => ({
       attribution: formatAttribution(activeBaseLayer),
       scaleLabel: formatScale(viewport.zoom),
-      cameraLabel: `相机：${Math.round(viewport.cameraAltitudeKm).toLocaleString('zh-CN')} 公里`,
       coordinateLabel: formatCoordinate(viewport.center.lng, viewport.center.lat),
-      zoomLabel: `Z${viewport.zoom.toFixed(1)} · ${viewport.is3D ? '3D' : '2D'}`,
-      engineLabel: `引擎：${viewport.activeEngine}`
+      zoomLabel: `Z${viewport.zoom.toFixed(1)}`
     }),
     [activeBaseLayer, viewport]
   )
@@ -52,7 +49,6 @@ export function useMapShell(snapshot: MapRuntimeState) {
     activeBaseLayer,
     activeTool,
     panels,
-    setActiveTool,
     setPanelState(updater: Partial<ShellPanelState>) {
       setPanels((current) => ({ ...current, ...updater }))
     },
@@ -72,7 +68,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
       for (const [index, file] of files.entries()) {
         try {
           const layer = await parseUserLayerFile(file, `${requestId}-${index}`)
-          await mapBridge.addLayer(layer)
+          await mapRuntime.addLayer(layer)
           importedLayers.push(layer)
         } catch (error) {
           const message = error instanceof Error ? error.message : '导入失败'
@@ -91,7 +87,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
       const latestUserLayer = toUserLayerListItem(latestLayer)
 
       if (latestUserLayer.bounds) {
-        await mapBridge.fitBounds(latestUserLayer.bounds)
+        await mapRuntime.fitBounds(latestUserLayer.bounds)
       }
 
       const successMessage =
@@ -116,7 +112,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
         return
       }
 
-      await mapBridge.updateLayer({
+      await mapRuntime.updateLayer({
         ...target,
         visible: !target.visible
       })
@@ -135,7 +131,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
         return
       }
 
-      await mapBridge.fitBounds(userLayer.bounds)
+      await mapRuntime.fitBounds(userLayer.bounds)
     },
     async removeUserLayer(layerId: string) {
       const target = snapshot.layers.find((layer) => layer.id === layerId)
@@ -144,7 +140,7 @@ export function useMapShell(snapshot: MapRuntimeState) {
         return
       }
 
-      await mapBridge.removeLayer(layerId)
+      await mapRuntime.removeLayer(layerId)
       toast.success(`已删除图层：${target.name}`)
     },
     toolbarActions,

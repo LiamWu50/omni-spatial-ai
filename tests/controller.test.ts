@@ -1,78 +1,73 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { createActionMeta, defaultBaseMaps, type GisAction } from '../src/lib/gis/schema'
-import { CesiumAdapter } from '../src/lib/map/adapters/cesium'
-import { LeafletAdapter } from '../src/lib/map/adapters/leaflet'
-import { MapboxAdapter } from '../src/lib/map/adapters/mapbox'
-import { MapController } from '../src/lib/map/controller'
+import type { LayerDescriptor } from '../src/lib/gis/schema'
+import { MapRuntime } from '../src/features/map/services/map-runtime'
 
-class FakeContainer {
-  innerHTML = ''
+function createLayer(id = 'demo'): LayerDescriptor {
+  return {
+    id,
+    name: `图层-${id}`,
+    sourceType: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    },
+    geometryType: 'mixed',
+    visible: true,
+    style: {},
+    crs: 'WGS84'
+  }
 }
 
-test('MapController 应能派发 MOVE_TO 并更新视图状态', async () => {
-  const controller = new MapController({
-    engines: {
-      mapbox: new MapboxAdapter(),
-      cesium: new CesiumAdapter(),
-      leaflet: new LeafletAdapter()
+test('MapRuntime 应能更新视图状态', async () => {
+  const runtime = new MapRuntime()
+
+  await runtime.moveTo({
+    center: {
+      lng: 121.473701,
+      lat: 31.230416
     },
-    initialEngine: 'mapbox',
-    initialBaseMap: defaultBaseMaps().streets
+    zoom: 12
   })
 
-  await controller.mount(new FakeContainer() as unknown as HTMLElement)
-  await controller.dispatch({
-    type: 'MOVE_TO',
-    payload: {
-      center: {
-        lng: 121.473701,
-        lat: 31.230416
-      },
-      zoom: 12
-    },
-    meta: createActionMeta('system')
-  } satisfies GisAction)
-
-  assert.equal(controller.getView().center.lng, 121.473701)
-  assert.equal(controller.getView().zoom, 12)
+  assert.equal(runtime.getSnapshot().view.center.lng, 121.473701)
+  assert.equal(runtime.getSnapshot().view.zoom, 12)
 })
 
-test('MapController 切换引擎时应保留图层状态', async () => {
-  const controller = new MapController({
-    engines: {
-      mapbox: new MapboxAdapter(),
-      cesium: new CesiumAdapter(),
-      leaflet: new LeafletAdapter()
-    },
-    initialEngine: 'mapbox',
-    initialBaseMap: defaultBaseMaps().streets
+test('MapRuntime 应能维护图层增删改状态', async () => {
+  const runtime = new MapRuntime()
+
+  await runtime.addLayer(createLayer())
+  assert.equal(runtime.getSnapshot().layers.length, 1)
+
+  await runtime.updateLayer({
+    ...runtime.getSnapshot().layers[0],
+    visible: false
   })
+  assert.equal(runtime.getSnapshot().layers[0]?.visible, false)
 
-  await controller.mount(new FakeContainer() as unknown as HTMLElement)
-  await controller.dispatch({
-    type: 'ADD_LAYER',
-    payload: {
-      layer: {
-        id: 'demo',
-        name: '示例图层',
-        sourceType: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: []
-        },
-        geometryType: 'mixed',
-        visible: true,
-        style: {},
-        crs: 'WGS84'
-      }
-    },
-    meta: createActionMeta('system')
-  } satisfies GisAction)
+  await runtime.removeLayer('demo')
+  assert.equal(runtime.getSnapshot().layers.length, 0)
+})
 
-  await controller.switchEngine('cesium')
+test('MapRuntime 应能处理 FIT_BOUNDS 并更新中心点', async () => {
+  const runtime = new MapRuntime()
 
-  assert.equal(controller.getActiveEngineType(), 'cesium')
-  assert.equal(controller.getLayers().length, 1)
+  await runtime.fitBounds([110, 30, 130, 40])
+
+  assert.deepEqual(runtime.getSnapshot().view.center, {
+    lng: 120,
+    lat: 35
+  })
+})
+
+test('MapRuntime 应能维护工具激活状态', () => {
+  const runtime = new MapRuntime()
+
+  runtime.setActiveTool('measure')
+  assert.equal(runtime.getSnapshot().activeTool, 'measure')
+
+  runtime.setActiveTool(null)
+  assert.equal(runtime.getSnapshot().activeTool, null)
 })

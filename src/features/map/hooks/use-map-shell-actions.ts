@@ -2,25 +2,21 @@
 
 import { useCallback } from 'react'
 
-import type { MapBridge } from '../helps/map-bridge-service'
-import type { BaseLayerType, MapTool, MapViewportState, ShellPanelState } from '../types'
+import type { MapRuntime } from '../services/map-runtime'
+import type { BaseLayerType, MapTool, ShellPanelState } from '../types'
 
 interface UseMapShellActionsOptions {
-  bridge: MapBridge
+  runtime: MapRuntime
   activeTool: MapTool | null
   panels: ShellPanelState
-  setActiveTool: (tool: MapTool | null) => void
   setPanelState: (updater: Partial<ShellPanelState>) => void
-  viewport: MapViewportState
 }
 
 export function useMapShellActions({
-  bridge,
+  runtime,
   activeTool,
   panels,
-  setActiveTool,
-  setPanelState,
-  viewport
+  setPanelState
 }: UseMapShellActionsOptions) {
   const handleLocate = useCallback(() => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
@@ -28,35 +24,30 @@ export function useMapShellActions({
     }
 
     navigator.geolocation.getCurrentPosition((position) => {
-      void bridge.locate({
+      void runtime.locate({
         lng: Number(position.coords.longitude.toFixed(5)),
         lat: Number(position.coords.latitude.toFixed(5))
       })
     })
-  }, [bridge])
+  }, [runtime])
 
   const handleResetView = useCallback(() => {
-    void bridge.resetView()
-  }, [bridge])
-
-  const handleToggle3D = useCallback(() => {
-    const nextEngine = viewport.is3D ? 'mapbox' : 'cesium'
-    void bridge.switchEngine(nextEngine)
-  }, [bridge, viewport.is3D])
+    void runtime.resetView()
+  }, [runtime])
 
   const handleToolbarAction = useCallback(
     (actionId: MapTool) => {
       const nextTool = actionId === activeTool ? null : actionId
-      setActiveTool(nextTool)
+      runtime.setActiveTool(nextTool)
     },
-    [activeTool, setActiveTool]
+    [activeTool, runtime]
   )
 
   const handleSwitchBaseLayer = useCallback(
     (layer: BaseLayerType) => {
-      void bridge.switchBaseLayer(layer)
+      void runtime.switchBaseLayer(layer)
     },
-    [bridge]
+    [runtime]
   )
 
   const handleToggleLayerManager = useCallback(() => {
@@ -87,26 +78,20 @@ export function useMapShellActions({
     [panels.assistantPanelOpen, setPanelState]
   )
 
-  const handleResetOrientation = useCallback(() => {
-    void bridge.resetOrientation()
-  }, [bridge])
-
   const handleZoomIn = useCallback(() => {
-    void bridge.zoomIn()
-  }, [bridge])
+    void runtime.zoomIn()
+  }, [runtime])
 
   const handleZoomOut = useCallback(() => {
-    void bridge.zoomOut()
-  }, [bridge])
+    void runtime.zoomOut()
+  }, [runtime])
 
   return {
     handleAssistantPanelChange,
     handleLocate,
     handleOpenAssistantPanel,
-    handleResetOrientation,
     handleResetView,
     handleSwitchBaseLayer,
-    handleToggle3D,
     handleToggleAssistantPanel,
     handleToggleLayerList,
     handleToggleLayerManager,

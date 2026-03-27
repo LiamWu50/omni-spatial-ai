@@ -14,9 +14,7 @@ export function Status({ state }: MapStatusProps) {
       </div>
 
       <div className='flex items-center gap-4 text-[10px]'>
-        <span>{state.engineLabel}</span>
         <span>{state.scaleLabel}</span>
-        <span>{state.cameraLabel}</span>
         <span>{state.coordinateLabel}</span>
         <span>{state.zoomLabel}</span>
       </div>

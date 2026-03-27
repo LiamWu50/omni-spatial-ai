@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { createActionMeta, gisActionSchema } from '../src/lib/gis/schema'
+import { createActionMeta, engineTypeSchema, gisActionSchema } from '../src/lib/gis/schema'
+
+test('EngineType schema 仅接受 leaflet', () => {
+  assert.equal(engineTypeSchema.parse('leaflet'), 'leaflet')
+  assert.throws(() => engineTypeSchema.parse('mapbox'))
+})
 
 test('GisAction schema 应接受合法 MOVE_TO 动作', () => {
   const action = gisActionSchema.parse({

@@ -1,10 +1,8 @@
 # OmniSpatial AI
 
-OmniSpatial AI 是一个基于 Next.js 16、TypeScript 与统一地图指令协议构建的空间智能操作系统 MVP。当前仓库实现了三部分核心能力：
+OmniSpatial AI 是一个基于 Next.js 16、TypeScript、Leaflet 与 assistant-ui 构建的空间智能工作台 MVP。
 
-- `GisAction` + `IMapEngine` + `MapController` 的引擎无关骨架
-- `Server Action -> AI 编排 -> ActionBus -> 前端地图实例` 的控制链路
-- GeoJSON / Excel 导入与缓冲区分析的最小闭环
+当前仓库已经收敛为 **Leaflet 单引擎架构**，地图功能、助手运行时和页面装配统一收口在 `src/features/map`。
 
 ## 快速启动
 
@@ -26,37 +24,57 @@ pnpm typecheck
 pnpm test
 ```
 
-## 当前已实现
+## 当前结构
 
-- 三引擎适配骨架：`MapboxAdapter`、`CesiumAdapter`、`LeafletAdapter`
-- 统一地图控制器：`/Users/admin/Desktop/omni-spatial-ai/src/lib/map/controller.ts`
-- AI 调度入口：`/Users/admin/Desktop/omni-spatial-ai/src/app/actions/chat.ts`
-- 空间分析入口：`/Users/admin/Desktop/omni-spatial-ai/src/lib/analysis/service.ts`
-- 文件导入组件：`/Users/admin/Desktop/omni-spatial-ai/src/components/file-importer.tsx`
+```text
+src/
+├── app/
+│   ├── (app)/page.tsx
+│   ├── (auth)/login/page.tsx
+│   ├── layout.tsx
+│   └── styles/globals.css
+├── components/
+│   ├── providers/
+│   └── ui/
+├── features/
+│   └── map/
+│       ├── assistant/
+│       │   ├── components/
+│       │   └── runtime/
+│       ├── components/
+│       ├── hooks/
+│       ├── lib/
+│       ├── services/
+│       ├── index.ts
+│       └── types.ts
+└── lib/
+    ├── gis/
+    └── map/
+```
+
+## 当前能力
+
+- Leaflet 单实例运行时门面：`src/features/map/services/map-runtime.ts`
+- 地图工作台入口：`src/features/map/components/map-shell.tsx`
+- assistant-ui 地图助手 runtime：`src/features/map/assistant/runtime/use-map-assistant-runtime.ts`
+- GeoJSON / JSON 图层上传、图层管理、底图切换
 
 ## 环境变量
 
 | 变量 | 说明 |
 |---|---|
-| `OPENAI_API_KEY` | OpenAI 模型调用 |
-| `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` | Mapbox 地图能力 |
-| `NEXT_PUBLIC_TIANDITU_TOKEN` | 天地图合规底图 |
-| `DATABASE_URL` | PostgreSQL / PostGIS 连接 |
-| `DUCKDB_PATH` | DuckDB-Spatial 数据文件路径 |
-| `PYTHON_ANALYSIS_URL` | Python 重型分析服务入口 |
+| `APP_URL` | 本地访问地址，默认 `http://localhost:3000` |
 
 ## 架构概览
 
-1. 用户在左侧 AI 调度台输入自然语言。
-2. `submitSpatialPrompt` Server Action 调用 `runSpatialAssistant`。
-3. AI 结果被规范化为 `GisAction[]`。
-4. 前端通过 `ActionBus` 将动作发送给 `MapController.dispatch()`。
-5. `MapController` 依据当前活动引擎调用对应 Adapter。
-6. 图层、视角、底图状态回写到统一 runtime store。
+1. `src/app/(app)/page.tsx` 作为根路由入口渲染地图工作台。
+2. `MapShell` 负责页面装配、图层管理、助手面板与地图挂载。
+3. `MapRuntime` 负责 Leaflet 初始化、地图实例暴露、快照订阅以及底图/视角/图层管理。
+4. `BaseMapManager`、`ViewportManager`、`LayerManager`、`ToolRegistry` 在运行时内部协作。
+5. assistant-ui runtime 在地图 feature 内就地消费当前视口、底图与面板状态。
 
-## 后续接真实 SDK 的位置
+## 开发约定
 
-- 把 `BaseDomMapEngine` 替换为真实 Mapbox GL / Cesium / Leaflet SDK 封装
-- 将 `runSpatialAssistant` 中的 mock 意图扩展为完整 Vercel AI SDK 流式编排
-- 将 `runAnalysis` 中的本地 buffer 扩展到 DuckDB / PostGIS / Python 服务
-# omni-spatial-ai
+- 地图能力统一按 Leaflet 开发，不再维护其他地图引擎兼容层
+- 地图助手相关组件与 runtime 统一放在 `src/features/map/assistant`
+- 共享 UI 基础组件继续保留在 `src/components/ui`

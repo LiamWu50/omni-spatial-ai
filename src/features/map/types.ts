@@ -1,8 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import type { ChatModelId } from '@/features/map/lib/models'
-import type { BBox, EngineType, LayerDescriptor } from '@/lib/gis/schema'
-
-export type ModelOptions = ChatModelId
+import type { BBox, LayerDescriptor } from '@/lib/gis/schema'
 
 export interface MapCenter {
   lng: number
@@ -30,13 +27,10 @@ export interface BaseMapOption {
 }
 
 export interface MapViewportState {
-  activeEngine: EngineType
   center: MapCenter
   zoom: number
   pitch: number
   bearing: number
-  is3D: boolean
-  cameraAltitudeKm: number
 }
 
 export interface ShellPanelState {
@@ -56,8 +50,6 @@ export interface ShellToolbarAction {
 export interface StatusBarState {
   attribution: string
   scaleLabel: string
-  cameraLabel: string
   coordinateLabel: string
   zoomLabel: string
-  engineLabel: string
 }
