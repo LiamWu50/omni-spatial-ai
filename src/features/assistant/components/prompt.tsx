@@ -6,7 +6,7 @@ import { type FocusEvent, type FormEvent, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-import { SelectModel } from './select-model'
+import { SelectModel } from './model-select'
 
 interface PromptProps {
   variant?: 'overlay' | 'docked'

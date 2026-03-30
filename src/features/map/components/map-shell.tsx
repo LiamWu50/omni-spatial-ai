@@ -2,17 +2,18 @@
 
 import { useEffect, useRef } from 'react'
 
-import { AssistantEntry } from '../assistant/components/entry'
-import { AssistantPanel } from '../assistant/components/panel'
-import { MapAssistantProvider } from '../assistant/runtime/provider'
+import { AssistantEntry } from '@/features/assistant/components/entry'
+import { AssistantPanel } from '@/features/assistant/components/panel'
+import { MapAssistantProvider } from '@/features/assistant/provider'
 import { useMapRuntime, useMapRuntimeSnapshot } from '../hooks/use-map-runtime'
 import { useMapShell } from '../hooks/use-map-shell'
 import { useMapShellActions } from '../hooks/use-map-shell-actions'
 import { BaseLayer } from './base-layer'
-import { LayerManagerPanel } from './layer-manager'
+import { LayerManagerPanel } from './layer-manager/panel'
 import { Nav } from './nav'
-import { Status } from './status'
+import { Status } from './status-bar'
 import { Toolbar } from './toolbar'
+import { UserAvatarTrigger } from './user-avatar'
 
 export function MapShell() {
   const containerRef = useRef<HTMLDivElement>(null)

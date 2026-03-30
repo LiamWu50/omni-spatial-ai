@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { createActionMeta, engineTypeSchema, gisActionSchema } from '../src/lib/gis/schema'
+import { createActionMeta } from '../src/lib/gis/defaults'
+import { engineTypeSchema, gisActionSchema } from '../src/lib/gis/schema'
 
 test('EngineType schema 仅接受 leaflet', () => {
   assert.equal(engineTypeSchema.parse('leaflet'), 'leaflet')

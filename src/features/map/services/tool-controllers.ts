@@ -12,8 +12,8 @@ import {
   isDrawLayer,
   isMeasureLayer,
   readManagedOriginFromFeature
-} from '../../lib/user-layers'
-import type { MapTool } from '../../types'
+} from '../lib/user-layers'
+import type { MapTool } from '../types'
 import {
   buildFeatureFromPath,
   buildMeasureMetrics,

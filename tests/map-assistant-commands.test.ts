@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { executeLocalMapCommand, getLatestUserText } from '../src/features/map/assistant/lib/local-map-command'
+import { executeLocalMapCommand, getLatestUserText } from '../src/features/assistant/lib/local-commands'
+import type { LocalMapCommandContext } from '../src/features/assistant/lib/local-commands'
 
 function createContext() {
   const events: string[] = []

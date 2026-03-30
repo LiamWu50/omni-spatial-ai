@@ -5,7 +5,7 @@ import React from 'react'
 
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useMapAssistantChatContext } from '@/features/map/assistant/runtime/provider'
+import { useMapAssistantChatContext } from '@/features/assistant/provider'
 import type { ChatModelId } from '@/features/map/lib/models'
 import { CHAT_MODEL_OPTIONS } from '@/features/map/lib/models'
 import { cn } from '@/lib/utils'

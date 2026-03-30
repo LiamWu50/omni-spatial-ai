@@ -7,7 +7,7 @@ import {
   mapLayerLoadInputSchema,
   mapLayerStyleInputSchema,
   mapViewControlInputSchema
-} from '../src/features/map/assistant/tools/contracts'
+} from '../src/features/assistant/lib/contracts'
 
 test('map_view_control schema 应接受地名飞行输入', () => {
   const action = mapViewControlInputSchema.parse({

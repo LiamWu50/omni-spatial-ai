@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import type { LayerDescriptor } from '../src/lib/gis/schema'
-import { executeMapClientAction, executeMapClientActions } from '../src/features/map/assistant/runtime/client-action-executor'
+import { executeMapClientAction, executeMapClientActions } from '../src/features/assistant/lib/client-action-executor'
 
 function createLayer(): LayerDescriptor {
   return {

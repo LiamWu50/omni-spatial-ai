@@ -1,6 +1,6 @@
 import type { UIMessage } from 'ai'
 
-import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
+import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../map/types'
 
 export interface LocalMapCommandContext {
   viewport: MapViewportState

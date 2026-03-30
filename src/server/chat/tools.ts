@@ -2,8 +2,8 @@ import { tool } from 'ai'
 import { z } from 'zod'
 
 import { geoJsonFeatureCollectionSchema, type GeoJsonFeatureCollection, type LayerDescriptor } from '@/lib/gis/schema'
-import { USER_LAYER_ID_PREFIX } from '../../lib/constants'
-import { extractBounds, extractGeometryType } from '../../lib/user-layers'
+import { USER_LAYER_ID_PREFIX } from '@/features/map/lib/constants'
+import { extractBounds, extractGeometryType } from '@/features/map/lib/user-layers'
 import {
   mapLayerLoadInputSchema,
   mapLayerStyleInputSchema,
@@ -14,7 +14,7 @@ import {
   type MapViewControlInput,
   type MapClientAction,
   type ToolExecutionResult
-} from './contracts'
+} from '@/features/assistant/lib/contracts'
 
 interface GeocodeResult {
   lng: number

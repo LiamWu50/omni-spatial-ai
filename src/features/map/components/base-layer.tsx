@@ -4,9 +4,9 @@ import { Check, Layers3, X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
-import terrainMapPreview from '@/assets/images/map/地形底图.png'
-import imageryMapPreview from '@/assets/images/map/影像底图.png'
-import darkMapPreview from '@/assets/images/map/暗黑底图.png'
+import terrainMapPreview from '@/assets/images/basemap-terrain.png'
+import imageryMapPreview from '@/assets/images/basemap-satellite.png'
+import darkMapPreview from '@/assets/images/basemap-dark.png'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 import { BASE_MAP_OPTIONS } from '../lib/constants'

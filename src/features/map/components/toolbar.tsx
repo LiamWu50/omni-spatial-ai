@@ -5,7 +5,7 @@ import { Layers } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 import type { MapTool, ShellToolbarAction } from '../types'
-import { UserAvatarTrigger } from './user/user-avatar-trigger'
+import { UserAvatarTrigger } from './user-avatar'
 
 interface MapToolbarProps {
   actions: ShellToolbarAction[]

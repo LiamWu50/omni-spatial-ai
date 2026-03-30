@@ -1,18 +1,18 @@
 'use client'
 
+import { defaultBaseMaps } from '@/lib/gis/defaults'
 import {
   type BBox,
-  defaultBaseMaps,
   type FeatureQuery,
   type LayerDescriptor,
   type MapViewState
 } from '@/lib/gis/schema'
 
 import type { BaseLayerType, MapCenter, MapTool, MapViewportState } from '../types'
-import { BaseMapManager } from './runtime/base-map-manager'
-import { LayerManager } from './runtime/layer-manager'
-import { ToolRegistry } from './runtime/tool-registry'
-import { ViewportManager } from './runtime/viewport-manager'
+import { BaseMapManager } from './base-map-manager'
+import { LayerManager } from './layer-manager'
+import { ToolRegistry } from './tool-registry'
+import { ViewportManager } from './viewport-manager'
 
 type LeafletModule = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map

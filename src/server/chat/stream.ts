@@ -10,13 +10,13 @@ import {
   streamText
 } from 'ai'
 
-import { createMapAssistantTools } from '@/features/map/assistant/tools/server-tools'
+import { createMapAssistantTools } from './tools'
 import {
   type MapAssistantUIMessage,
   type MapClientActionDispatch,
   mapAssistantToolNameSchema,
   toolExecutionResultSchema
-} from '@/features/map/assistant/tools/contracts'
+} from '@/features/assistant/lib/contracts'
 import { resolveChatModelId } from '@/features/map/lib/models'
 
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'

@@ -4,7 +4,7 @@ import { CircleUserRound, MessageSquareDot, Monitor, Moon, PaintBucket, Sun } fr
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 
-import avatarImage from '@/assets/images/my-notion-face.png'
+import avatarImage from '@/assets/images/avatar-default.png'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {

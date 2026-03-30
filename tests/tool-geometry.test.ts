@@ -11,7 +11,7 @@ import {
   getFeatureCentroid,
   getPathGeometryType,
   isClosedPath
-} from '../src/features/map/services/runtime/tool-geometry'
+} from '../src/features/map/services/tool-geometry'
 
 function createLatLng(lat: number, lng: number) {
   return {

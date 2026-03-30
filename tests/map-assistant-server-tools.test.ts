@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import type { LayerDescriptor } from '../src/lib/gis/schema'
-import { createMapAssistantTools } from '../src/features/map/assistant/tools/server-tools'
+import { createMapAssistantTools } from '../src/server/chat/tools'
 
 function getExecuteFunction(toolDefinition: any) {
   assert.ok(toolDefinition.execute)

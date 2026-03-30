@@ -7,15 +7,15 @@ import { createUIMessageStream } from 'ai'
 import { type Dispatch, type SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
-import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../lib/models'
-import type { MapRuntime } from '../../services/map-runtime'
-import { executeLocalMapCommand, getLatestUserText, type LocalMapCommandContext } from '../lib/local-map-command'
+import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../map/lib/models'
+import type { MapRuntime } from '../../map/services/map-runtime'
+import { executeLocalMapCommand, getLatestUserText, type LocalMapCommandContext } from '../lib/local-commands'
 import {
   mapAssistantDataPartSchemas,
   type MapAssistantUIMessage,
   type MapClientActionDispatch
-} from '../tools/contracts'
-import { executeMapClientActions } from './client-action-executor'
+} from '../lib/contracts'
+import { executeMapClientActions } from '../lib/client-action-executor'
 
 interface MapAssistantRuntimeOptions extends LocalMapCommandContext {
   runtime: MapRuntime

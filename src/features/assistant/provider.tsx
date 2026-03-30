@@ -3,10 +3,10 @@
 import { AssistantRuntimeProvider } from '@assistant-ui/react'
 import { createContext, type Dispatch, type PropsWithChildren, type SetStateAction, useContext, useMemo } from 'react'
 
-import type { ChatModelId } from '../../lib/models'
-import type { MapRuntime } from '../../services/map-runtime'
-import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
-import { useMapAssistantRuntime } from './use-map-assistant-runtime'
+import type { ChatModelId } from '../map/lib/models'
+import type { MapRuntime } from '../map/services/map-runtime'
+import type { BaseLayerType, MapViewportState, ShellPanelState } from '../map/types'
+import { useMapAssistantRuntime } from './hooks/use-assistant-runtime'
 
 type MapAssistantProviderProps = PropsWithChildren<{
   runtime: MapRuntime

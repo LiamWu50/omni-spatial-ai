@@ -3,8 +3,8 @@
 import { PanelRightClose } from 'lucide-react'
 import { useMemo } from 'react'
 
-import { useResizablePanel } from '../../hooks/use-resizable-panel'
-import { ASSISTANT_PANEL_DEFAULTS } from '../../lib/constants'
+import { useResizablePanel } from '../../map/hooks/use-resizable-panel'
+import { ASSISTANT_PANEL_DEFAULTS } from '../../map/lib/constants'
 import { Prompt } from './prompt'
 import { AssistantThread } from './thread'
 
