@@ -46,6 +46,7 @@ export function MapShell() {
 
   return (
     <MapAssistantProvider
+      runtime={runtime}
       viewport={state.viewport}
       activeBaseLayer={state.activeBaseLayer}
       panels={state.panels}

@@ -4,10 +4,12 @@ import { AssistantRuntimeProvider } from '@assistant-ui/react'
 import { createContext, type Dispatch, type PropsWithChildren, type SetStateAction, useContext, useMemo } from 'react'
 
 import type { ChatModelId } from '../../lib/models'
+import type { MapRuntime } from '../../services/map-runtime'
 import type { BaseLayerType, MapViewportState, ShellPanelState } from '../../types'
 import { useMapAssistantRuntime } from './use-map-assistant-runtime'
 
 type MapAssistantProviderProps = PropsWithChildren<{
+  runtime: MapRuntime
   viewport: MapViewportState
   activeBaseLayer: BaseLayerType
   panels: ShellPanelState
@@ -28,6 +30,7 @@ const MapAssistantChatContext = createContext<MapAssistantChatContextValue | nul
 
 export function MapAssistantProvider({
   children,
+  runtime,
   viewport,
   activeBaseLayer,
   panels,
@@ -38,7 +41,8 @@ export function MapAssistantProvider({
   onToggleLayerList,
   onToggleAssistantPanel
 }: MapAssistantProviderProps) {
-  const { runtime, selectedModel, setSelectedModel } = useMapAssistantRuntime({
+  const { runtime: assistantRuntime, selectedModel, setSelectedModel } = useMapAssistantRuntime({
+    runtime,
     viewport,
     activeBaseLayer,
     panels,
@@ -60,7 +64,7 @@ export function MapAssistantProvider({
 
   return (
     <MapAssistantChatContext.Provider value={contextValue}>
-      <AssistantRuntimeProvider runtime={runtime}>{children}</AssistantRuntimeProvider>
+      <AssistantRuntimeProvider runtime={assistantRuntime}>{children}</AssistantRuntimeProvider>
     </MapAssistantChatContext.Provider>
   )
 }

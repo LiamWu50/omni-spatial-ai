@@ -50,7 +50,9 @@ export type GeoJsonFeatureCollection = z.infer<typeof geoJsonFeatureCollectionSc
 
 export const layerStyleSchema = z.object({
   color: z.string().optional(),
+  fillColor: z.string().optional(),
   opacity: z.number().min(0).max(1).optional(),
+  fillOpacity: z.number().min(0).max(1).optional(),
   lineWidth: z.number().optional(),
   radius: z.number().optional(),
   extruded: z.boolean().optional()

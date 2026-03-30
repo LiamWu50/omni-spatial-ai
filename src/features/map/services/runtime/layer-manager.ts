@@ -121,16 +121,16 @@ export class LayerManager {
         pointToLayer: (_feature, latlng) =>
           leaflet.circleMarker(latlng, {
             color: layer.style.color ?? '#60a5fa',
-            fillColor: layer.style.color ?? '#60a5fa',
-            fillOpacity: layer.style.opacity ?? 0.75,
+            fillColor: layer.style.fillColor ?? layer.style.color ?? '#60a5fa',
+            fillOpacity: layer.style.fillOpacity ?? layer.style.opacity ?? 0.75,
             opacity: layer.style.opacity ?? 0.95,
             radius: layer.style.radius ?? 6,
             weight: Math.max(1, layer.style.lineWidth ?? 2)
           }),
         style: () => ({
           color: layer.style.color ?? '#60a5fa',
-          fillColor: layer.style.color ?? '#60a5fa',
-          fillOpacity: layer.style.opacity ?? 0.28,
+          fillColor: layer.style.fillColor ?? layer.style.color ?? '#60a5fa',
+          fillOpacity: layer.style.fillOpacity ?? layer.style.opacity ?? 0.28,
           opacity: layer.style.opacity ?? 0.95,
           weight: Math.max(1, layer.style.lineWidth ?? 2)
         })

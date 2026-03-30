@@ -73,10 +73,10 @@ function createPathStyle(layer: LayerDescriptor) {
 
   return {
     color: layer.style.color ?? '#60a5fa',
-    fillColor: layer.style.color ?? '#60a5fa',
+    fillColor: layer.style.fillColor ?? layer.style.color ?? '#60a5fa',
     fill: isPolygon,
     opacity: layer.style.opacity ?? 0.95,
-    fillOpacity,
+    fillOpacity: layer.style.fillOpacity ?? fillOpacity,
     stroke: true,
     weight: Math.max(1, layer.style.lineWidth ?? 2)
   }
@@ -101,8 +101,8 @@ function createRenderableLeafletLayer(leaflet: LeafletModule, layer: LayerDescri
           })
         : leaflet.circleMarker(latlng, {
             color: layer.style.color ?? '#60a5fa',
-            fillColor: layer.style.color ?? '#60a5fa',
-            fillOpacity: layer.style.opacity ?? 0.75,
+            fillColor: layer.style.fillColor ?? layer.style.color ?? '#60a5fa',
+            fillOpacity: layer.style.fillOpacity ?? layer.style.opacity ?? 0.75,
             opacity: layer.style.opacity ?? 0.95,
             radius: layer.style.radius ?? 6,
             weight: Math.max(1, layer.style.lineWidth ?? 2)

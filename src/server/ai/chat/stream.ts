@@ -7,16 +7,22 @@ import {
   createUIMessageStreamResponse,
   smoothStream,
   stepCountIs,
-  streamText,
-  type UIMessage
+  streamText
 } from 'ai'
 
+import { createMapAssistantTools } from '@/features/map/assistant/tools/server-tools'
+import {
+  type MapAssistantUIMessage,
+  type MapClientActionDispatch,
+  mapAssistantToolNameSchema,
+  toolExecutionResultSchema
+} from '@/features/map/assistant/tools/contracts'
 import { resolveChatModelId } from '@/features/map/lib/models'
 
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'
 
 export interface ChatRequestBody {
-  messages: UIMessage[]
+  messages: MapAssistantUIMessage[]
   model?: string
 }
 
@@ -25,7 +31,7 @@ export function isDashscopeConfigError(error: unknown) {
 }
 
 function createAssistantTextResponse(text: string) {
-  const stream = createUIMessageStream<UIMessage>({
+  const stream = createUIMessageStream<MapAssistantUIMessage>({
     execute: ({ writer }) => {
       const messageId =
         typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
@@ -65,7 +71,6 @@ function createAssistantTextResponse(text: string) {
 
 function getDashscopeClient() {
   const apiKey = process.env.DASHSCOPE_API_KEY
-  console.log('DASHSCOPE_API_KEY:', apiKey)
 
   if (!apiKey) {
     throw new Error('缺少 DASHSCOPE_API_KEY 配置')
@@ -85,14 +90,16 @@ export async function streamChat(body: ChatRequestBody) {
   const qwen = getDashscopeClient()
   const resolvedModel = resolveChatModelId(body.model)
   const messages = Array.isArray(body.messages) ? body.messages : []
+  const tools = createMapAssistantTools()
 
-  const stream = createUIMessageStream({
+  const stream = createUIMessageStream<MapAssistantUIMessage>({
     execute: async ({ writer }) => {
       const result = streamText({
         model: qwen.chat(resolvedModel),
         temperature: 0.2,
         system: MAP_CHAT_SYSTEM_PROMPT,
         messages: await convertToModelMessages(messages),
+        tools,
         stopWhen: stepCountIs(8),
         experimental_transform: smoothStream({
           chunking: zhStreamSegmenter
@@ -102,7 +109,38 @@ export async function streamChat(body: ChatRequestBody) {
         }
       })
 
-      writer.merge(result.toUIMessageStream())
+      for await (const chunk of result.toUIMessageStream<MapAssistantUIMessage>({ sendFinish: false })) {
+        writer.write(chunk)
+      }
+
+      const toolResults = await result.toolResults
+
+      for (const toolResult of toolResults) {
+        const parsedResult = toolExecutionResultSchema.safeParse(toolResult.output)
+        const parsedToolName = mapAssistantToolNameSchema.safeParse(toolResult.toolName)
+
+        if (!parsedResult.success || !parsedToolName.success) {
+          continue
+        }
+
+        const dispatch: MapClientActionDispatch = {
+          toolCallId: toolResult.toolCallId,
+          toolName: parsedToolName.data,
+          result: parsedResult.data
+        }
+
+        writer.write({
+          type: 'data-mapClientActions',
+          id: toolResult.toolCallId,
+          data: dispatch,
+          transient: true
+        })
+      }
+
+      writer.write({
+        type: 'finish',
+        finishReason: await result.finishReason
+      })
     }
   })
 

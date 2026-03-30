@@ -20,7 +20,7 @@ export function AssistantThread({ open }: AssistantThreadProps) {
           <div className='flex min-h-full flex-col'>
             <ThreadPrimitive.If empty>
               <div className='flex flex-1 items-center justify-center px-6 text-center text-[15px] text-neutral-500 dark:text-neutral-500'>
-                试试输入：定位、切换影像底图、打开图层。
+                试试输入：飞到杭州西湖、加载 GeoJSON、把图层改成红色半透明。
               </div>
             </ThreadPrimitive.If>
             <ThreadPrimitive.Messages
