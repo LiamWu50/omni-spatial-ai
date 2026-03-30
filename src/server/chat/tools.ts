@@ -5,6 +5,7 @@ import { geoJsonFeatureCollectionSchema, type GeoJsonFeatureCollection, type Lay
 import { USER_LAYER_ID_PREFIX } from '@/features/map/lib/constants'
 import { extractBounds, extractGeometryType } from '@/features/map/lib/user-layers'
 import {
+  mapAssistantToolDescriptions,
   mapLayerLoadInputSchema,
   mapLayerStyleInputSchema,
   mapViewControlInputSchema,
@@ -301,7 +302,7 @@ export function createMapAssistantTools(options: CreateMapAssistantToolsOptions 
 
   return {
     map_view_control: tool<MapViewControlInput, ToolExecutionResult>({
-      description: '控制地图视角：飞到地点、回到初始视角、定位用户当前位置。',
+      description: mapAssistantToolDescriptions.map_view_control,
       inputSchema: mapViewControlInputSchema,
       async execute(input) {
         if (input.action === 'reset_view') {
@@ -372,7 +373,7 @@ export function createMapAssistantTools(options: CreateMapAssistantToolsOptions 
       }
     }),
     map_layer_load: tool<MapLayerLoadInput, ToolExecutionResult>({
-      description: '加载 GeoJSON 数据为地图图层，支持 URL 或系统内数据源。',
+      description: mapAssistantToolDescriptions.map_layer_load,
       inputSchema: mapLayerLoadInputSchema,
       async execute(input) {
         try {
@@ -418,7 +419,7 @@ export function createMapAssistantTools(options: CreateMapAssistantToolsOptions 
       }
     }),
     map_layer_style: tool<MapLayerStyleInput, ToolExecutionResult>({
-      description: '修改已有图层的颜色、透明度、线宽、点半径、填充样式和显隐状态。',
+      description: mapAssistantToolDescriptions.map_layer_style,
       inputSchema: mapLayerStyleInputSchema,
       execute(input) {
         return buildToolResult({

@@ -1,25 +1,16 @@
 'use client'
 
 import { useChat } from '@ai-sdk/react'
+import type { UIMessage } from 'ai'
 import type { AssistantRuntime } from '@assistant-ui/react'
 import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-sdk'
-import { createUIMessageStream } from 'ai'
-import { type Dispatch, type SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
+import { type Dispatch, type SetStateAction, useEffect, useRef, useState, useMemo } from 'react'
 import { toast } from 'sonner'
 
 import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../map/lib/models'
-import type { MapRuntime } from '../../map/services/map-runtime'
-import { executeLocalMapCommand, getLatestUserText, type LocalMapCommandContext } from '../lib/local-commands'
-import {
-  mapAssistantDataPartSchemas,
-  type MapAssistantUIMessage,
-  type MapClientActionDispatch
-} from '../lib/contracts'
+import { type MapClientAction } from '../lib/contracts'
 import { executeMapClientActions } from '../lib/client-action-executor'
-
-interface MapAssistantRuntimeOptions extends LocalMapCommandContext {
-  runtime: MapRuntime
-}
+import { useMapContext } from '../../map/components/map-provider'
 
 interface MapAssistantRuntimeState {
   runtime: AssistantRuntime
@@ -27,7 +18,7 @@ interface MapAssistantRuntimeState {
   setSelectedModel: Dispatch<SetStateAction<ChatModelId>>
 }
 
-const INITIAL_MESSAGES: MapAssistantUIMessage[] = [
+const INITIAL_MESSAGES: UIMessage[] = [
   {
     id: 'map-assistant-welcome',
     role: 'assistant',
@@ -41,143 +32,65 @@ const INITIAL_MESSAGES: MapAssistantUIMessage[] = [
   }
 ]
 
-function createClientId(prefix: string) {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return `${prefix}-${crypto.randomUUID()}`
-  }
+export function useMapAssistantRuntime(): MapAssistantRuntimeState {
+  const [selectedModel, setSelectedModel] = useState<ChatModelId>(DEFAULT_CHAT_MODEL)
+  const mapContext = useMapContext()
 
-  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`
-}
+  const mapContextRef = useRef(mapContext)
+  useEffect(() => {
+    mapContextRef.current = mapContext
+  }, [mapContext])
 
-function createLocalAssistantStream(text: string) {
-  const messageId = createClientId('assistant')
-  const textPartId = createClientId('text')
-
-  return createUIMessageStream<MapAssistantUIMessage>({
-    execute: ({ writer }) => {
-      writer.write({
-        type: 'start',
-        messageId
-      })
-      writer.write({
-        type: 'text-start',
-        id: textPartId
-      })
-      writer.write({
-        type: 'text-delta',
-        id: textPartId,
-        delta: text
-      })
-      writer.write({
-        type: 'text-end',
-        id: textPartId
-      })
-      writer.write({
-        type: 'finish',
-        finishReason: 'stop'
-      })
+  const transport = useMemo(() => new AssistantChatTransport({
+    api: '/api/chat',
+    body: {
+      model: selectedModel
     }
-  })
-}
+  }), [selectedModel])
 
-class MapAssistantChatTransport extends AssistantChatTransport<MapAssistantUIMessage> {
-  constructor(
-    private readonly resolveLocalResponse: (messages: MapAssistantUIMessage[]) => string | null,
-    resolveModel: () => ChatModelId
-  ) {
-    super({
-      api: '/api/chat',
-      body: {
-        get model() {
-          return resolveModel()
+  const chatOptions: any = {
+    transport,
+    initialMessages: INITIAL_MESSAGES,
+    onFinish: (messageObject: any) => {
+      const message = 'message' in messageObject ? messageObject.message : messageObject;
+      if (!message) return;
+
+      const invocations: any[] = message.toolInvocations || message.parts || [];
+
+      for (const part of invocations) {
+        let result: any = null;
+        
+        // Handle various AI SDK tool invocation shapes dynamically
+        if (part.state === 'result' && part.result) {
+          result = part.result;
+        } else if (part.type === 'tool-invocation' && part.toolInvocation?.state === 'result') {
+          result = part.toolInvocation.result;
+        } else if (part.type?.startsWith('tool-') && part.result) {
+          result = part.result;
+        } else if (part.type?.startsWith('tool-') && part.output) {
+          result = part.output;
+        }
+
+        if (result && result.clientActions && Array.isArray(result.clientActions)) {
+          const currentContext = mapContextRef.current
+          executeMapClientActions(result.clientActions as MapClientAction[], {
+            runtime: currentContext.runtime,
+            locateUser: currentContext.actions.locate
+          }).catch((error) => {
+            toast.error(error instanceof Error ? error.message : '地图动作执行失败')
+          })
         }
       }
-    })
-  }
-
-  override async sendMessages(options: Parameters<AssistantChatTransport<MapAssistantUIMessage>['sendMessages']>[0]) {
-    if (options.trigger !== 'submit-message') {
-      return super.sendMessages(options)
-    }
-
-    const localResponse = this.resolveLocalResponse(options.messages)
-
-    if (!localResponse) {
-      return super.sendMessages(options)
-    }
-
-    return createLocalAssistantStream(localResponse)
-  }
-}
-
-export function useMapAssistantRuntime(options: MapAssistantRuntimeOptions): MapAssistantRuntimeState {
-  const [selectedModel, setSelectedModel] = useState<ChatModelId>(DEFAULT_CHAT_MODEL)
-  const optionsRef = useRef(options)
-  const selectedModelRef = useRef(selectedModel)
-  const executedActionIdsRef = useRef(new Set<string>())
-
-  useEffect(() => {
-    optionsRef.current = options
-  }, [options])
-
-  useEffect(() => {
-    selectedModelRef.current = selectedModel
-  }, [selectedModel])
-
-  const transport = useMemo(
-    () =>
-      new MapAssistantChatTransport(
-        (messages) => {
-          const prompt = getLatestUserText(messages)
-          const result = executeLocalMapCommand(prompt, optionsRef.current)
-          return result?.responseText ?? null
-        },
-        () => selectedModelRef.current
-      ),
-    []
-  )
-
-  const chat = useChat<MapAssistantUIMessage>({
-    messages: INITIAL_MESSAGES,
-    transport,
-    dataPartSchemas: mapAssistantDataPartSchemas,
-    onData: (dataPart) => {
-      if (dataPart.type !== 'data-mapClientActions') {
-        return
-      }
-
-      const dispatch = dataPart.data as MapClientActionDispatch
-
-      if (
-        executedActionIdsRef.current.has(dispatch.toolCallId) ||
-        !dispatch.result.ok ||
-        !dispatch.result.clientActions ||
-        dispatch.result.clientActions.length === 0
-      ) {
-        return
-      }
-
-      executedActionIdsRef.current.add(dispatch.toolCallId)
-
-      void executeMapClientActions(dispatch.result.clientActions, {
-        runtime: optionsRef.current.runtime,
-        locateUser: optionsRef.current.onLocate
-      }).catch((error) => {
-        const message = error instanceof Error ? error.message : '地图动作执行失败'
-        toast.error(message)
-      })
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Map assistant chat error:', error)
       toast.error(error.message || 'AI 对话失败，请稍后重试')
     }
-  })
+  }
+
+  const chat = useChat(chatOptions)
 
   const runtime = useAISDKRuntime(chat)
-
-  useEffect(() => {
-    transport.setRuntime(runtime)
-  }, [runtime, transport])
 
   return {
     runtime,

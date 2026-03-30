@@ -1,25 +1,13 @@
 'use client'
 
-import { AssistantRuntimeProvider } from '@assistant-ui/react'
+import { AssistantRuntimeProvider, Tools, useAui } from '@assistant-ui/react'
 import { createContext, type Dispatch, type PropsWithChildren, type SetStateAction, useContext, useMemo } from 'react'
 
 import type { ChatModelId } from '../map/lib/models'
-import type { MapRuntime } from '../map/services/map-runtime'
-import type { BaseLayerType, MapViewportState, ShellPanelState } from '../map/types'
+import { mapAssistantToolkit } from './components/messages'
 import { useMapAssistantRuntime } from './hooks/use-assistant-runtime'
 
-type MapAssistantProviderProps = PropsWithChildren<{
-  runtime: MapRuntime
-  viewport: MapViewportState
-  activeBaseLayer: BaseLayerType
-  panels: ShellPanelState
-  visibleLayerCount: number
-  onLocate: () => void
-  onResetView: () => void
-  onSwitchBaseLayer: (layer: BaseLayerType) => void
-  onToggleLayerList: () => void
-  onToggleAssistantPanel: (open?: boolean) => void
-}>
+type MapAssistantProviderProps = PropsWithChildren<{}>
 
 interface MapAssistantChatContextValue {
   selectedModel: ChatModelId
@@ -28,30 +16,12 @@ interface MapAssistantChatContextValue {
 
 const MapAssistantChatContext = createContext<MapAssistantChatContextValue | null>(null)
 
-export function MapAssistantProvider({
-  children,
-  runtime,
-  viewport,
-  activeBaseLayer,
-  panels,
-  visibleLayerCount,
-  onLocate,
-  onResetView,
-  onSwitchBaseLayer,
-  onToggleLayerList,
-  onToggleAssistantPanel
-}: MapAssistantProviderProps) {
-  const { runtime: assistantRuntime, selectedModel, setSelectedModel } = useMapAssistantRuntime({
-    runtime,
-    viewport,
-    activeBaseLayer,
-    panels,
-    visibleLayerCount,
-    onLocate,
-    onResetView,
-    onSwitchBaseLayer,
-    onToggleLayerList,
-    onToggleAssistantPanel
+export function MapAssistantProvider({ children }: MapAssistantProviderProps) {
+  const { runtime: assistantRuntime, selectedModel, setSelectedModel } = useMapAssistantRuntime()
+  const aui = useAui({
+    tools: Tools({
+      toolkit: mapAssistantToolkit
+    })
   })
 
   const contextValue = useMemo(
@@ -64,7 +34,9 @@ export function MapAssistantProvider({
 
   return (
     <MapAssistantChatContext.Provider value={contextValue}>
-      <AssistantRuntimeProvider runtime={assistantRuntime}>{children}</AssistantRuntimeProvider>
+      <AssistantRuntimeProvider aui={aui} runtime={assistantRuntime}>
+        {children}
+      </AssistantRuntimeProvider>
     </MapAssistantChatContext.Provider>
   )
 }

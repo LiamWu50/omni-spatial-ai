@@ -5,20 +5,17 @@ import { useEffect, useRef } from 'react'
 import { AssistantEntry } from '@/features/assistant/components/entry'
 import { AssistantPanel } from '@/features/assistant/components/panel'
 import { MapAssistantProvider } from '@/features/assistant/provider'
-import { useMapRuntime, useMapRuntimeSnapshot } from '../hooks/use-map-runtime'
-import { useMapShell } from '../hooks/use-map-shell'
-import { useMapShellActions } from '../hooks/use-map-shell-actions'
+import { MapProvider, useMapContext } from './map-provider'
 import { BaseLayer } from './base-layer'
 import { LayerManagerPanel } from './layer-manager/panel'
 import { Nav } from './nav'
 import { Status } from './status-bar'
 import { Toolbar } from './toolbar'
-import { UserAvatarTrigger } from './user-avatar'
 
-export function MapShell() {
+function MapShellInner() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const runtime = useMapRuntime()
-  const snapshot = useMapRuntimeSnapshot()
+  const { runtime, shell, actions: mapActions } = useMapContext()
+  const { actions: shellActions, derived, state } = shell
 
   useEffect(() => {
     const container = containerRef.current
@@ -38,26 +35,8 @@ export function MapShell() {
     }
   }, [runtime])
 
-  const shell = useMapShell(snapshot)
-  const { actions: shellActions, derived, state } = shell
-  const { actions: mapActions } = useMapShellActions({
-    runtime,
-    shell
-  })
-
   return (
-    <MapAssistantProvider
-      runtime={runtime}
-      viewport={state.viewport}
-      activeBaseLayer={state.activeBaseLayer}
-      panels={state.panels}
-      visibleLayerCount={derived.visibleLayerCount}
-      onLocate={mapActions.locate}
-      onResetView={mapActions.resetView}
-      onSwitchBaseLayer={mapActions.switchBaseLayer}
-      onToggleLayerList={mapActions.toggleLayerList}
-      onToggleAssistantPanel={mapActions.toggleAssistantPanel}
-    >
+    <MapAssistantProvider>
       <div className='relative h-screen w-full overflow-hidden text-neutral-900 dark:text-white'>
         <div className='absolute inset-0 flex h-full w-full overflow-hidden'>
           <div className='relative h-full min-w-0 flex-1 overflow-hidden'>
@@ -104,5 +83,13 @@ export function MapShell() {
         </div>
       </div>
     </MapAssistantProvider>
+  )
+}
+
+export function MapShell() {
+  return (
+    <MapProvider>
+      <MapShellInner />
+    </MapProvider>
   )
 }

@@ -1,0 +1,2 @@
+tests/map-assistant-commands.test.ts(4,59): error TS2307: Cannot find module '../src/features/assistant/lib/local-commands' or its corresponding type declarations.
+tests/map-assistant-commands.test.ts(5,45): error TS2307: Cannot find module '../src/features/assistant/lib/local-commands' or its corresponding type declarations.
