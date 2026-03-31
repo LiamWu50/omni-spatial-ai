@@ -201,18 +201,39 @@ export async function fetchGeoJsonFromUrl(fetchImpl: typeof fetch, url: string) 
 }
 
 /**
+ * 创建内置的 LocationIQ 地理编码配置。
+ */
+export function createLocationIqGeocoderConfig() {
+  const apiKey = process.env.LOCATIONIQ_API_KEY
+  if (!apiKey) {
+    return null
+  }
+
+  return {
+    urlTemplate: `https://us1.locationiq.com/v1/search?key=${encodeURIComponent(apiKey)}&q={query}&format=json&limit=1`,
+    lngPath: 'lon',
+    latPath: 'lat',
+    labelPath: 'display_name'
+  } satisfies z.infer<typeof geocoderConfigSchema>
+}
+
+/**
  * 创建默认地理编码器。
  */
 export function createDefaultGeocoder(fetchImpl: typeof fetch): GeocoderAdapter {
   return {
     async geocode(query) {
       const rawConfig = readJsonEnv<unknown>('MAP_GEOCODER_CONFIG')
-      if (!rawConfig) {
-        throw new Error('当前未配置地理编码服务，请提供经纬度坐标。')
+      const configCandidate = rawConfig ?? createLocationIqGeocoderConfig()
+
+      if (!configCandidate) {
+        throw new Error(
+          '当前未配置地理编码服务，请配置 `MAP_GEOCODER_CONFIG` 或 `LOCATIONIQ_API_KEY`，或者直接提供经纬度坐标。'
+        )
       }
-      const parsedConfig = geocoderConfigSchema.safeParse(rawConfig)
+      const parsedConfig = geocoderConfigSchema.safeParse(configCandidate)
       if (!parsedConfig.success) {
-        throw new Error('MAP_GEOCODER_CONFIG 缺少必要字段')
+        throw new Error('地理编码配置缺少必要字段')
       }
       const config = parsedConfig.data
       const requestUrl = config.urlTemplate.replaceAll('{query}', encodeURIComponent(query))
@@ -223,8 +244,11 @@ export function createDefaultGeocoder(fetchImpl: typeof fetch): GeocoderAdapter 
         throw new Error(`地理编码失败：HTTP ${response.status}`)
       }
       const payload = (await response.json()) as unknown
-      const resultCandidate =
-        readPathValue(payload, config.resultPath) ?? (Array.isArray(payload) ? payload[0] : payload)
+      const resultCandidate = config.resultPath
+        ? readPathValue(payload, config.resultPath)
+        : Array.isArray(payload)
+          ? payload[0]
+          : payload
       const lng = asFiniteNumber(readPathValue(resultCandidate, config.lngPath))
       const lat = asFiniteNumber(readPathValue(resultCandidate, config.latPath))
       if (lng == null || lat == null) {

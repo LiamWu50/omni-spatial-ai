@@ -24,10 +24,7 @@ function mergeLayerStyle(layer: LayerDescriptor, stylePatch: MapLayerStylePatch)
   }
 }
 
-export async function executeMapClientAction(
-  action: MapClientAction,
-  context: MapClientActionExecutorContext
-) {
+export async function executeMapClientAction(action: MapClientAction, context: MapClientActionExecutorContext) {
   switch (action.type) {
     case 'view.fly_to': {
       await context.runtime.moveTo({
@@ -65,10 +62,7 @@ export async function executeMapClientAction(
   }
 }
 
-export async function executeMapClientActions(
-  actions: MapClientAction[],
-  context: MapClientActionExecutorContext
-) {
+export async function executeMapClientActions(actions: MapClientAction[], context: MapClientActionExecutorContext) {
   console.log('执行地图动作', actions)
   for (const action of actions) {
     try {

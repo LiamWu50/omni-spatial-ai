@@ -1,12 +1,7 @@
 'use client'
 
 import { defaultBaseMaps } from '@/lib/gis/defaults'
-import {
-  type BBox,
-  type FeatureQuery,
-  type LayerDescriptor,
-  type MapViewState
-} from '@/lib/gis/schema'
+import { type BBox, type FeatureQuery, type LayerDescriptor, type MapViewState } from '@/lib/gis/schema'
 
 import type { BaseLayerType, MapCenter, MapTool, MapViewportState } from '../types'
 import { BaseMapManager } from './base-map-manager'

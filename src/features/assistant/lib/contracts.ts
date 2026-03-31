@@ -1,12 +1,7 @@
 import type { UIMessage } from 'ai'
 import { z } from 'zod'
 
-import {
-  bboxSchema,
-  geoJsonFeatureCollectionSchema,
-  layerDescriptorSchema,
-  lngLatSchema
-} from '@/lib/gis/schema'
+import { bboxSchema, geoJsonFeatureCollectionSchema, layerDescriptorSchema, lngLatSchema } from '@/lib/gis/schema'
 
 export const mapViewFlyToCoordinatesTargetSchema = z.object({
   type: z.literal('coordinates'),
@@ -102,11 +97,7 @@ export const toolExecutionResultSchema = z.object({
   clientActions: z.array(mapClientActionSchema).optional()
 })
 
-export const mapAssistantToolNameSchema = z.enum([
-  'map_view_control',
-  'map_layer_load',
-  'map_layer_style'
-])
+export const mapAssistantToolNameSchema = z.enum(['map_view_control', 'map_layer_load', 'map_layer_style'])
 
 export const mapAssistantToolDescriptions = {
   map_view_control: '控制地图视角：飞到地点、回到初始视角、定位用户当前位置。',

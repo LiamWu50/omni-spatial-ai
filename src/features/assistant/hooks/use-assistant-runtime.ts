@@ -1,16 +1,15 @@
 'use client'
 
 import { useChat } from '@ai-sdk/react'
-import type { UIMessage } from 'ai'
 import type { AssistantRuntime } from '@assistant-ui/react'
 import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-sdk'
-import { type Dispatch, type SetStateAction, useEffect, useRef, useState, useMemo } from 'react'
+import type { UIMessage } from 'ai'
+import { type Dispatch, type SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
-
-import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../map/lib/models'
-import { type MapClientAction } from '../lib/contracts'
-import { executeMapClientActions } from '../lib/client-action-executor'
 import { useMapContext } from '../../map/components/map-provider'
+import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../map/lib/models'
+import { executeMapClientActions } from '../lib/client-action-executor'
+import { type MapClientAction } from '../lib/contracts'
 
 interface MapAssistantRuntimeState {
   runtime: AssistantRuntime
@@ -41,34 +40,38 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
     mapContextRef.current = mapContext
   }, [mapContext])
 
-  const transport = useMemo(() => new AssistantChatTransport({
-    api: '/api/chat',
-    body: {
-      model: selectedModel
-    }
-  }), [selectedModel])
+  const transport = useMemo(
+    () =>
+      new AssistantChatTransport({
+        api: '/api/chat',
+        body: {
+          model: selectedModel
+        }
+      }),
+    [selectedModel]
+  )
 
   const chatOptions: any = {
     transport,
     initialMessages: INITIAL_MESSAGES,
     onFinish: (messageObject: any) => {
-      const message = 'message' in messageObject ? messageObject.message : messageObject;
-      if (!message) return;
+      const message = 'message' in messageObject ? messageObject.message : messageObject
+      if (!message) return
 
-      const invocations: any[] = message.toolInvocations || message.parts || [];
+      const invocations: any[] = message.toolInvocations || message.parts || []
 
       for (const part of invocations) {
-        let result: any = null;
-        
+        let result: any = null
+
         // Handle various AI SDK tool invocation shapes dynamically
         if (part.state === 'result' && part.result) {
-          result = part.result;
+          result = part.result
         } else if (part.type === 'tool-invocation' && part.toolInvocation?.state === 'result') {
-          result = part.toolInvocation.result;
+          result = part.toolInvocation.result
         } else if (part.type?.startsWith('tool-') && part.result) {
-          result = part.result;
+          result = part.result
         } else if (part.type?.startsWith('tool-') && part.output) {
-          result = part.output;
+          result = part.output
         }
 
         if (result?.clientActions && Array.isArray(result.clientActions)) {

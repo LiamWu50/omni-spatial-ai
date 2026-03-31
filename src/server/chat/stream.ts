@@ -3,17 +3,16 @@ import 'server-only'
 import { createOpenAI } from '@ai-sdk/openai'
 import {
   convertToModelMessages,
+  createUIMessageStream,
+  createUIMessageStreamResponse,
   smoothStream,
   stepCountIs,
-  streamText,
-  createUIMessageStream,
-  createUIMessageStreamResponse
+  streamText
 } from 'ai'
 import type { MapAssistantUIMessage } from '@/features/assistant/lib/contracts'
-
-import { createMapAssistantTools } from './tools'
 import { resolveChatModelId } from '@/features/map/lib/models'
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'
+import { createMapAssistantTools } from './tools'
 
 export interface ChatRequestBody {
   messages: MapAssistantUIMessage[]

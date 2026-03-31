@@ -1,9 +1,9 @@
 'use client'
 
-import { createContext, useContext, type PropsWithChildren } from 'react'
+import { createContext, type PropsWithChildren, useContext } from 'react'
 
 import { useMapRuntime, useMapRuntimeSnapshot } from '../hooks/use-map-runtime'
-import { useMapShell, type UseMapShellResult } from '../hooks/use-map-shell'
+import { type UseMapShellResult, useMapShell } from '../hooks/use-map-shell'
 import { useMapShellActions } from '../hooks/use-map-shell-actions'
 import type { MapRuntime } from '../services/map-runtime'
 

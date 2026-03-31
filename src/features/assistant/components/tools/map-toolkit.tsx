@@ -1,7 +1,7 @@
 'use client'
 
 import { type Toolkit } from '@assistant-ui/react'
-import { CheckCircle2, Layers, type LucideIcon, MapPin, Palette, Loader } from 'lucide-react'
+import { CheckCircle2, Layers, Loader, type LucideIcon, MapPin, Palette } from 'lucide-react'
 
 import { type MapAssistantToolName, mapAssistantToolMetadata } from '../../lib/contracts'
 
