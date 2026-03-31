@@ -38,9 +38,7 @@ function buildToolCard(
       ? 'text-emerald-400'
       : status.type === 'incomplete'
         ? 'text-red-400'
-        : status.type === 'requires-action'
-          ? 'text-amber-400'
-          : 'text-cyan-400'
+        : 'text-400'
 
   return (
     <div className='mb-2 w-full max-w-[320px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/75 shadow-sm backdrop-blur-md'>
