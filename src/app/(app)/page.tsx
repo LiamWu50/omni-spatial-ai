@@ -1,5 +1,1 @@
-import { MapShell } from '@/features/map'
-
-export default function MapPage() {
-  return <MapShell />
-}
+export { MapPage as default } from '@/features/map/components/map-page'

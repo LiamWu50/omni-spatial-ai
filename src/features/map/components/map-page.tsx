@@ -12,7 +12,7 @@ import { Nav } from './nav'
 import { Status } from './status-bar'
 import { Toolbar } from './toolbar'
 
-function MapShellInner() {
+function MapPageInner() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { runtime, shell, actions: mapActions } = useMapContext()
   const { actions: shellActions, derived, state } = shell
@@ -86,10 +86,10 @@ function MapShellInner() {
   )
 }
 
-export function MapShell() {
+export function MapPage() {
   return (
     <MapProvider>
-      <MapShellInner />
+      <MapPageInner />
     </MapProvider>
   )
 }

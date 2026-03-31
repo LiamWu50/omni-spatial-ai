@@ -22,11 +22,7 @@ export function MapProvider({ children }: PropsWithChildren) {
   const shell = useMapShell(snapshot)
   const { actions } = useMapShellActions({ runtime, shell })
 
-  return (
-    <MapContext.Provider value={{ runtime, shell, actions }}>
-      {children}
-    </MapContext.Provider>
-  )
+  return <MapContext.Provider value={{ runtime, shell, actions }}>{children}</MapContext.Provider>
 }
 
 export function useMapContext() {
