@@ -1,7 +1,7 @@
 'use client'
 
 import { type Toolkit } from '@assistant-ui/react'
-import { CheckCircle2, Layers, type LucideIcon, MapPin, Palette } from 'lucide-react'
+import { CheckCircle2, Layers, type LucideIcon, MapPin, Palette, Loader } from 'lucide-react'
 
 import { type MapAssistantToolName, mapAssistantToolMetadata } from '../../lib/contracts'
 
@@ -32,7 +32,7 @@ function buildToolCard(
   status: { type: 'running' | 'complete' | 'incomplete' | 'requires-action' }
 ) {
   const config = mapAssistantToolCardConfig[toolName]
-  const StatusIcon = status.type === 'complete' ? CheckCircle2 : config.icon
+  const StatusIcon = status.type === 'complete' ? CheckCircle2 : Loader
   const iconClassName =
     status.type === 'complete'
       ? 'text-emerald-400'

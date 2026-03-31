@@ -1,142 +1,204 @@
 'use client'
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { ReactNode, RefObject } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
 type ScrollAxis = 'horizontal' | 'vertical' | 'both'
 
 interface ScrollFadeProps {
-  children: React.ReactNode
+  children?: ReactNode
   className?: string
-  hideScrollbar?: boolean
+  overlayClassName?: string
   axis?: ScrollAxis
+  hideScrollbar?: boolean
+  intensity?: number
+  background?: string
+  containerRef?: RefObject<HTMLElement | null>
 }
 
-export default function ScrollFade({
-  children,
-  className,
-  hideScrollbar = true,
-  axis = 'horizontal'
-}: ScrollFadeProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const contentRef = useRef<HTMLDivElement | null>(null)
+interface ScrollFadeState {
+  showLeft: boolean
+  showRight: boolean
+  showTop: boolean
+  showBottom: boolean
+}
 
-  const [showLeft, setShowLeft] = useState(false)
-  const [showRight, setShowRight] = useState(false)
-  const [showTop, setShowTop] = useState(false)
-  const [showBottom, setShowBottom] = useState(false)
+const initialFadeState: ScrollFadeState = {
+  showLeft: false,
+  showRight: false,
+  showTop: false,
+  showBottom: false
+}
 
-  const checkScroll = useCallback(() => {
-    const el = containerRef.current
-    if (!el) return
-
-    const { scrollLeft, scrollTop, scrollWidth, scrollHeight, clientWidth, clientHeight } = el
-
-    if (axis === 'horizontal' || axis === 'both') {
-      setShowLeft(scrollLeft > 0)
-      setShowRight(Math.ceil(scrollLeft + clientWidth) < Math.floor(scrollWidth - 1))
-    }
-
-    if (axis === 'vertical' || axis === 'both') {
-      setShowTop(scrollTop > 0)
-      setShowBottom(Math.ceil(scrollTop + clientHeight) < Math.floor(scrollHeight - 1))
-    }
-  }, [axis])
-
-  useLayoutEffect(() => {
-    requestAnimationFrame(checkScroll)
-  }, [checkScroll])
+function useScrollFadeState(containerRef: RefObject<HTMLElement | null>, axis: ScrollAxis) {
+  const [fadeState, setFadeState] = useState<ScrollFadeState>(initialFadeState)
 
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
-    const onScroll = () => checkScroll()
-    container.addEventListener('scroll', onScroll, { passive: true })
+    const checkScroll = () => {
+      const { clientHeight, clientWidth, scrollHeight, scrollLeft, scrollTop, scrollWidth } = container
 
-    const ro = new ResizeObserver(() => checkScroll())
-    if (contentRef.current) ro.observe(contentRef.current)
-    ro.observe(container)
+      setFadeState({
+        showLeft: (axis === 'horizontal' || axis === 'both') && scrollLeft > 0,
+        showRight: (axis === 'horizontal' || axis === 'both') && Math.ceil(scrollLeft + clientWidth) < scrollWidth,
+        showTop: (axis === 'vertical' || axis === 'both') && scrollTop > 0,
+        showBottom: (axis === 'vertical' || axis === 'both') && Math.ceil(scrollTop + clientHeight) < scrollHeight
+      })
+    }
 
-    const onResize = () => checkScroll()
-    window.addEventListener('resize', onResize)
+    checkScroll()
 
-    const raf = requestAnimationFrame(checkScroll)
+    container.addEventListener('scroll', checkScroll, { passive: true })
+
+    const resizeObserver = new ResizeObserver(checkScroll)
+    resizeObserver.observe(container)
+
+    const content = container.firstElementChild
+    if (content instanceof HTMLElement) {
+      resizeObserver.observe(content)
+    }
 
     return () => {
-      container.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
-      ro.disconnect()
-      cancelAnimationFrame(raf)
+      container.removeEventListener('scroll', checkScroll)
+      resizeObserver.disconnect()
     }
-  }, [checkScroll])
+  }, [axis, containerRef])
+
+  return fadeState
+}
+
+function ScrollFadeOverlays({
+  axis,
+  background,
+  intensity,
+  overlayClassName,
+  showBottom,
+  showLeft,
+  showRight,
+  showTop
+}: ScrollFadeState & {
+  axis: ScrollAxis
+  background: string
+  intensity: number
+  overlayClassName?: string
+}) {
+  return (
+    <div className={cn('pointer-events-none absolute inset-0 z-10', overlayClassName)}>
+      {(axis === 'horizontal' || axis === 'both') && showLeft ? (
+        <div
+          aria-hidden
+          className='absolute left-0 top-0 h-full w-10'
+          style={{
+            opacity: intensity,
+            background: `linear-gradient(to right, ${background}, transparent)`
+          }}
+        />
+      ) : null}
+
+      {(axis === 'horizontal' || axis === 'both') && showRight ? (
+        <div
+          aria-hidden
+          className='absolute right-0 top-0 h-full w-10'
+          style={{
+            opacity: intensity,
+            background: `linear-gradient(to left, ${background}, transparent)`
+          }}
+        />
+      ) : null}
+
+      {(axis === 'vertical' || axis === 'both') && showTop ? (
+        <div
+          aria-hidden
+          className='absolute left-0 top-0 h-10 w-full'
+          style={{
+            opacity: intensity,
+            background: `linear-gradient(to bottom, ${background}, transparent)`
+          }}
+        />
+      ) : null}
+
+      {(axis === 'vertical' || axis === 'both') && showBottom ? (
+        <div
+          aria-hidden
+          className='absolute bottom-0 left-0 h-10 w-full'
+          style={{
+            opacity: intensity,
+            background: `linear-gradient(to top, ${background}, transparent)`
+          }}
+        />
+      ) : null}
+    </div>
+  )
+}
+
+export default function ScrollFade({
+  children,
+  className,
+  overlayClassName,
+  axis = 'horizontal',
+  hideScrollbar = true,
+  intensity = 1,
+  background = 'var(--module-panel-bg-solid, var(--background, #ffffff))',
+  containerRef
+}: ScrollFadeProps) {
+  const internalRef = useRef<HTMLDivElement | null>(null)
+  const targetRef = containerRef ?? internalRef
+  const { showBottom, showLeft, showRight, showTop } = useScrollFadeState(targetRef, axis)
+  const fadeIntensity = Math.min(Math.max(intensity, 0), 1)
+
+  if (containerRef) {
+    return (
+      <ScrollFadeOverlays
+        axis={axis}
+        background={background}
+        intensity={fadeIntensity}
+        overlayClassName={overlayClassName}
+        showBottom={showBottom}
+        showLeft={showLeft}
+        showRight={showRight}
+        showTop={showTop}
+      />
+    )
+  }
 
   return (
-    <div className='relative'>
+    <div className='relative min-h-0 min-w-0'>
       <div
-        ref={containerRef}
+        ref={internalRef}
         className={cn(
-          hideScrollbar
-            ? '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
-            : '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-neutral-200/50 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border [&::-webkit-scrollbar-thumb]:border-transparent [&::-webkit-scrollbar-thumb]:bg-clip-content hover:[&::-webkit-scrollbar-thumb]:bg-neutral-200 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-800/50 dark:hover:[&::-webkit-scrollbar-thumb]:bg-neutral-800',
+          'min-h-0 min-w-0',
+          hideScrollbar && '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
           axis === 'horizontal' && 'w-full overflow-x-auto overflow-y-hidden',
-          axis === 'vertical' && 'h-full overflow-y-auto overflow-x-hidden',
+          axis === 'vertical' && 'h-full overflow-x-hidden overflow-y-auto',
           axis === 'both' && 'overflow-auto',
           className
         )}
       >
         <div
-          ref={contentRef}
           className={cn(
-            axis === 'horizontal' && 'w-fit min-w-full',
-            axis === 'vertical' && 'h-fit min-h-full',
-            axis === 'both' && 'min-w-full min-h-full w-fit h-fit'
+            axis === 'horizontal' && 'min-w-full w-fit',
+            axis === 'vertical' && 'min-h-full h-fit',
+            axis === 'both' && 'min-h-full min-w-full h-fit w-fit'
           )}
         >
           {children}
         </div>
       </div>
 
-      {(axis === 'horizontal' || axis === 'both') && showLeft && (
-        <div
-          aria-hidden
-          className='pointer-events-none absolute left-0 top-0 h-full w-10 z-10'
-          style={{
-            background: 'linear-gradient(to right, var(--background) 0%, transparent 100%)'
-          }}
-        />
-      )}
-
-      {(axis === 'horizontal' || axis === 'both') && showRight && (
-        <div
-          aria-hidden
-          className='pointer-events-none absolute right-0 top-0 h-full w-10 z-10'
-          style={{
-            background: 'linear-gradient(to left, var(--background) 0%, transparent 100%)'
-          }}
-        />
-      )}
-
-      {(axis === 'vertical' || axis === 'both') && showTop && (
-        <div
-          aria-hidden
-          className='pointer-events-none absolute top-0 left-0 w-full h-10 z-10'
-          style={{
-            background: 'linear-gradient(to bottom, var(--background) 0%, transparent 100%)'
-          }}
-        />
-      )}
-
-      {(axis === 'vertical' || axis === 'both') && showBottom && (
-        <div
-          aria-hidden
-          className='pointer-events-none absolute bottom-0 left-0 w-full h-10 z-10'
-          style={{
-            background: 'linear-gradient(to top, var(--background) 0%, transparent 100%)'
-          }}
-        />
-      )}
+      <ScrollFadeOverlays
+        axis={axis}
+        background={background}
+        intensity={fadeIntensity}
+        overlayClassName={overlayClassName}
+        showBottom={showBottom}
+        showLeft={showLeft}
+        showRight={showRight}
+        showTop={showTop}
+      />
     </div>
   )
 }
