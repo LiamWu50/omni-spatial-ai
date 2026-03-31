@@ -71,7 +71,7 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
           result = part.output;
         }
 
-        if (result && result.clientActions && Array.isArray(result.clientActions)) {
+        if (result?.clientActions && Array.isArray(result.clientActions)) {
           const currentContext = mapContextRef.current
           executeMapClientActions(result.clientActions as MapClientAction[], {
             runtime: currentContext.runtime,

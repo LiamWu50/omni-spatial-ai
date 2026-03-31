@@ -131,11 +131,11 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
                   type='submit'
                   className={cn(
                     'inline-flex shrink-0 items-center justify-center rounded-[2px] bg-(--module-primary-bg) text-(--module-primary-text) transition-[background-color,color,opacity] duration-180 hover:bg-(--module-primary-hover-bg) disabled:cursor-not-allowed disabled:opacity-40',
-                    isOverlay ? 'h-8 w-8 rounded-[12px]' : 'h-9 w-9 rounded-[14px]'
+                    isOverlay ? 'h-6 w-6 rounded-[8px]' : 'h-7 w-7 rounded-[10px]'
                   )}
                   aria-label='发送'
                 >
-                  <ArrowUp className={cn(isOverlay ? 'h-4 w-4' : 'h-4.5 w-4.5')} />
+                  <ArrowUp className={cn(isOverlay ? 'h-3 w-3' : 'h-4 w-4')} />
                 </button>
               </ComposerPrimitive.Send>
             </div>

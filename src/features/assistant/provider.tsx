@@ -4,10 +4,10 @@ import { AssistantRuntimeProvider, Tools, useAui } from '@assistant-ui/react'
 import { createContext, type Dispatch, type PropsWithChildren, type SetStateAction, useContext, useMemo } from 'react'
 
 import type { ChatModelId } from '../map/lib/models'
-import { mapAssistantToolkit } from './components/messages'
+import { mapAssistantToolkit } from './components/tools'
 import { useMapAssistantRuntime } from './hooks/use-assistant-runtime'
 
-type MapAssistantProviderProps = PropsWithChildren<{}>
+type MapAssistantProviderProps = PropsWithChildren
 
 interface MapAssistantChatContextValue {
   selectedModel: ChatModelId

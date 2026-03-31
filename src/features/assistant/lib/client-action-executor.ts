@@ -69,6 +69,7 @@ export async function executeMapClientActions(
   actions: MapClientAction[],
   context: MapClientActionExecutorContext
 ) {
+  console.log('执行地图动作', actions)
   for (const action of actions) {
     try {
       await executeMapClientAction(action, context)
