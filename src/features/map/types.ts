@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
+
 import type { BBox, LayerDescriptor } from '@/lib/gis/schema'
 
 export interface MapCenter {

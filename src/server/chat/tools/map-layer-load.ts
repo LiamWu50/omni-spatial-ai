@@ -1,8 +1,9 @@
 import { tool } from 'ai'
+
 import {
+  mapAssistantToolDescriptions,
   type MapClientAction,
   type MapLayerLoadInput,
-  mapAssistantToolDescriptions,
   mapLayerLoadInputSchema,
   type ToolExecutionResult,
   toolExecutionResultSchema

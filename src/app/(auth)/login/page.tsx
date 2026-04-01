@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function LoginPage() {
   return (
     <main className='flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#262626_0%,#0a0a0a_45%,#000000_100%)] px-6 text-neutral-50'>
@@ -16,12 +18,12 @@ export default function LoginPage() {
           <div className='rounded-2xl border border-neutral-800 bg-neutral-900/60 px-4 py-3 text-sm text-neutral-300'>
             规划中的能力：账户登录、会话恢复、模型偏好配置。
           </div>
-          <a
+          <Link
             href='/'
             className='inline-flex h-11 w-full items-center justify-center rounded-full bg-neutral-50 text-sm font-medium text-neutral-900 transition hover:bg-neutral-200'
           >
             返回地图首页
-          </a>
+          </Link>
         </div>
       </section>
     </main>

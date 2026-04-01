@@ -1,14 +1,14 @@
 import { tool } from 'ai'
 
 import {
-  type MapViewControlInput,
   mapAssistantToolDescriptions,
+  type MapViewControlInput,
   mapViewControlInputSchema,
   type ToolExecutionResult,
   toolExecutionResultSchema
 } from '@/features/assistant/lib/contracts'
 
-import type { GeocodeResult, GeocoderAdapter } from './shared'
+import type { GeocoderAdapter, GeocodeResult } from './shared'
 
 const DEFAULT_FLY_TO_ZOOM = 11
 

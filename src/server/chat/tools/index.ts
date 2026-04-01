@@ -1,7 +1,7 @@
 import { createMapLayerLoadTool } from './map-layer-load'
 import { createMapLayerStyleTool } from './map-layer-style'
 import { createMapViewControlTool } from './map-view-control'
-import { type CreateMapAssistantToolsOptions, createDefaultGeocoder, createDefaultSystemDatasetLoader } from './shared'
+import { createDefaultGeocoder, createDefaultSystemDatasetLoader, type CreateMapAssistantToolsOptions } from './shared'
 
 /**
  * 创建地图助手工具集合。
@@ -18,9 +18,4 @@ export function createMapAssistantTools(options: CreateMapAssistantToolsOptions 
   }
 }
 
-export type {
-  CreateMapAssistantToolsOptions,
-  GeocodeResult,
-  GeocoderAdapter,
-  SystemDatasetLoader
-} from './shared'
+export type { CreateMapAssistantToolsOptions, GeocoderAdapter, GeocodeResult, SystemDatasetLoader } from './shared'

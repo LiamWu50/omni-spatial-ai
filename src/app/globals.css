@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "leaflet/dist/leaflet.css";
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
 /* Tailwind v4 默认按系统媒体查询处理 dark，这里显式切到 `.dark` 类驱动 */
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -67,15 +67,15 @@
   --module-panel-border: rgba(229, 229, 229, 0.9);
   --module-panel-border-strong: rgba(212, 212, 212, 0.95);
   --module-panel-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-  --module-panel-text: #0A0A0A;
+  --module-panel-text: #0a0a0a;
   --module-panel-text-muted: #737373;
   --module-panel-icon: #525252;
   --module-button-hover-bg: rgba(245, 245, 245, 0.96);
-  --module-button-hover-text: #0A0A0A;
-  --module-button-active-bg: #0A0A0A;
+  --module-button-hover-text: #0a0a0a;
+  --module-button-active-bg: #0a0a0a;
   --module-button-active-text: #fafafa;
   --module-button-active-ring: inset 0 0 0 1px rgba(38, 38, 38, 0.16);
-  --module-primary-bg: #0A0A0A;
+  --module-primary-bg: #0a0a0a;
   --module-primary-hover-bg: #262626;
   --module-primary-text: #fafafa;
 }
@@ -125,7 +125,7 @@
   --module-button-active-ring: inset 0 0 0 1px rgba(64, 64, 64, 0.9);
   --module-primary-bg: #fafafa;
   --module-primary-hover-bg: #e5e5e5;
-  --module-primary-text: #0A0A0A;
+  --module-primary-text: #0a0a0a;
 }
 
 * {
@@ -140,7 +140,14 @@ body {
 }
 
 body {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   color: var(--foreground);
 }
 

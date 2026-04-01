@@ -1,27 +1,10 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import {
-  Eye,
-  EyeOff,
-  FileUp,
-  LineSquiggle,
-  MapPin,
-  MoreHorizontal,
-  Ruler,
-  Search,
-  Trash2,
-} from 'lucide-react'
+import { Eye, EyeOff, FileUp, LineSquiggle, MapPin, MoreHorizontal, Ruler, Search, Trash2 } from 'lucide-react'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import {
-  Item as BaseItem,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from '@/components/ui/item'
+import { Item as BaseItem, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 
 import type { UserLayerListItem } from '../../types'
 import type { LayerManagerActions, LayerManagerData } from './types'

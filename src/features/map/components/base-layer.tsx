@@ -3,6 +3,7 @@
 import { Check, Layers3, X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
+
 import darkMapPreview from '@/assets/images/basemap-dark.png'
 import imageryMapPreview from '@/assets/images/basemap-satellite.png'
 import terrainMapPreview from '@/assets/images/basemap-terrain.png'

@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 import { AssistantEntry } from '@/features/assistant/components/entry'
 import { AssistantPanel } from '@/features/assistant/components/panel'
 import { MapAssistantProvider } from '@/features/assistant/provider'
+
 import { BaseLayer } from './base-layer'
 import { LayerManagerPanel } from './layer-manager/panel'
 import { MapProvider, useMapContext } from './map-provider'

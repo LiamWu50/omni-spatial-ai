@@ -9,8 +9,10 @@ import {
   stepCountIs,
   streamText
 } from 'ai'
+
 import type { MapAssistantUIMessage } from '@/features/assistant/lib/contracts'
 import { resolveChatModelId } from '@/features/map/lib/models'
+
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'
 import { createMapAssistantTools } from './tools'
 

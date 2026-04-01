@@ -1,6 +1,6 @@
 import { GripVerticalIcon } from 'lucide-react'
 import * as React from 'react'
-import { Panel, Group as PanelGroup, Separator as PanelResizeHandle } from 'react-resizable-panels'
+import { Group as PanelGroup, Panel, Separator as PanelResizeHandle } from 'react-resizable-panels'
 
 import { cn } from '@/lib/utils'
 

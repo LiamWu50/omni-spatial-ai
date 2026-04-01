@@ -6,6 +6,7 @@ import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-
 import type { UIMessage } from 'ai'
 import { type Dispatch, type SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
+
 import { useMapContext } from '../../map/components/map-provider'
 import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../map/lib/models'
 import { executeMapClientActions } from '../lib/client-action-executor'

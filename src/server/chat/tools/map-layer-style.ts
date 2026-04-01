@@ -1,8 +1,8 @@
 import { tool } from 'ai'
 
 import {
-  type MapLayerStyleInput,
   mapAssistantToolDescriptions,
+  type MapLayerStyleInput,
   mapLayerStyleInputSchema,
   type ToolExecutionResult,
   toolExecutionResultSchema
