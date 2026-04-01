@@ -8,7 +8,7 @@ import {
   createDrawLayerFromFeature,
   createMeasureLayerFromResult,
   extractBoundsFromLayer,
-  getLayerSummary,
+  getLayerMeasureLabel,
   isDrawLayer,
   isMeasureLayer,
   readManagedOriginFromFeature
@@ -114,14 +114,14 @@ function createRenderableLeafletLayer(leaflet: LeafletModule, layer: LayerDescri
 }
 
 function createMeasureLabelLayer(leaflet: LeafletModule, layer: LayerDescriptor) {
-  const summary = getLayerSummary(layer)
+  const measureLabel = getLayerMeasureLabel(layer)
   const latlng = getMeasureLabelLatLng(leaflet, layer)
 
-  if (!summary || !latlng) {
+  if (!measureLabel || !latlng) {
     return null
   }
 
-  const labelHtml = summary.replaceAll(' · ', '<span class="map-measure-label-separator">·</span><br />')
+  const labelHtml = measureLabel.replaceAll(' · ', '<span class="map-measure-label-separator">·</span><br />')
 
   return leaflet.marker(latlng, {
     interactive: false,

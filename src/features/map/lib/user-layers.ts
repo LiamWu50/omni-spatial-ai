@@ -36,7 +36,7 @@ const USER_LAYER_STYLE: LayerDescriptor['style'] = {
 const INTERNAL_META_KEYS = {
   kind: '__managedKind',
   origin: '__managedOrigin',
-  summary: '__managedSummary'
+  measureLabel: '__managedMeasureLabel'
 } as const
 
 type GeometryCategory = Exclude<LayerDescriptor['geometryType'], 'mixed'>
@@ -125,7 +125,7 @@ function withMeta(
   meta: {
     kind: string
     origin: LayerOrigin
-    summary?: string | null
+    measureLabel?: string | null
   }
 ): GeoJsonFeatureCollection {
   return {
@@ -138,7 +138,7 @@ function withMeta(
           ? {
               [INTERNAL_META_KEYS.kind]: meta.kind,
               [INTERNAL_META_KEYS.origin]: meta.origin,
-              ...(meta.summary ? { [INTERNAL_META_KEYS.summary]: meta.summary } : {})
+              ...(meta.measureLabel ? { [INTERNAL_META_KEYS.measureLabel]: meta.measureLabel } : {})
             }
           : {})
       }
@@ -321,9 +321,9 @@ export function isToolManagedLayer(layer: LayerDescriptor) {
   return origin === 'draw' || origin === 'measure'
 }
 
-export function getLayerSummary(layer: LayerDescriptor) {
-  const summary = readLayerMetaValue(layer, INTERNAL_META_KEYS.summary)
-  return typeof summary === 'string' && summary.trim().length > 0 ? summary : null
+export function getLayerMeasureLabel(layer: LayerDescriptor) {
+  const measureLabel = readLayerMetaValue(layer, INTERNAL_META_KEYS.measureLabel)
+  return typeof measureLabel === 'string' && measureLabel.trim().length > 0 ? measureLabel : null
 }
 
 export function getLayerKind(layer: LayerDescriptor) {
@@ -340,8 +340,7 @@ export function toUserLayerListItem(layer: LayerDescriptor): UserLayerListItem {
     sourceType: layer.sourceType,
     geometryType: layer.geometryType,
     bounds: extractBoundsFromLayer(layer),
-    origin: getLayerOrigin(layer) ?? 'upload',
-    summary: getLayerSummary(layer)
+    origin: getLayerOrigin(layer) ?? 'upload'
   }
 }
 
@@ -436,7 +435,7 @@ export function createMeasureLayerFromResult(options: {
           coordinates: coordinates[0]
         }
 
-  const summary = isAreaMeasurement
+  const measureLabel = isAreaMeasurement
     ? `面积 ${options.result.areaDisplay} · 周长 ${options.result.lengthDisplay}`
     : `距离 ${options.result.lengthDisplay}`
   const kindLabel = isAreaMeasurement ? '面积测量' : '距离测量'
@@ -450,7 +449,7 @@ export function createMeasureLayerFromResult(options: {
     {
       kind: kindLabel,
       origin: 'measure',
-      summary
+      measureLabel
     }
   )
   const geometryType = extractGeometryType(collection)

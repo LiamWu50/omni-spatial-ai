@@ -2,6 +2,7 @@
 
 import { Layers } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 import type { MapTool, ShellToolbarAction } from '../types'
@@ -14,46 +15,46 @@ interface MapToolbarProps {
   onToggleLayerManager: () => void
 }
 
+const mapControlButtonClass =
+  'shadow-sm shadow-black/10 duration-200 ease-out bg-[#E5E5E5] text-neutral-900 hover:bg-[#D4D4D4] hover:text-neutral-950 dark:shadow-black/30 dark:bg-[#0A0A0A] dark:text-neutral-100 dark:hover:bg-[#171717] dark:hover:text-neutral-50'
+
+const mapControlButtonActiveClass =
+  'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground'
+
 export function Toolbar({ actions, layerManagerOpen, onAction, onToggleLayerManager }: MapToolbarProps) {
   return (
     <div className='pointer-events-none absolute left-5 right-5 top-5 z-30 flex items-start justify-between gap-4'>
       <div className='pointer-events-auto flex items-center gap-3'>
         <UserAvatarTrigger />
 
-        <div className='flex items-center gap-1 rounded-full p-1 border border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'>
-          <button
+        <div className='flex items-center gap-2'>
+          <Button
             type='button'
+            size='icon'
+            variant='secondary'
             onClick={onToggleLayerManager}
             title={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
             aria-label={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
-            className={cn(
-              'flex h-9 w-9 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)',
-              layerManagerOpen
-                ? 'bg-(--module-button-active-bg) text-(--module-button-active-text) shadow-(--module-button-active-ring)'
-                : ''
-            )}
+            className={cn(mapControlButtonClass, layerManagerOpen && mapControlButtonActiveClass)}
           >
             <Layers className='h-3.5 w-3.5' />
-          </button>
+          </Button>
 
           {actions.map((action) => {
             const Icon = action.icon
 
             return (
-              <button
+              <Button
                 key={action.id}
                 type='button'
+                size='icon'
+                variant='secondary'
                 onClick={() => onAction(action.id)}
                 title={action.label}
-                className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)',
-                  action.active
-                    ? 'bg-(--module-button-active-bg) text-(--module-button-active-text) shadow-(--module-button-active-ring)'
-                    : ''
-                )}
+                className={cn(mapControlButtonClass, action.active && mapControlButtonActiveClass)}
               >
                 <Icon className='h-4 w-4' />
-              </button>
+              </Button>
             )
           })}
         </div>

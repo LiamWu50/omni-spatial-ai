@@ -21,7 +21,6 @@ export interface UserLayerListItem {
   geometryType: LayerDescriptor['geometryType']
   bounds: BBox | null
   origin: LayerOrigin
-  summary: string | null
 }
 
 export interface BaseMapOption {

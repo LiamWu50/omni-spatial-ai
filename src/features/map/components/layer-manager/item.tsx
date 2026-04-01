@@ -32,9 +32,6 @@ export function Item({ layer, onFocusLayer, onRemoveLayer, onToggleLayer }: Laye
               <div className='text-[11px] leading-4 text-(--module-panel-text-muted)'>
                 {layer.featureCount} 个要素 · {formatGeometryLabel(layer.geometryType)}
               </div>
-              {layer.summary ? (
-                <div className='mt-0.5 text-[11px] leading-4 text-(--module-panel-text-muted)'>{layer.summary}</div>
-              ) : null}
             </div>
           </div>
         </div>
