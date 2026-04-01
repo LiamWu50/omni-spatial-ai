@@ -47,7 +47,9 @@ function MapPageInner() {
 
             <Toolbar
               actions={derived.toolbarActions}
+              importStatus={state.importStatus}
               layerManagerOpen={state.panels.layerManagerOpen}
+              onImportLayers={shellActions.importLayers}
               onAction={mapActions.toolbarAction}
               onToggleLayerManager={mapActions.toggleLayerManager}
             />
@@ -55,12 +57,10 @@ function MapPageInner() {
             <LayerManagerPanel
               open={state.panels.layerManagerOpen}
               data={{
-                importStatus: state.importStatus,
                 layers: derived.layers
               }}
               actions={{
                 onToggle: mapActions.toggleLayerManager,
-                onImportLayers: shellActions.importLayers,
                 onToggleLayer: shellActions.toggleLayer,
                 onFocusLayer: shellActions.focusLayer,
                 onRemoveLayer: shellActions.removeLayer

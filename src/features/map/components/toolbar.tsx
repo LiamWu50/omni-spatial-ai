@@ -6,11 +6,14 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 import type { MapTool, ShellToolbarAction } from '../types'
+import { UploadDialog } from './upload/upload-dialog'
 import { UserAvatarTrigger } from './user-avatar'
 
 interface MapToolbarProps {
   actions: ShellToolbarAction[]
+  importStatus: string
   layerManagerOpen: boolean
+  onImportLayers: (files: File[]) => Promise<void> | void
   onAction: (actionId: MapTool) => void
   onToggleLayerManager: () => void
 }
@@ -21,44 +24,59 @@ const mapControlButtonClass =
 const mapControlButtonActiveClass =
   'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground'
 
-export function Toolbar({ actions, layerManagerOpen, onAction, onToggleLayerManager }: MapToolbarProps) {
+export function Toolbar({
+  actions,
+  importStatus,
+  layerManagerOpen,
+  onImportLayers,
+  onAction,
+  onToggleLayerManager
+}: MapToolbarProps) {
   return (
-    <div className='pointer-events-none absolute left-5 right-5 top-5 z-30 flex items-start justify-between gap-4'>
-      <div className='pointer-events-auto flex items-center gap-3'>
-        <UserAvatarTrigger />
+    <>
+      <div className='pointer-events-none absolute left-5 right-5 top-5 z-30 flex items-start justify-between gap-4'>
+        <div className='pointer-events-auto flex items-center gap-3'>
+          <UserAvatarTrigger />
 
-        <div className='flex items-center gap-2'>
-          <Button
-            type='button'
-            size='icon'
-            variant='secondary'
-            onClick={onToggleLayerManager}
-            title={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
-            aria-label={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
-            className={cn(mapControlButtonClass, layerManagerOpen && mapControlButtonActiveClass)}
-          >
-            <Layers className='h-3.5 w-3.5' />
-          </Button>
+          <div className='flex items-center gap-2'>
+            <Button
+              type='button'
+              size='icon'
+              variant='secondary'
+              onClick={onToggleLayerManager}
+              title={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
+              aria-label={layerManagerOpen ? '收起图层工作台' : '打开图层工作台'}
+              className={cn(mapControlButtonClass, layerManagerOpen && mapControlButtonActiveClass)}
+            >
+              <Layers className='h-3.5 w-3.5' />
+            </Button>
 
-          {actions.map((action) => {
-            const Icon = action.icon
+            <UploadDialog
+              importStatus={importStatus}
+              onImportLayers={onImportLayers}
+              triggerClassName={mapControlButtonClass}
+            />
 
-            return (
-              <Button
-                key={action.id}
-                type='button'
-                size='icon'
-                variant='secondary'
-                onClick={() => onAction(action.id)}
-                title={action.label}
-                className={cn(mapControlButtonClass, action.active && mapControlButtonActiveClass)}
-              >
-                <Icon className='h-4 w-4' />
-              </Button>
-            )
-          })}
+            {actions.map((action) => {
+              const Icon = action.icon
+
+              return (
+                <Button
+                  key={action.id}
+                  type='button'
+                  size='icon'
+                  variant='secondary'
+                  onClick={() => onAction(action.id)}
+                  title={action.label}
+                  className={cn(mapControlButtonClass, action.active && mapControlButtonActiveClass)}
+                >
+                  <Icon className='h-4 w-4' />
+                </Button>
+              )
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

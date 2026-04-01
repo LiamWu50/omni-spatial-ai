@@ -1,13 +1,11 @@
 'use client'
 
 import { Layers3, X } from 'lucide-react'
-import { useRef } from 'react'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { List } from './list'
 import type { LayerManagerActions, LayerManagerData } from './types'
-import { Uploader } from './upload'
 
 interface LayerManagerPanelProps {
   open: boolean
@@ -16,8 +14,6 @@ interface LayerManagerPanelProps {
 }
 
 export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
-
   return (
     <aside
       className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[360px] flex-col overflow-hidden rounded-[12px] bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ${
@@ -44,9 +40,7 @@ export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProp
       </div>
 
       <ScrollArea className='min-h-0 flex-1'>
-        <div className='space-y-5 px-4 py-4'>
-          <Uploader inputRef={inputRef} onImportLayers={actions.onImportLayers} importStatus={data.importStatus} />
-
+        <div className='px-4 py-4'>
           <List data={data} actions={actions} />
         </div>
       </ScrollArea>
