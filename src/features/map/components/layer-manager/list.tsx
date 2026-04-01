@@ -17,6 +17,17 @@ interface ListProps {
 export function List({ actions, data }: ListProps) {
   const { layers } = data
 
+  if (layers.length === 0) {
+    return (
+      <section>
+        <div className='flex items-center justify-center gap-2 rounded-[10px] border border-dashed border-neutral-200/80 bg-neutral-50/70 px-3 py-4 text-xs text-(--module-panel-text-muted) dark:border-white/10 dark:bg-white/2'>
+          <FileUp className='size-3.5 text-(--module-panel-icon)' />
+          <span>暂无图层数据</span>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section>
       <div className='space-y-2'>
