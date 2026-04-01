@@ -16,7 +16,7 @@ export function List({ actions, data }: ListProps) {
     <section>
       <div className='mb-3 flex items-center justify-between'>
         <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>图层列表</div>
-        <div className='text-xs text-[var(--module-panel-text-muted)]'>
+        <div className='text-xs text-(--module-panel-text-muted)'>
           {visibleLayerCount}/{layers.length} 可见
         </div>
       </div>

@@ -479,18 +479,6 @@ export function toLeafletFeature(layer: LayerDescriptor) {
   return feature
 }
 
-export function originToLabel(origin: LayerOrigin) {
-  if (origin === 'draw') {
-    return '绘制'
-  }
-
-  if (origin === 'measure') {
-    return '测量'
-  }
-
-  return '上传'
-}
-
 export function buildDrawMarkerIconHtml() {
   return '<span class="map-draw-marker-dot"></span>'
 }
