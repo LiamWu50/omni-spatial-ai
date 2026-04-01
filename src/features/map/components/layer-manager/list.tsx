@@ -1,6 +1,29 @@
 'use client'
 
-import { Item } from './item'
+import type { LucideIcon } from 'lucide-react'
+import {
+  Eye,
+  EyeOff,
+  FileUp,
+  LineSquiggle,
+  MapPin,
+  MoreHorizontal,
+  Ruler,
+  Search,
+  Trash2,
+} from 'lucide-react'
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import {
+  Item as BaseItem,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from '@/components/ui/item'
+
+import type { UserLayerListItem } from '../../types'
 import type { LayerManagerActions, LayerManagerData } from './types'
 
 interface ListProps {
@@ -10,27 +33,107 @@ interface ListProps {
 
 export function List({ actions, data }: ListProps) {
   const { layers } = data
-  const visibleLayerCount = layers.filter((layer) => layer.visible).length
 
   return (
     <section>
-      <div className='mb-3 flex items-center justify-between'>
-        <div className='text-sm font-semibold text-neutral-900 dark:text-neutral-50'>图层列表</div>
-        <div className='text-xs text-(--module-panel-text-muted)'>
-          {visibleLayerCount}/{layers.length} 可见
-        </div>
-      </div>
       <div className='space-y-2'>
-        {layers.map((layer) => (
-          <Item
-            key={layer.id}
-            layer={layer}
-            onFocusLayer={actions.onFocusLayer}
-            onRemoveLayer={actions.onRemoveLayer}
-            onToggleLayer={actions.onToggleLayer}
-          />
-        ))}
+        {layers.map((layer) => {
+          const LayerIcon = getLayerIcon(layer)
+
+          return (
+            <BaseItem
+              key={layer.id}
+              className='flex-nowrap gap-2.5 rounded-[18px] border-0 bg-neutral-100/85 px-3 py-2.5 dark:bg-white/2'
+            >
+              <ItemMedia
+                variant='icon'
+                className='size-8 rounded-lg border-none bg-neutral-200/80 text-(--module-panel-icon) dark:bg-white/2'
+              >
+                <LayerIcon className='size-3.5' />
+              </ItemMedia>
+
+              <ItemContent className='min-w-0 flex-1 gap-0'>
+                <ItemTitle className='min-w-0 text-[13px] leading-5 text-neutral-900 dark:text-neutral-50'>
+                  <span className='block truncate'>{layer.name}</span>
+                </ItemTitle>
+                <ItemDescription className='text-[11px] leading-4 text-(--module-panel-text-muted)'>
+                  {layer.featureCount} 个要素 · {formatGeometryLabel(layer.geometryType)}
+                </ItemDescription>
+              </ItemContent>
+
+              <ItemActions className='shrink-0 self-center gap-1'>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type='button'
+                      className='flex h-7 w-7 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,color] duration-200 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)'
+                      aria-label='打开图层操作菜单'
+                    >
+                      <MoreHorizontal className='h-3.5 w-3.5' />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='min-w-36 rounded-xl p-1' align='end' side='bottom'>
+                    <DropdownMenuItem
+                      className='cursor-pointer rounded-lg'
+                      onSelect={() => void actions.onFocusLayer(layer.id)}
+                    >
+                      <Search className='h-3.5 w-3.5' />
+                      定位图层
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className='cursor-pointer rounded-lg'
+                      onSelect={() => void actions.onToggleLayer(layer.id)}
+                    >
+                      {layer.visible ? <Eye className='h-3.5 w-3.5' /> : <EyeOff className='h-3.5 w-3.5' />}
+                      {layer.visible ? '隐藏图层' : '显示图层'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className='cursor-pointer rounded-lg'
+                      variant='destructive'
+                      onSelect={() => void actions.onRemoveLayer(layer.id)}
+                    >
+                      <Trash2 className='h-3.5 w-3.5' />
+                      删除图层
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </ItemActions>
+            </BaseItem>
+          )
+        })}
       </div>
     </section>
   )
+}
+
+function getLayerIcon(layer: UserLayerListItem): LucideIcon {
+  if (layer.origin === 'measure') {
+    return Ruler
+  }
+
+  if (layer.geometryType === 'point') {
+    return MapPin
+  }
+
+  if (layer.geometryType === 'line' || layer.geometryType === 'polygon' || layer.geometryType === 'mixed') {
+    return LineSquiggle
+  }
+
+  return FileUp
+}
+
+function formatGeometryLabel(geometryType: UserLayerListItem['geometryType']) {
+  if (geometryType === 'point') {
+    return '点'
+  }
+
+  if (geometryType === 'line') {
+    return '线'
+  }
+
+  if (geometryType === 'polygon') {
+    return '面'
+  }
+
+  return '混合几何'
 }
