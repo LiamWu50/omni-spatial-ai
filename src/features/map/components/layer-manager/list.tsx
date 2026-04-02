@@ -1,8 +1,9 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { Eye, EyeOff, FileUp, LineSquiggle, MapPin, MoreHorizontal, Ruler, Search, Trash2 } from 'lucide-react'
+import { Eye, EyeOff, FileUp, Layers2, LineSquiggle, MapPin, MoreHorizontal, Ruler, Search, Trash2 } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Item as BaseItem, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 
@@ -20,8 +21,10 @@ export function List({ actions, data }: ListProps) {
   if (layers.length === 0) {
     return (
       <section>
-        <div className='flex items-center justify-center gap-2 rounded-[10px] border border-dashed border-neutral-200/80 bg-neutral-50/70 px-3 py-4 text-xs text-(--module-panel-text-muted) dark:border-white/10 dark:bg-white/2'>
-          <FileUp className='size-3.5 text-(--module-panel-icon)' />
+        <div className='flex flex-col items-center justify-center gap-2 px-3 py-4 text-xs text-(--module-panel-text-muted)'>
+          <Button size='icon-sm' variant='secondary'>
+            <Layers2 />
+          </Button>
           <span>暂无图层数据</span>
         </div>
       </section>
