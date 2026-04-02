@@ -6,6 +6,7 @@ import { useRef } from 'react'
 
 import ScrollFade from '@/components/ui/scroll-fade'
 
+import { MAP_ASSISTANT_EMPTY_HINT } from '../lib/default-thread-copy'
 import { MapAssistantMessage, MapUserMessage } from './messages'
 
 interface AssistantThreadProps {
@@ -33,7 +34,7 @@ export function AssistantThread({ open }: AssistantThreadProps) {
             <div className='flex min-h-full flex-col'>
               <ThreadPrimitive.If empty>
                 <div className='flex flex-1 items-center justify-center px-6 text-center text-[15px] text-neutral-500 dark:text-neutral-500'>
-                  试试输入：飞到杭州西湖、加载 GeoJSON、把图层改成红色半透明。
+                  {MAP_ASSISTANT_EMPTY_HINT}
                 </div>
               </ThreadPrimitive.If>
               <ThreadPrimitive.Messages

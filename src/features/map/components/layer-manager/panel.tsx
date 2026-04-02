@@ -16,7 +16,7 @@ interface LayerManagerPanelProps {
 export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProps) {
   return (
     <aside
-      className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[360px] flex-col overflow-hidden rounded-[12px] bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ${
+      className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-[12px] bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ${
         open ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
       }`}
     >

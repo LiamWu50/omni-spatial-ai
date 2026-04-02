@@ -3,7 +3,6 @@
 import { useChat } from '@ai-sdk/react'
 import type { AssistantRuntime } from '@assistant-ui/react'
 import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-sdk'
-import type { UIMessage } from 'ai'
 import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -18,27 +17,6 @@ interface MapAssistantRuntimeState {
   setSelectedModel: Dispatch<SetStateAction<ChatModelId>>
   resetConversation: () => void
   composerResetKey: number
-}
-
-const INITIAL_MESSAGES: UIMessage[] = [
-  {
-    id: 'map-assistant-welcome',
-    role: 'assistant',
-    parts: [
-      {
-        type: 'text',
-        text: '地图助手已就绪。你可以让我飞到某个地方、回到初始视角、定位当前位置、加载 GeoJSON，或修改图层样式。',
-        state: 'done'
-      }
-    ]
-  }
-]
-
-function getInitialMessages(): UIMessage[] {
-  return INITIAL_MESSAGES.map((message) => ({
-    ...message,
-    parts: message.parts.map((part) => ({ ...part }))
-  }))
 }
 
 export function useMapAssistantRuntime(): MapAssistantRuntimeState {
@@ -64,7 +42,6 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
 
   const chatOptions: any = {
     transport,
-    initialMessages: getInitialMessages(),
     onFinish: (messageObject: any) => {
       const message = 'message' in messageObject ? messageObject.message : messageObject
       if (!message) return
@@ -106,7 +83,7 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
   const resetConversation = useCallback(() => {
     chat.stop()
     chat.clearError()
-    chat.setMessages(getInitialMessages())
+    chat.setMessages([])
     setComposerResetKey((currentKey) => currentKey + 1)
   }, [chat])
 
