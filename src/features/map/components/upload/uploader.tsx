@@ -54,17 +54,17 @@ export function Uploader({ importStatus, inputRef, onImportLayers }: LayerUpload
         className={cn(
           'flex w-full items-center gap-3 rounded-[16px] border border-dashed px-3 py-3 text-left transition-[background-color,border-color,color] duration-200',
           dragging
-            ? 'border-[var(--module-panel-border-strong)] bg-[var(--module-button-hover-bg)]'
-            : 'border-[var(--module-panel-border)] bg-[var(--module-panel-bg-subtle)]'
+            ? 'border-(--module-panel-border-strong) bg-(--module-button-hover-bg)'
+            : 'border-(--module-panel-border) bg-(--module-panel-bg-subtle)'
         )}
       >
-        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--module-panel-bg-muted)] text-[var(--module-panel-icon)]'>
+        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--module-panel-bg-muted) text-(--module-panel-icon)'>
           <Upload className='h-4.5 w-4.5' />
         </div>
 
         <div className='min-w-0 flex-1'>
           <div className='truncate text-sm font-medium text-neutral-900 dark:text-neutral-50'>上传 GeoJSON / JSON</div>
-          <div className='truncate text-xs leading-5 text-[var(--module-panel-text-muted)]'>{importStatus}</div>
+          <div className='truncate text-xs leading-5 text-(--module-panel-text-muted)'>{importStatus}</div>
         </div>
       </button>
       <input
