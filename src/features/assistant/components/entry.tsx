@@ -1,5 +1,6 @@
 'use client'
 
+import { useMapAssistantChatContext } from '../provider'
 import { Prompt } from './prompt'
 
 interface AssistantEntryProps {
@@ -8,13 +9,15 @@ interface AssistantEntryProps {
 }
 
 export function AssistantEntry({ visible, onOpen }: AssistantEntryProps) {
+  const { composerResetKey } = useMapAssistantChatContext()
+
   if (!visible) {
     return null
   }
 
   return (
     <>
-      <Prompt variant='overlay' onSubmitted={onOpen} />
+      <Prompt key={composerResetKey} variant='overlay' onSubmitted={onOpen} />
       <AssistantEdgeTrigger onOpen={onOpen} />
     </>
   )

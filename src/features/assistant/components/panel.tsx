@@ -1,10 +1,13 @@
 'use client'
 
-import { PanelRightClose } from 'lucide-react'
+import { MessageSquarePlus, PanelRightClose } from 'lucide-react'
 import { useMemo } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 import { useResizablePanel } from '../../map/hooks/use-resizable-panel'
 import { ASSISTANT_PANEL_DEFAULTS } from '../../map/lib/constants'
+import { useMapAssistantChatContext } from '../provider'
 import { Prompt } from './prompt'
 import { AssistantThread } from './thread'
 
@@ -15,6 +18,7 @@ interface AssistantPanelProps {
 
 export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
   const { isResizing, startResize, width } = useResizablePanel(ASSISTANT_PANEL_DEFAULTS)
+  const { composerResetKey, resetConversation } = useMapAssistantChatContext()
 
   const assistantPanelStyle = useMemo(
     () => ({
@@ -55,7 +59,13 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         <div className='flex h-full min-h-0 min-w-[320px] flex-col rounded-none border-0 bg-(--module-panel-bg-solid) shadow-none'>
           <AssistantThread open={open} />
           <div className='px-5 pb-5'>
-            <Prompt variant='docked' />
+            <Prompt key={composerResetKey} variant='docked' />
+            <div className='mt-2 flex justify-start'>
+              <Button variant='ghost' size='xs' className='text-[12px]!' onClick={resetConversation}>
+                <MessageSquarePlus className='h-3! w-3! shrink-0' />
+                新建对话
+              </Button>
+            </div>
           </div>
         </div>
       </div>

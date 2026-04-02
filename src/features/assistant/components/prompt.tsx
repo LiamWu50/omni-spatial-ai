@@ -91,7 +91,7 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
             'flex w-full flex-col border border-(--module-panel-border) bg-(--module-panel-bg) text-neutral-900 shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-[min-height,border-radius,box-shadow,background-color,padding,gap] duration-300 ease-out dark:text-neutral-50',
             isOverlay
               ? 'min-h-[36px] rounded-[12px] px-3.5 py-2 shadow-[0_12px_28px_rgba(15,23,42,0.12)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.28)]'
-              : 'min-h-[96px] gap-2 rounded-[20px] px-4 py-3 shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.32)]',
+              : 'min-h-[84px] gap-2 rounded-[20px] px-4 py-2 shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.32)]',
             isOverlay && isExpanded
               ? 'min-h-[88px] gap-2 rounded-[16px] px-3.5 py-2.5 shadow-[0_18px_40px_rgba(15,23,42,0.16)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.34)]'
               : ''
@@ -118,7 +118,7 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
                   ? isExpanded
                     ? 'min-h-[36px] max-h-[88px] leading-[18px]!'
                     : 'h-[18px] min-h-[18px] max-h-6 leading-[18px]!'
-                  : 'min-h-[48px] max-h-[112px] leading-[18px]!'
+                  : 'min-h-[40px] max-h-[96px] leading-[18px]!'
               )}
             />
           </div>

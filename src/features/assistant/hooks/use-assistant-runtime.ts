@@ -4,7 +4,7 @@ import { useChat } from '@ai-sdk/react'
 import type { AssistantRuntime } from '@assistant-ui/react'
 import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-sdk'
 import type { UIMessage } from 'ai'
-import { type Dispatch, type SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import { useMapContext } from '../../map/components/map-provider'
@@ -16,6 +16,8 @@ interface MapAssistantRuntimeState {
   runtime: AssistantRuntime
   selectedModel: ChatModelId
   setSelectedModel: Dispatch<SetStateAction<ChatModelId>>
+  resetConversation: () => void
+  composerResetKey: number
 }
 
 const INITIAL_MESSAGES: UIMessage[] = [
@@ -32,8 +34,16 @@ const INITIAL_MESSAGES: UIMessage[] = [
   }
 ]
 
+function getInitialMessages(): UIMessage[] {
+  return INITIAL_MESSAGES.map((message) => ({
+    ...message,
+    parts: message.parts.map((part) => ({ ...part }))
+  }))
+}
+
 export function useMapAssistantRuntime(): MapAssistantRuntimeState {
   const [selectedModel, setSelectedModel] = useState<ChatModelId>(DEFAULT_CHAT_MODEL)
+  const [composerResetKey, setComposerResetKey] = useState(0)
   const mapContext = useMapContext()
 
   const mapContextRef = useRef(mapContext)
@@ -54,7 +64,7 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
 
   const chatOptions: any = {
     transport,
-    initialMessages: INITIAL_MESSAGES,
+    initialMessages: getInitialMessages(),
     onFinish: (messageObject: any) => {
       const message = 'message' in messageObject ? messageObject.message : messageObject
       if (!message) return
@@ -93,12 +103,20 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
   }
 
   const chat = useChat(chatOptions)
+  const resetConversation = useCallback(() => {
+    chat.stop()
+    chat.clearError()
+    chat.setMessages(getInitialMessages())
+    setComposerResetKey((currentKey) => currentKey + 1)
+  }, [chat])
 
   const runtime = useAISDKRuntime(chat)
 
   return {
     runtime,
     selectedModel,
-    setSelectedModel
+    setSelectedModel,
+    resetConversation,
+    composerResetKey
   }
 }

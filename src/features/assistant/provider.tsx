@@ -12,12 +12,15 @@ type MapAssistantProviderProps = PropsWithChildren
 interface MapAssistantChatContextValue {
   selectedModel: ChatModelId
   setSelectedModel: Dispatch<SetStateAction<ChatModelId>>
+  resetConversation: () => void
+  composerResetKey: number
 }
 
 const MapAssistantChatContext = createContext<MapAssistantChatContextValue | null>(null)
 
 export function MapAssistantProvider({ children }: MapAssistantProviderProps) {
-  const { runtime: assistantRuntime, selectedModel, setSelectedModel } = useMapAssistantRuntime()
+  const { runtime: assistantRuntime, selectedModel, setSelectedModel, resetConversation, composerResetKey } =
+    useMapAssistantRuntime()
   const aui = useAui({
     tools: Tools({
       toolkit: mapAssistantToolkit
@@ -27,9 +30,11 @@ export function MapAssistantProvider({ children }: MapAssistantProviderProps) {
   const contextValue = useMemo(
     () => ({
       selectedModel,
-      setSelectedModel
+      setSelectedModel,
+      resetConversation,
+      composerResetKey
     }),
-    [selectedModel, setSelectedModel]
+    [selectedModel, setSelectedModel, resetConversation, composerResetKey]
   )
 
   return (
