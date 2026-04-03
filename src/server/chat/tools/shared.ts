@@ -175,7 +175,14 @@ export function normalizeGeoJsonLayer(options: {
     data,
     geometryType: extractGeometryType(parsed.data),
     visible: true,
-    style: {},
+    style: {
+      color: '#38bdf8',
+      fillColor: '#38bdf8',
+      opacity: 0.9,
+      fillOpacity: 0.2,
+      lineWidth: 2,
+      radius: 6
+    },
     crs: 'WGS84'
   }
 }

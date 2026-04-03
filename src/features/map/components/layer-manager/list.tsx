@@ -63,33 +63,34 @@ export function List({ actions, data }: ListProps) {
                   <DropdownMenuTrigger asChild>
                     <button
                       type='button'
-                      className='flex h-7 w-7 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,color] duration-200 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)'
+                      className='flex h-8 w-8 items-center justify-center rounded-full text-(--module-panel-icon) transition-all duration-200 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text) active:scale-95 focus-visible:ring-2 focus-visible:ring-neutral-200 dark:focus-visible:ring-neutral-800'
                       aria-label='打开图层操作菜单'
                     >
-                      <MoreHorizontal className='h-3.5 w-3.5' />
+                      <MoreHorizontal className='h-4 w-4' />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className='min-w-36 rounded-xl p-1' align='end' side='bottom'>
+                  <DropdownMenuContent className='min-w-[120px] rounded-xl border-neutral-200/60 p-1 shadow-xl dark:border-neutral-800/60' align='end' side='bottom' sideOffset={4}>
                     <DropdownMenuItem
-                      className='cursor-pointer rounded-lg'
+                      className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-neutral-700 transition-colors focus:bg-neutral-100 focus:text-neutral-900 dark:text-neutral-300 dark:focus:bg-neutral-800 dark:focus:text-neutral-50'
                       onSelect={() => void actions.onFocusLayer(layer.id)}
                     >
-                      <Search className='h-3.5 w-3.5' />
+                      <Search className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />
                       定位图层
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      className='cursor-pointer rounded-lg'
+                      className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-neutral-700 transition-colors focus:bg-neutral-100 focus:text-neutral-900 dark:text-neutral-300 dark:focus:bg-neutral-800 dark:focus:text-neutral-50'
                       onSelect={() => void actions.onToggleLayer(layer.id)}
                     >
-                      {layer.visible ? <Eye className='h-3.5 w-3.5' /> : <EyeOff className='h-3.5 w-3.5' />}
+                      {layer.visible ? <Eye className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' /> : <EyeOff className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />}
                       {layer.visible ? '隐藏图层' : '显示图层'}
                     </DropdownMenuItem>
+                    <div className="my-0.5 h-px bg-neutral-200/50 dark:bg-neutral-800/50" />
                     <DropdownMenuItem
-                      className='cursor-pointer rounded-lg'
+                      className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-red-600 transition-colors focus:bg-red-50 focus:text-red-700 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-300'
                       variant='destructive'
                       onSelect={() => void actions.onRemoveLayer(layer.id)}
                     >
-                      <Trash2 className='h-3.5 w-3.5' />
+                      <Trash2 className='h-[14px] w-[14px] text-red-600 transition-colors group-focus:text-red-700 dark:text-red-400 dark:group-focus:text-red-300' />
                       删除图层
                     </DropdownMenuItem>
                   </DropdownMenuContent>

@@ -14,21 +14,27 @@ import {
 
 const DRAW_LAYER_STYLE: LayerDescriptor['style'] = {
   color: '#8b5cf6',
-  opacity: 0.92,
+  fillColor: '#8b5cf6',
+  opacity: 0.9,
+  fillOpacity: 0.2,
   lineWidth: 3,
   radius: 6
 }
 
 const MEASURE_LAYER_STYLE: LayerDescriptor['style'] = {
   color: '#f59e0b',
+  fillColor: '#f59e0b',
   opacity: 0.9,
+  fillOpacity: 0.2,
   lineWidth: 3,
   radius: 5
 }
 
 const USER_LAYER_STYLE: LayerDescriptor['style'] = {
   color: '#38bdf8',
-  opacity: 0.85,
+  fillColor: '#38bdf8',
+  opacity: 0.9,
+  fillOpacity: 0.2,
   lineWidth: 2,
   radius: 6
 }
