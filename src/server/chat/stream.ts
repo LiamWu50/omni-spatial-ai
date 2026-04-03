@@ -13,8 +13,10 @@ import {
 import type { MapAssistantUIMessage } from '@/features/assistant/lib/contracts'
 import { resolveChatModelId } from '@/features/map/lib/models'
 
+import { detectDirectGeoJsonLoadRequest, writeDirectGeoJsonLoadStream } from './direct-geojson-load'
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'
 import { createMapAssistantTools } from './tools'
+import { writeNormalizedUIMessageStream } from './ui-stream-normalizer'
 
 export interface ChatRequestBody {
   messages: MapAssistantUIMessage[]
@@ -47,9 +49,15 @@ export async function streamChat(body: ChatRequestBody) {
   const resolvedModel = resolveChatModelId(body.model)
   const messages = Array.isArray(body.messages) ? body.messages : []
   const tools = createMapAssistantTools()
+  const directGeoJsonLoadRequest = detectDirectGeoJsonLoadRequest(messages)
 
   const stream = createUIMessageStream<MapAssistantUIMessage>({
     execute: async ({ writer }) => {
+      if (directGeoJsonLoadRequest) {
+        await writeDirectGeoJsonLoadStream(writer, tools.map_layer_load, directGeoJsonLoadRequest)
+        return
+      }
+
       const result = streamText({
         model: qwen.chat(resolvedModel),
         temperature: 0.2,
@@ -65,9 +73,7 @@ export async function streamChat(body: ChatRequestBody) {
         }
       })
 
-      for await (const chunk of result.toUIMessageStream<MapAssistantUIMessage>()) {
-        writer.write(chunk)
-      }
+      await writeNormalizedUIMessageStream(writer, result.fullStream)
     }
   })
 
