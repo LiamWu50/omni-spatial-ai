@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import darkMapPreview from '@/assets/images/basemap-dark.png'
 import imageryMapPreview from '@/assets/images/basemap-satellite.png'
-import terrainMapPreview from '@/assets/images/basemap-terrain.png'
+import lightMapPreview from '@/assets/images/basemap-street.png'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 import { BASE_MAP_OPTIONS } from '../lib/constants'
@@ -18,9 +18,9 @@ interface BaseLayerProps {
 }
 
 const PREVIEW_IMAGE_MAP = {
-  vector: darkMapPreview,
+  dark: darkMapPreview,
   satellite: imageryMapPreview,
-  terrain: terrainMapPreview
+  light: lightMapPreview
 } as const
 
 export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
@@ -33,35 +33,35 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
         <PopoverTrigger asChild>
           <button
             type='button'
-            className='group flex flex-col items-center gap-1 rounded-xl border border-(--module-panel-border) bg-(--module-panel-bg) p-0.5 shadow-(--module-panel-shadow) backdrop-blur-[20px]'
+            className='group flex flex-col items-center gap-1 rounded-xl border border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'
             aria-label='打开底图设置'
           >
-            <PreviewCard active option={activeOption} />
+            <PreviewCard option={activeOption} />
           </button>
         </PopoverTrigger>
 
         <PopoverContent
           side='top'
           align='start'
-          sideOffset={4}
-          className='w-[208px] rounded-2xl border border-(--module-panel-border) bg-(--module-panel-bg-solid) p-2 text-neutral-900 shadow-(--module-panel-shadow) dark:text-neutral-50'
+          sideOffset={12}
+          className='w-[280px] rounded-2xl border border-(--module-panel-border) bg-(--module-panel-bg-solid)/95 p-3 text-neutral-900 shadow-2xl backdrop-blur-xl dark:text-neutral-50'
         >
-          <div className='mb-2 flex items-center justify-between border-b border-(--module-panel-border)'>
-            <div className='flex items-center gap-2'>
-              <Layers3 className='h-3.5 w-3.5 text-neutral-500 dark:text-neutral-400' />
-              <div className='text-xs font-semibold text-neutral-900 dark:text-neutral-50'>底图设置</div>
+          <div className='mb-3 flex items-center justify-between'>
+            <div className='flex items-center gap-2 px-1'>
+              <Layers3 className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
+              <div className='text-sm font-medium text-neutral-900 dark:text-neutral-50'>底图样式</div>
             </div>
             <button
               type='button'
               onClick={() => setOpen(false)}
-              className='flex h-7 w-7 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)'
+              className='flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50'
               aria-label='关闭底图设置'
             >
-              <X className='h-3.5 w-3.5' />
+              <X className='h-4 w-4' />
             </button>
           </div>
 
-          <div className='grid gap-1'>
+          <div className='grid grid-cols-2 gap-2'>
             {BASE_MAP_OPTIONS.map((option) => {
               const active = option.key === activeBaseLayer
 
@@ -73,22 +73,41 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
                     onChange(option.key)
                     setOpen(false)
                   }}
-                  className={`flex items-center gap-2 rounded-xl border border-(--module-panel-border) bg-(--module-panel-bg-muted) px-1.5 py-1.5 text-left text-(--module-panel-text) transition-[background-color,border-color,color] duration-180 hover:border-(--module-panel-border-strong) hover:bg-(--module-button-hover-bg) ${
-                    active ? 'bg-(--module-button-hover-bg)' : ''
+                  className={`group relative flex flex-col items-center gap-2 rounded-xl border p-2 transition-all duration-200 ${
+                    active
+                      ? 'border-blue-500 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-900/20'
+                      : 'border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800/50'
                   }`}
                   aria-label={`切换到底图：${option.label}`}
                 >
-                  <PreviewCard active={active} option={option} />
-                  <div className='flex min-w-0 items-center gap-2'>
-                    <span
-                      className={`text-xs font-semibold ${
-                        active ? 'text-neutral-900 dark:text-neutral-50' : 'text-neutral-700 dark:text-neutral-200'
-                      }`}
-                    >
-                      {option.label}
-                    </span>
-                    {active ? <Check className='h-3.5 w-3.5 text-neutral-500 dark:text-neutral-300' /> : null}
+                  <div className='relative w-full overflow-hidden rounded-lg'>
+                    <div className='aspect-[4/3] w-full relative'>
+                      <Image
+                        src={PREVIEW_IMAGE_MAP[option.key]}
+                        alt={`${option.label}底图预览`}
+                        fill
+                        className={`object-cover transition-transform duration-500 ${
+                          active ? 'scale-105' : 'group-hover:scale-105'
+                        }`}
+                        sizes='(max-width: 768px) 100vw, 280px'
+                        quality={100}
+                      />
+                    </div>
+                    {active && (
+                      <div className='absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 shadow-sm'>
+                        <Check className='h-3 w-3 text-white' strokeWidth={3} />
+                      </div>
+                    )}
+                    <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10 rounded-lg' />
                   </div>
+                  
+                  <span
+                    className={`text-xs font-medium ${
+                      active ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-200'
+                    }`}
+                  >
+                    {option.label}
+                  </span>
                 </button>
               )
             })}
@@ -99,18 +118,21 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
   )
 }
 
-function PreviewCard({ active = false, option }: { active?: boolean; option: (typeof BASE_MAP_OPTIONS)[number] }) {
+function PreviewCard({ option }: { option: (typeof BASE_MAP_OPTIONS)[number] }) {
   const previewImage = PREVIEW_IMAGE_MAP[option.key]
 
   return (
     <div
-      className={`relative size-10 shrink-0 overflow-hidden rounded-[10px] transition ${
-        active
-          ? 'border-neutral-300 shadow-[0_0_0_1px_rgba(212,212,212,0.25)]'
-          : 'border-neutral-200 dark:border-neutral-700'
-      }`}
+      className='relative size-10 shrink-0 overflow-hidden rounded-[10px] border border-neutral-200 transition dark:border-neutral-700'
     >
-      <Image src={previewImage} alt={`${option.label}底图预览`} fill className='object-cover' sizes='40px' />
+      <Image 
+        src={previewImage} 
+        alt={`${option.label}底图预览`} 
+        fill 
+        className='object-cover' 
+        sizes='40px' 
+        quality={100}
+      />
       <div className='absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.06)_0%,rgba(2,6,23,0.22)_100%)]' />
     </div>
   )

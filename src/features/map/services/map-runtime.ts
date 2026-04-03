@@ -26,9 +26,9 @@ type RuntimeListener = (state: MapRuntimeState) => void
 const DEFAULT_BASE_MAPS = defaultBaseMaps()
 
 const BASE_LAYER_MAP = {
-  vector: DEFAULT_BASE_MAPS.streets,
+  dark: DEFAULT_BASE_MAPS.streets,
   satellite: DEFAULT_BASE_MAPS.imagery,
-  terrain: DEFAULT_BASE_MAPS.light
+  light: DEFAULT_BASE_MAPS.light
 } as const
 
 const INITIAL_VIEW: MapViewState = {
@@ -39,6 +39,13 @@ const INITIAL_VIEW: MapViewState = {
   zoom: 2.8,
   pitch: 0,
   bearing: 0
+}
+
+const getInitialBaseMap = () => {
+  if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    return BASE_LAYER_MAP.light
+  }
+  return BASE_LAYER_MAP.dark
 }
 
 export class MapRuntime {
@@ -61,7 +68,7 @@ export class MapRuntime {
   private state: MapRuntimeState = {
     view: INITIAL_VIEW,
     layers: [],
-    baseMap: BASE_LAYER_MAP.vector,
+    baseMap: getInitialBaseMap(),
     activeTool: null,
     lastError: null
   }
@@ -75,7 +82,7 @@ export class MapRuntime {
     })
 
     this.baseMapManager = new BaseMapManager({
-      initialBaseMap: BASE_LAYER_MAP.vector,
+      initialBaseMap: getInitialBaseMap(),
       onBaseMapChange: (baseMap) => {
         this.setState({ baseMap })
       }
@@ -166,11 +173,11 @@ export class MapRuntime {
       return 'satellite'
     }
 
-    if (baseMap?.id === BASE_LAYER_MAP.terrain.id) {
-      return 'terrain'
+    if (baseMap?.id === BASE_LAYER_MAP.light.id) {
+      return 'light'
     }
 
-    return 'vector'
+    return 'dark'
   }
 
   toViewportState(state: MapRuntimeState): MapViewportState {
@@ -219,7 +226,8 @@ export class MapRuntime {
 
   async resetView() {
     await this.moveTo(INITIAL_VIEW)
-    await this.switchBaseLayer('vector')
+    const defaultBaseMap = getInitialBaseMap()
+    await this.switchBaseLayer(this.getBaseLayerType(defaultBaseMap))
   }
 
   async switchBaseLayer(layer: BaseLayerType) {

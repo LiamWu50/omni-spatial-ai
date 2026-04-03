@@ -20,13 +20,13 @@ export const BASE_MAP_OPTIONS: BaseMapOption[] = [
     previewClassName: 'bg-[linear-gradient(135deg,#86efac_0%,#38bdf8_42%,#1d4ed8_100%)]'
   },
   {
-    key: 'terrain',
-    label: '地形',
+    key: 'light',
+    label: '浅色模式',
     previewClassName: 'bg-[linear-gradient(135deg,#d9f99d_0%,#86efac_26%,#7dd3fc_56%,#cbd5e1_100%)]'
   },
   {
-    key: 'vector',
-    label: '矢量',
+    key: 'dark',
+    label: '深色模式',
     previewClassName: 'bg-[linear-gradient(135deg,#e2e8f0_0%,#cbd5e1_34%,#93c5fd_62%,#2563eb_100%)]'
   }
 ]

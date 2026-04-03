@@ -22,7 +22,7 @@ const mapControlButtonClass =
   'shadow-sm shadow-black/10 duration-200 ease-out bg-[#E5E5E5] text-neutral-900 hover:bg-[#D4D4D4] hover:text-neutral-950 dark:shadow-black/30 dark:bg-[#0A0A0A] dark:text-neutral-100 dark:hover:bg-[#171717] dark:hover:text-neutral-50'
 
 const mapControlButtonActiveClass =
-  'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground'
+  'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30 bg-(--module-button-active-bg) text-(--module-button-active-text) hover:bg-(--module-button-active-bg) hover:text-(--module-button-active-text)'
 
 export function Toolbar({
   actions,
