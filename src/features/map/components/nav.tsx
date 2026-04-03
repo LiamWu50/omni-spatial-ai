@@ -13,11 +13,13 @@ interface MapNavProps {
   onZoomOut: () => void
 }
 
-const mapControlButtonClass =
-  'shadow-sm shadow-black/10 duration-200 ease-out bg-[#E5E5E5] text-neutral-900 hover:bg-[#D4D4D4] hover:text-neutral-950 dark:shadow-black/30 dark:bg-[#0A0A0A] dark:text-neutral-100 dark:hover:bg-[#171717] dark:hover:text-neutral-50'
+const mapControlButtonClass = 'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30'
+
+const mapControlButtonIdleClass =
+  'bg-[#E5E5E5] text-neutral-900 hover:bg-[#D4D4D4] hover:text-neutral-950 dark:bg-[#0A0A0A] dark:text-neutral-100 dark:hover:bg-[#171717] dark:hover:text-neutral-50'
 
 const mapControlButtonActiveClass =
-  'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground'
+  'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground'
 
 export function Nav({ onLocate, onResetView, onZoomIn, onZoomOut }: MapNavProps) {
   return (
@@ -59,12 +61,12 @@ function NavActionButton({
     <Button
       type='button'
       size='icon'
-      variant='secondary'
+      variant='ghost'
       onClick={onClick}
       aria-label={label}
       className={cn(
         mapControlButtonClass,
-        active && mapControlButtonActiveClass,
+        active ? mapControlButtonActiveClass : mapControlButtonIdleClass,
         grouped && 'rounded-none shadow-none first:border-r first:border-border dark:first:border-border'
       )}
     >

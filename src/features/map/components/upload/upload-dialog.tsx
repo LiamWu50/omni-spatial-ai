@@ -31,7 +31,7 @@ export function UploadDialog({ importStatus, onImportLayers, triggerClassName }:
         <Button
           type='button'
           size='icon'
-          variant='secondary'
+          variant='ghost'
           title='上传图层'
           aria-label='上传图层'
           className={triggerClassName}
