@@ -41,12 +41,14 @@ const INITIAL_VIEW: MapViewState = {
   bearing: 0
 }
 
-const getInitialBaseMap = () => {
+const getPreferredBaseMap = () => {
   if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: light)').matches) {
     return BASE_LAYER_MAP.light
   }
   return BASE_LAYER_MAP.dark
 }
+
+const getInitialBaseMap = () => BASE_LAYER_MAP.dark
 
 export class MapRuntime {
   private readonly listeners = new Set<RuntimeListener>()
@@ -226,14 +228,33 @@ export class MapRuntime {
 
   async resetView() {
     await this.moveTo(INITIAL_VIEW)
-    const defaultBaseMap = getInitialBaseMap()
-    await this.switchBaseLayer(this.getBaseLayerType(defaultBaseMap))
+    const preferredBaseMap = getPreferredBaseMap()
+    await this.switchBaseLayer(this.getBaseLayerType(preferredBaseMap))
   }
 
   async switchBaseLayer(layer: BaseLayerType) {
     await this.runSafely(async () => {
       await this.baseMapManager.setBaseMap(BASE_LAYER_MAP[layer])
     })
+  }
+
+  async syncPreferredBaseMap() {
+    // 首屏必须保证服务端和客户端输出一致，避免 hydration mismatch。
+    // 挂载后再根据客户端主题偏好补一次同步。
+    const currentBaseLayer = this.getBaseLayerType(this.state.baseMap)
+
+    if (currentBaseLayer !== 'dark') {
+      return
+    }
+
+    const preferredBaseMap = getPreferredBaseMap()
+    const preferredBaseLayer = this.getBaseLayerType(preferredBaseMap)
+
+    if (preferredBaseLayer === currentBaseLayer) {
+      return
+    }
+
+    await this.switchBaseLayer(preferredBaseLayer)
   }
 
   async addLayer(layer: LayerDescriptor) {

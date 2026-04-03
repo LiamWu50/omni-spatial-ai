@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, type PropsWithChildren, useContext } from 'react'
+import { createContext, type PropsWithChildren, useContext, useEffect } from 'react'
 
 import { useMapRuntime, useMapRuntimeSnapshot } from '../hooks/use-map-runtime'
 import { useMapShell, type UseMapShellResult } from '../hooks/use-map-shell'
@@ -18,6 +18,10 @@ const MapContext = createContext<MapContextValue | null>(null)
 export function MapProvider({ children }: PropsWithChildren) {
   const runtime = useMapRuntime()
   const snapshot = useMapRuntimeSnapshot()
+
+  useEffect(() => {
+    void runtime.syncPreferredBaseMap()
+  }, [runtime])
 
   const shell = useMapShell(snapshot)
   const { actions } = useMapShellActions({ runtime, shell })
