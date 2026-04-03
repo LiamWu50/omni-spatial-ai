@@ -26,13 +26,59 @@ export function createMapLayerLoadTool(fetchImpl: typeof fetch, systemDatasetLoa
     inputSchema: mapLayerLoadInputSchema,
     async execute(input) {
       try {
-        const layer =
-          input.source.type === 'url'
-            ? normalizeGeoJsonLayer({
-                collection: await fetchGeoJsonFromUrl(fetchImpl, input.source.url),
-                name: input.name ?? inferLayerNameFromUrl(input.source.url)
-              })
-            : await systemDatasetLoader.load(input.source.datasetId)
+        let layer
+
+        if (input.source.type === 'url') {
+          layer = normalizeGeoJsonLayer({
+            collection: await fetchGeoJsonFromUrl(fetchImpl, input.source.url),
+            name: input.name ?? inferLayerNameFromUrl(input.source.url)
+          })
+        } else if (input.source.type === 'system') {
+          layer = await systemDatasetLoader.load(input.source.datasetId)
+        } else if (input.source.type === 'raw') {
+          let rawData
+          if (typeof input.source.data === 'string') {
+            try {
+              rawData = JSON.parse(input.source.data)
+            } catch {
+              throw new Error('传入的 GeoJSON 字符串无法解析为合法 JSON')
+            }
+          } else {
+            rawData = input.source.data
+          }
+
+          let collectionData = rawData
+          if (rawData && typeof rawData.type === 'string') {
+            const geomTypes = [
+              'Point',
+              'MultiPoint',
+              'LineString',
+              'MultiLineString',
+              'Polygon',
+              'MultiPolygon',
+              'GeometryCollection'
+            ]
+            if (geomTypes.includes(rawData.type)) {
+              collectionData = {
+                type: 'FeatureCollection',
+                features: [
+                  {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: rawData
+                  }
+                ]
+              }
+            } else if (rawData.type === 'Feature') {
+              collectionData = { type: 'FeatureCollection', features: [rawData] }
+            }
+          }
+
+          layer = normalizeGeoJsonLayer({
+            collection: collectionData as GeoJsonFeatureCollection,
+            name: input.name ?? '用户输入数据'
+          })
+        }
 
         if (!layer) {
           return buildToolResult({

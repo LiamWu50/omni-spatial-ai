@@ -39,6 +39,10 @@ export const mapLayerLoadInputSchema = z.object({
     z.object({
       type: z.literal('system'),
       datasetId: z.string().min(1).describe('系统内数据集 ID')
+    }),
+    z.object({
+      type: z.literal('raw'),
+      data: z.union([z.string(), z.record(z.any())]).describe('直接传入的 GeoJSON 数据内容（可以是 JSON 字符串或解析后的对象）')
     })
   ]),
   name: z.string().trim().min(1).optional().describe('可选图层名称'),
@@ -101,7 +105,7 @@ export const mapAssistantToolNameSchema = z.enum(['map_view_control', 'map_layer
 
 export const mapAssistantToolDescriptions = {
   map_view_control: '控制地图视角：飞到地点、回到初始视角、定位用户当前位置。',
-  map_layer_load: '加载 GeoJSON 数据为地图图层，支持 URL 或系统内数据源。',
+  map_layer_load: '加载 GeoJSON 数据为地图图层，支持 URL、系统内数据源，或直接传入的 GeoJSON 数据内容。',
   map_layer_style: '修改已有图层的颜色、透明度、线宽、点半径、填充样式和显隐状态。'
 } as const
 
