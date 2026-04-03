@@ -88,10 +88,10 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
           onSubmitCapture={handleSubmitCapture}
           onBlurCapture={isOverlay ? handleBlurCapture : undefined}
           className={cn(
-            'flex w-full flex-col border border-(--module-panel-border) bg-(--module-panel-bg) text-neutral-900 shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-[min-height,border-radius,box-shadow,background-color,padding,gap] duration-300 ease-out dark:text-neutral-50',
+            'group flex w-full flex-col border border-(--module-panel-border) bg-(--module-panel-bg) text-neutral-900 shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ease-out dark:text-neutral-50',
             isOverlay
-              ? 'min-h-[36px] rounded-[12px] px-3.5 py-2 shadow-[0_12px_28px_rgba(15,23,42,0.12)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.28)]'
-              : 'min-h-[84px] gap-2 rounded-[20px] px-4 py-2 shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.32)]',
+              ? 'min-h-[36px] rounded-[12px] px-3.5 py-2 shadow-[0_12px_28px_rgba(15,23,42,0.12)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.28)] focus-within:ring-2 focus-within:ring-neutral-200 dark:focus-within:ring-neutral-800'
+              : 'min-h-[84px] gap-3 rounded-[24px] px-4 pb-3 pt-4 shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.24)] focus-within:border-neutral-300 dark:focus-within:border-neutral-700',
             isOverlay && isExpanded
               ? 'min-h-[88px] gap-2 rounded-[16px] px-3.5 py-2.5 shadow-[0_18px_40px_rgba(15,23,42,0.16)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.34)]'
               : ''
@@ -111,14 +111,14 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
 
             <ComposerPrimitive.Input
               placeholder='输入地图指令或问题...'
-              style={{ fontSize: '12px', lineHeight: '18px' }}
+              style={{ fontSize: '13px', lineHeight: '20px' }}
               className={cn(
-                'w-full resize-none overflow-y-auto bg-transparent p-0 text-[12px]! text-neutral-900 outline-none placeholder:text-neutral-400 dark:text-neutral-50 dark:placeholder:text-neutral-500',
+                'w-full resize-none overflow-y-auto bg-transparent p-0 text-[13px]! text-neutral-900 outline-none placeholder:text-neutral-400 dark:text-neutral-50 dark:placeholder:text-neutral-500',
                 isOverlay
                   ? isExpanded
-                    ? 'min-h-[36px] max-h-[88px] leading-[18px]!'
-                    : 'h-[18px] min-h-[18px] max-h-6 leading-[18px]!'
-                  : 'min-h-[40px] max-h-[96px] leading-[18px]!'
+                    ? 'min-h-[36px] max-h-[88px] leading-[20px]!'
+                    : 'h-[20px] min-h-[20px] max-h-6 leading-[20px]!'
+                  : 'min-h-[44px] max-h-[120px] leading-[20px]!'
               )}
             />
           </div>
@@ -130,12 +130,12 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
                 <button
                   type='submit'
                   className={cn(
-                    'inline-flex shrink-0 items-center justify-center rounded-[2px] bg-(--module-primary-bg) text-(--module-primary-text) transition-[background-color,color,opacity] duration-180 hover:bg-(--module-primary-hover-bg) disabled:cursor-not-allowed disabled:opacity-40',
-                    isOverlay ? 'h-6 w-6 rounded-[8px]' : 'h-7 w-7 rounded-[10px]'
+                    'inline-flex shrink-0 items-center justify-center bg-(--module-primary-bg) text-(--module-primary-text) transition-all duration-200 hover:bg-(--module-primary-hover-bg) disabled:cursor-not-allowed disabled:opacity-40',
+                    isOverlay ? 'h-6 w-6 rounded-[8px]' : 'h-8 w-8 rounded-full shadow-sm hover:scale-105 active:scale-95'
                   )}
                   aria-label='发送'
                 >
-                  <ArrowUp className={cn(isOverlay ? 'h-3 w-3' : 'h-4 w-4')} />
+                  <ArrowUp strokeWidth={2.5} className={cn(isOverlay ? 'h-3 w-3' : 'h-4 w-4')} />
                 </button>
               </ComposerPrimitive.Send>
             </div>
