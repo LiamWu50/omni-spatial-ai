@@ -2,7 +2,7 @@ import type { FeatureCollection } from 'geojson'
 
 import type { FeatureQuery, GeoJsonFeatureCollection, LayerDescriptor } from '@/lib/gis/schema'
 
-import { shouldRenderInGenericLayerManager } from './tool-controllers-shared'
+import { shouldRenderInGenericLayerManager } from './tools/tool-controllers-shared'
 
 type LeafletModule = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map

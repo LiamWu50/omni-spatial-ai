@@ -2,7 +2,7 @@ import type { FeatureGroup, Map as LeafletMap } from 'leaflet'
 
 import type { LayerDescriptor } from '@/lib/gis/schema'
 
-import { createMeasureLayerFromResult, isMeasureLayer } from '../lib/user-layers'
+import { createMeasureLayerFromResult, isMeasureLayer } from '../../lib/user-layers'
 import { PathSession } from './path-session'
 import type { ManagedToolLayerCallbacks } from './tool-controllers-shared'
 import { MEASURE_COLOR, syncVisibleLayers } from './tool-controllers-shared'

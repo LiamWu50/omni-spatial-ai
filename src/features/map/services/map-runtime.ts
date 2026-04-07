@@ -6,7 +6,7 @@ import { type BBox, type FeatureQuery, type LayerDescriptor, type MapViewState }
 import type { BaseLayerType, MapCenter, MapTool, MapViewportState } from '../types'
 import { BaseMapManager } from './base-map-manager'
 import { LayerManager } from './layer-manager'
-import { ToolRegistry } from './tool-registry'
+import { ToolRegistry } from './tools/tool-registry'
 import { ViewportManager } from './viewport-manager'
 
 type LeafletModule = typeof import('leaflet')

@@ -9,7 +9,7 @@ import {
   isDrawLayer,
   isMeasureLayer,
   readManagedOriginFromFeature
-} from '../lib/user-layers'
+} from '../../lib/user-layers'
 import { getFeatureCentroid } from './tool-geometry'
 
 type LeafletModule = typeof import('leaflet')
@@ -18,7 +18,7 @@ export interface ManagedToolLayerCallbacks {
   onAddLayer: (layer: LayerDescriptor) => Promise<void> | void
   onRemoveLayer: (_layerId: string) => Promise<void> | void
   onUpdateLayer: (_layer: LayerDescriptor) => Promise<void> | void
-  onRequestToolChange?: (tool: import('../types').MapTool | null) => void
+  onRequestToolChange?: (tool: import('../../types').MapTool | null) => void
 }
 
 export interface PathSessionOptions {

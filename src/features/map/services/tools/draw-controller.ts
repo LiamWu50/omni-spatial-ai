@@ -2,8 +2,8 @@ import type { FeatureGroup, Map as LeafletMap } from 'leaflet'
 
 import type { LayerDescriptor } from '@/lib/gis/schema'
 
-import { createDrawLayerFromFeature, isDrawLayer } from '../lib/user-layers'
-import type { MapTool } from '../types'
+import { createDrawLayerFromFeature, isDrawLayer } from '../../lib/user-layers'
+import type { MapTool } from '../../types'
 import { PathSession } from './path-session'
 import { PointDrawSession } from './point-draw-session'
 import type { ManagedToolLayerCallbacks } from './tool-controllers-shared'
