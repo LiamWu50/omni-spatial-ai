@@ -69,7 +69,12 @@ export function List({ actions, data }: ListProps) {
                       <MoreHorizontal className='h-4 w-4' />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className='min-w-[120px] rounded-xl border-neutral-200/60 p-1 shadow-xl dark:border-neutral-800/60' align='end' side='bottom' sideOffset={4}>
+                  <DropdownMenuContent
+                    className='min-w-[120px] rounded-xl border-neutral-200/60 p-1 shadow-xl dark:border-neutral-800/60'
+                    align='end'
+                    side='bottom'
+                    sideOffset={4}
+                  >
                     <DropdownMenuItem
                       className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-neutral-700 transition-colors focus:bg-neutral-100 focus:text-neutral-900 dark:text-neutral-300 dark:focus:bg-neutral-800 dark:focus:text-neutral-50'
                       onSelect={() => void actions.onFocusLayer(layer.id)}
@@ -81,10 +86,14 @@ export function List({ actions, data }: ListProps) {
                       className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-neutral-700 transition-colors focus:bg-neutral-100 focus:text-neutral-900 dark:text-neutral-300 dark:focus:bg-neutral-800 dark:focus:text-neutral-50'
                       onSelect={() => void actions.onToggleLayer(layer.id)}
                     >
-                      {layer.visible ? <Eye className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' /> : <EyeOff className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />}
+                      {layer.visible ? (
+                        <Eye className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />
+                      ) : (
+                        <EyeOff className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />
+                      )}
                       {layer.visible ? '隐藏图层' : '显示图层'}
                     </DropdownMenuItem>
-                    <div className="my-0.5 h-px bg-neutral-200/50 dark:bg-neutral-800/50" />
+                    <div className='my-0.5 h-px bg-neutral-200/50 dark:bg-neutral-800/50' />
                     <DropdownMenuItem
                       className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-red-600 transition-colors focus:bg-red-50 focus:text-red-700 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-300'
                       variant='destructive'

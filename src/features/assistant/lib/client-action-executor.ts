@@ -2,10 +2,10 @@
 
 import { toast } from 'sonner'
 
+import { type MapClientAction, type MapLayerStylePatch } from '@/lib/ai/contracts'
 import type { LayerDescriptor } from '@/lib/gis/schema'
 
 import type { MapRuntime } from '../../map/services/map-runtime'
-import { type MapClientAction, type MapLayerStylePatch } from './contracts'
 
 export interface MapClientActionExecutorContext {
   runtime: MapRuntime

@@ -100,10 +100,12 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
                     )}
                     <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10 rounded-lg' />
                   </div>
-                  
+
                   <span
                     className={`text-xs font-medium ${
-                      active ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-200'
+                      active
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : 'text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-200'
                     }`}
                   >
                     {option.label}
@@ -122,15 +124,13 @@ function PreviewCard({ option }: { option: (typeof BASE_MAP_OPTIONS)[number] }) 
   const previewImage = PREVIEW_IMAGE_MAP[option.key]
 
   return (
-    <div
-      className='relative size-10 shrink-0 overflow-hidden rounded-[10px] border border-neutral-200 transition dark:border-neutral-700'
-    >
-      <Image 
-        src={previewImage} 
-        alt={`${option.label}底图预览`} 
-        fill 
-        className='object-cover' 
-        sizes='40px' 
+    <div className='relative size-10 shrink-0 overflow-hidden rounded-[10px] border border-neutral-200 transition dark:border-neutral-700'>
+      <Image
+        src={previewImage}
+        alt={`${option.label}底图预览`}
+        fill
+        className='object-cover'
+        sizes='40px'
         quality={100}
       />
       <div className='absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.06)_0%,rgba(2,6,23,0.22)_100%)]' />

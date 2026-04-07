@@ -42,7 +42,9 @@ export const mapLayerLoadInputSchema = z.object({
     }),
     z.object({
       type: z.literal('raw'),
-      data: z.union([z.string(), z.record(z.any())]).describe('直接传入的 GeoJSON 数据内容（可以是 JSON 字符串或解析后的对象）')
+      data: z
+        .union([z.string(), z.record(z.any())])
+        .describe('直接传入的 GeoJSON 数据内容（可以是 JSON 字符串或解析后的对象）')
     })
   ]),
   name: z.string().trim().min(1).optional().describe('可选图层名称'),

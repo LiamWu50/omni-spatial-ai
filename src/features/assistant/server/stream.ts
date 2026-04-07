@@ -10,8 +10,8 @@ import {
   streamText
 } from 'ai'
 
-import type { MapAssistantUIMessage } from '@/features/assistant/lib/contracts'
-import { resolveChatModelId } from '@/features/map/lib/models'
+import type { MapAssistantUIMessage } from '@/lib/ai/contracts'
+import { resolveChatModelId } from '@/lib/ai/models'
 
 import { detectDirectGeoJsonLoadRequest, writeDirectGeoJsonLoadStream } from './direct-geojson-load'
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'

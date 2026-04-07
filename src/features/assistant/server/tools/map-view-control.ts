@@ -6,7 +6,7 @@ import {
   mapViewControlInputSchema,
   type ToolExecutionResult,
   toolExecutionResultSchema
-} from '@/features/assistant/lib/contracts'
+} from '@/lib/ai/contracts'
 
 import type { GeocoderAdapter, GeocodeResult } from './shared'
 

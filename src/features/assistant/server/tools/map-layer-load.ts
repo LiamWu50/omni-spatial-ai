@@ -1,5 +1,6 @@
 import { tool } from 'ai'
 
+import { extractBounds } from '@/features/map/lib/user-layers'
 import {
   mapAssistantToolDescriptions,
   type MapClientAction,
@@ -7,8 +8,7 @@ import {
   mapLayerLoadInputSchema,
   type ToolExecutionResult,
   toolExecutionResultSchema
-} from '@/features/assistant/lib/contracts'
-import { extractBounds } from '@/features/map/lib/user-layers'
+} from '@/lib/ai/contracts'
 import type { GeoJsonFeatureCollection } from '@/lib/gis/schema'
 
 import { fetchGeoJsonFromUrl, inferLayerNameFromUrl, normalizeGeoJsonLayer, type SystemDatasetLoader } from './shared'

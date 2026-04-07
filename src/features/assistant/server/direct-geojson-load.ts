@@ -1,6 +1,6 @@
 import type { UIMessageStreamWriter } from 'ai'
 
-import type { MapAssistantUIMessage, MapLayerLoadInput } from '@/features/assistant/lib/contracts'
+import type { MapAssistantUIMessage, MapLayerLoadInput } from '@/lib/ai/contracts'
 
 import { normalizeToolInputForStream } from './ui-stream-normalizer'
 

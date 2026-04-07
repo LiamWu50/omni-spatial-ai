@@ -1,7 +1,8 @@
 import type { LayerDescriptor } from '@/lib/gis/schema'
 
 import type { MapTool } from '../types'
-import { DrawToolController, MeasureToolController } from './tool-controllers'
+import { DrawToolController } from './draw-controller'
+import { MeasureToolController } from './measure-controller'
 
 type LeafletModule = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map

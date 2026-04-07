@@ -6,8 +6,8 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useMapAssistantChatContext } from '@/features/assistant/provider'
-import type { ChatModelId } from '@/features/map/lib/models'
-import { CHAT_MODEL_OPTIONS } from '@/features/map/lib/models'
+import type { ChatModelId } from '@/lib/ai/models'
+import { CHAT_MODEL_OPTIONS } from '@/lib/ai/models'
 import { cn } from '@/lib/utils'
 
 interface SelectModelProps {
@@ -35,13 +35,18 @@ export const SelectModelComponent = ({ className, onOpenChange }: SelectModelPro
           <ChevronDown className='size-3.5 opacity-50' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='min-w-[140px] rounded-xl border-neutral-200/60 p-1.5 shadow-xl dark:border-neutral-800/60' align='start'>
+      <DropdownMenuContent
+        className='min-w-[140px] rounded-xl border-neutral-200/60 p-1.5 shadow-xl dark:border-neutral-800/60'
+        align='start'
+      >
         {CHAT_MODEL_OPTIONS.map((model) => (
           <DropdownMenuItem
             key={model.id}
             className={cn(
               'my-0.5 cursor-pointer rounded-lg px-3 py-2 text-[13px] transition-colors',
-              selectedModel === model.id ? 'bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50' : 'text-neutral-600 dark:text-neutral-300'
+              selectedModel === model.id
+                ? 'bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50'
+                : 'text-neutral-600 dark:text-neutral-300'
             )}
             onSelect={() => setSelectedModel(model.id as ChatModelId)}
           >

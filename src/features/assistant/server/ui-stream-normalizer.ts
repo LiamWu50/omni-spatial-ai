@@ -1,6 +1,6 @@
 import type { InferUIMessageChunk, TextStreamPart, UIMessageStreamWriter } from 'ai'
 
-import type { MapAssistantUIMessage } from '@/features/assistant/lib/contracts'
+import type { MapAssistantUIMessage } from '@/lib/ai/contracts'
 
 const GEOJSON_GEOMETRY_TYPES = new Set([
   'Point',

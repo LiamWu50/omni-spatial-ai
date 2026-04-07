@@ -6,10 +6,11 @@ import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-
 import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
+import { type MapClientAction } from '@/lib/ai/contracts'
+import { type ChatModelId, DEFAULT_CHAT_MODEL } from '@/lib/ai/models'
+
 import { useMapContext } from '../../map/components/map-provider'
-import { type ChatModelId, DEFAULT_CHAT_MODEL } from '../../map/lib/models'
 import { executeMapClientActions } from '../lib/client-action-executor'
-import { type MapClientAction } from '../lib/contracts'
 
 interface MapAssistantRuntimeState {
   runtime: AssistantRuntime

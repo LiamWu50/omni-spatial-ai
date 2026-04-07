@@ -24,20 +24,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "**/*.mts"],
-  "exclude": [
-    "node_modules",
-    "src/components/ui/assistant-ui/**/*",
-    "src/components/ui/calendar.tsx",
-    "src/components/ui/carousel.tsx",
-    "src/components/ui/chart.tsx",
-    "src/components/ui/command.tsx",
-    "src/components/ui/drawer.tsx",
-    "src/components/ui/form.tsx",
-    "src/components/ui/input-otp.tsx",
-    "src/components/ui/map.tsx",
-    "src/components/ui/resizable.tsx",
-    "src/components/ui/sidebar.tsx",
-    "src/components/ui/toast.tsx",
-    "src/components/ui/toaster.tsx"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -3,7 +3,8 @@
 import { AssistantRuntimeProvider, Tools, useAui } from '@assistant-ui/react'
 import { createContext, type Dispatch, type PropsWithChildren, type SetStateAction, useContext, useMemo } from 'react'
 
-import type { ChatModelId } from '../map/lib/models'
+import type { ChatModelId } from '@/lib/ai/models'
+
 import { mapAssistantToolkit } from './components/tools'
 import { useMapAssistantRuntime } from './hooks/use-assistant-runtime'
 
@@ -19,8 +20,13 @@ interface MapAssistantChatContextValue {
 const MapAssistantChatContext = createContext<MapAssistantChatContextValue | null>(null)
 
 export function MapAssistantProvider({ children }: MapAssistantProviderProps) {
-  const { runtime: assistantRuntime, selectedModel, setSelectedModel, resetConversation, composerResetKey } =
-    useMapAssistantRuntime()
+  const {
+    runtime: assistantRuntime,
+    selectedModel,
+    setSelectedModel,
+    resetConversation,
+    composerResetKey
+  } = useMapAssistantRuntime()
   const aui = useAui({
     tools: Tools({
       toolkit: mapAssistantToolkit

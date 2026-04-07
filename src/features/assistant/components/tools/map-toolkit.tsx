@@ -3,7 +3,7 @@
 import { type Toolkit } from '@assistant-ui/react'
 import { CheckCircle2, Layers, Loader, type LucideIcon, MapPin, Palette } from 'lucide-react'
 
-import { mapAssistantToolMetadata, type MapAssistantToolName } from '../../lib/contracts'
+import { mapAssistantToolMetadata, type MapAssistantToolName } from '@/lib/ai/contracts'
 
 type ToolCardConfig = {
   icon: LucideIcon

@@ -6,7 +6,7 @@ import {
   mapLayerStyleInputSchema,
   type ToolExecutionResult,
   toolExecutionResultSchema
-} from '@/features/assistant/lib/contracts'
+} from '@/lib/ai/contracts'
 
 function buildToolResult(result: ToolExecutionResult) {
   return toolExecutionResultSchema.parse(result)

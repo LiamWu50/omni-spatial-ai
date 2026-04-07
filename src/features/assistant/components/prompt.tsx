@@ -131,7 +131,9 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
                   type='submit'
                   className={cn(
                     'inline-flex shrink-0 items-center justify-center bg-(--module-primary-bg) text-(--module-primary-text) transition-all duration-200 hover:bg-(--module-primary-hover-bg) disabled:cursor-not-allowed disabled:opacity-40',
-                    isOverlay ? 'h-6 w-6 rounded-[8px]' : 'h-8 w-8 rounded-full shadow-sm hover:scale-105 active:scale-95'
+                    isOverlay
+                      ? 'h-6 w-6 rounded-[8px]'
+                      : 'h-8 w-8 rounded-full shadow-sm hover:scale-105 active:scale-95'
                   )}
                   aria-label='发送'
                 >
