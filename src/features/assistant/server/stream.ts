@@ -10,18 +10,13 @@ import {
   streamText
 } from 'ai'
 
-import type { MapAssistantUIMessage } from '@/lib/ai/contracts'
+import type { ChatRequestBody } from '@/lib/ai/contracts'
 import { resolveChatModelId } from '@/lib/ai/models'
 
 import { detectDirectGeoJsonLoadRequest, writeDirectGeoJsonLoadStream } from './direct-geojson-load'
 import { MAP_CHAT_SYSTEM_PROMPT } from './prompts'
 import { createMapAssistantTools } from './tools'
 import { writeNormalizedUIMessageStream } from './ui-stream-normalizer'
-
-export interface ChatRequestBody {
-  messages: MapAssistantUIMessage[]
-  model?: string
-}
 
 export function isDashscopeConfigError(error: unknown) {
   return error instanceof Error && error.message.includes('DASHSCOPE_API_KEY')
@@ -51,7 +46,14 @@ export async function streamChat(body: ChatRequestBody) {
   const tools = createMapAssistantTools()
   const directGeoJsonLoadRequest = detectDirectGeoJsonLoadRequest(messages)
 
-  const stream = createUIMessageStream<MapAssistantUIMessage>({
+  // 添加调试日志
+  console.log('[AI Chat] 服务端接收到的图层列表:', body.currentLayers)
+
+  // 构建图层上下文
+  const layersContext = buildLayersContext(body.currentLayers)
+  console.log('[AI Chat] 构建的图层上下文:', layersContext)
+
+  const stream = createUIMessageStream<any>({
     execute: async ({ writer }) => {
       if (directGeoJsonLoadRequest) {
         await writeDirectGeoJsonLoadStream(writer, tools.map_layer_load, directGeoJsonLoadRequest)
@@ -61,7 +63,7 @@ export async function streamChat(body: ChatRequestBody) {
       const result = streamText({
         model: qwen.chat(resolvedModel),
         temperature: 0.2,
-        system: MAP_CHAT_SYSTEM_PROMPT,
+        system: MAP_CHAT_SYSTEM_PROMPT + layersContext,
         messages: await convertToModelMessages(messages),
         tools,
         stopWhen: stepCountIs(8),
@@ -78,6 +80,21 @@ export async function streamChat(body: ChatRequestBody) {
   })
 
   return createUIMessageStreamResponse({ stream })
+}
+
+/**
+ * 构建图层列表的上下文信息，添加到系统提示中
+ */
+function buildLayersContext(currentLayers?: ChatRequestBody['currentLayers']): string {
+  if (!currentLayers || currentLayers.length === 0) {
+    return '\n\n当前地图上没有图层。'
+  }
+
+  const layersList = currentLayers
+    .map(layer => `- ${layer.name} (图层ID: ${layer.id})`)
+    .join('\n')
+
+  return `\n\n当前地图图层列表：\n${layersList}\n\n注意：当用户提到"图层"但未指定具体图层时，请先询问用户要修改哪个图层，或根据上下文合理推断。`
 }
 
 export function createChatErrorResponse(error: unknown) {

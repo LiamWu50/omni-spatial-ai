@@ -1,5 +1,5 @@
-import type { ChatRequestBody } from '@/features/assistant/server/stream'
 import { createChatErrorResponse, isDashscopeConfigError, streamChat } from '@/features/assistant/server/stream'
+import type { ChatRequestBody } from '@/lib/ai/contracts'
 
 export const maxDuration = 60
 

@@ -6,7 +6,7 @@ import { AssistantChatTransport, useAISDKRuntime } from '@assistant-ui/react-ai-
 import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
-import { type MapClientAction } from '@/lib/ai/contracts'
+import { type CurrentLayerItem, type MapClientAction } from '@/lib/ai/contracts'
 import { type ChatModelId, DEFAULT_CHAT_MODEL } from '@/lib/ai/models'
 
 import { useMapContext } from '../../map/components/map-provider'
@@ -30,15 +30,39 @@ export function useMapAssistantRuntime(): MapAssistantRuntimeState {
     mapContextRef.current = mapContext
   }, [mapContext])
 
+  // 创建一个自定义的 fetch 函数来动态添加图层信息
+  const originalFetch = useCallback(async (url: RequestInfo | URL, options?: RequestInit) => {
+    const currentContext = mapContextRef.current
+
+    // 动态获取当前图层列表
+    const currentLayers = currentContext.shell.derived.layers.map((layer): CurrentLayerItem => ({
+      id: layer.id,
+      name: layer.name
+    }))
+
+    // 添加调试日志
+    console.log('[AI Chat] 发送请求时的图层列表:', currentLayers)
+
+    // 添加模型和图层信息到请求体
+    const modifiedOptions: RequestInit = {
+      ...options,
+      body: JSON.stringify({
+        ...(options?.body ? JSON.parse(options.body as string) : {}),
+        model: selectedModel,
+        currentLayers
+      })
+    }
+
+    return fetch(url, modifiedOptions)
+  }, [selectedModel])
+
   const transport = useMemo(
     () =>
       new AssistantChatTransport({
         api: '/api/chat',
-        body: {
-          model: selectedModel
-        }
+        fetch: originalFetch
       }),
-    [selectedModel]
+    [originalFetch]
   )
 
   const chatOptions: any = {

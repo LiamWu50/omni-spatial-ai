@@ -132,6 +132,17 @@ export const mapClientActionDispatchSchema = z.object({
   result: toolExecutionResultSchema
 })
 
+export const currentLayerItemSchema = z.object({
+  id: z.string().describe('图层唯一标识符'),
+  name: z.string().describe('图层显示名称')
+})
+
+export const chatRequestBodySchema = z.object({
+  messages: z.array(z.any()),
+  model: z.string().optional(),
+  currentLayers: z.array(currentLayerItemSchema).optional().describe('当前地图上的图层列表')
+})
+
 export const mapAssistantDataPartSchemas = {
   mapClientActions: mapClientActionDispatchSchema
 } as const
@@ -168,3 +179,7 @@ export type MapClientActionDispatch = z.infer<typeof mapClientActionDispatchSche
 export type MapAssistantDataParts = Record<'mapClientActions', MapClientActionDispatch>
 
 export type MapAssistantUIMessage = UIMessage<unknown, MapAssistantDataParts>
+
+export type CurrentLayerItem = z.infer<typeof currentLayerItemSchema>
+
+export type ChatRequestBody = z.infer<typeof chatRequestBodySchema>
