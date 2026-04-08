@@ -87,10 +87,10 @@ export function UserAvatarTrigger() {
       </DropdownMenu>
 
       <Dialog open={showThemeDialog} onOpenChange={setShowThemeDialog}>
-        <DialogContent className='sm:max-w-115'>
+        <DialogContent className='overflow-hidden rounded-[12px] border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] sm:max-w-[440px]'>
           <DialogHeader>
-            <DialogTitle>主题设置</DialogTitle>
-            <DialogDescription>选择您喜欢的主题模式</DialogDescription>
+            <DialogTitle className='text-(--module-panel-text)'>主题设置</DialogTitle>
+            <DialogDescription className='text-(--module-panel-text-muted)'>选择您喜欢的主题模式</DialogDescription>
           </DialogHeader>
           <div className='grid grid-cols-3 gap-3 py-2'>
             <button

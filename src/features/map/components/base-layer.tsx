@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Layers3, X } from 'lucide-react'
+import { Layers3, X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -93,11 +93,6 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
                         quality={100}
                       />
                     </div>
-                    {active && (
-                      <div className='absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 shadow-sm'>
-                        <Check className='h-3 w-3 text-white' strokeWidth={3} />
-                      </div>
-                    )}
                     <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10 rounded-lg' />
                   </div>
 
