@@ -16,10 +16,11 @@ interface LayerManagerPanelProps {
 export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProps) {
   return (
     <aside
-      className={`absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-[12px] bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ${
+      className={`pointer-events-none absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-[12px] bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ${
         open ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
       }`}
     >
+      <div className='pointer-events-auto cursor-default flex h-full flex-col'>
       <div className='flex items-center justify-between p-2'>
         <div className='flex-1 text-left'>
           <div className='flex items-center gap-2 text-[14px] font-semibold text-neutral-900 dark:text-neutral-50'>
@@ -44,6 +45,7 @@ export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProp
           <List data={data} actions={actions} />
         </div>
       </ScrollArea>
+      </div>
     </aside>
   )
 }

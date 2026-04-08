@@ -37,7 +37,7 @@ export function Toolbar({
   return (
     <>
       <div className='pointer-events-none absolute left-5 right-5 top-5 z-30 flex items-start justify-between gap-4'>
-        <div className='pointer-events-auto flex items-center gap-3'>
+        <div className='pointer-events-auto cursor-default flex items-center gap-3'>
           <UserAvatarTrigger />
 
           <div className='flex items-center gap-2'>
