@@ -23,8 +23,8 @@ const mapControlButtonActiveClass =
 
 export function Nav({ onLocate, onResetView, onZoomIn, onZoomOut }: MapNavProps) {
   return (
-    <div className='absolute bottom-12 right-4 z-30 flex items-center gap-2'>
-      <div className='flex items-center gap-2'>
+    <div className='pointer-events-none absolute bottom-12 right-4 z-30 flex items-center gap-2'>
+      <div className='pointer-events-auto flex items-center gap-2'>
         <NavActionButton label='定位' onClick={onLocate}>
           <Crosshair className='h-4 w-4' />
         </NavActionButton>

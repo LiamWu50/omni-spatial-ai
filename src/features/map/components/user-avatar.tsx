@@ -6,7 +6,13 @@ import { useState } from 'react'
 
 import avatarImage from '@/assets/images/avatar-default.png'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +36,57 @@ const defaultUserProfile: UserProfile = {
   avatar: avatarImage
 }
 
-export function UserAvatarTrigger() {
+function ThemeDialogContent() {
   const { theme, setTheme } = useTheme()
+
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle className='text-(--module-panel-text)'>主题设置</DialogTitle>
+        <DialogDescription className='text-(--module-panel-text-muted)'>选择您喜欢的主题模式</DialogDescription>
+      </DialogHeader>
+      <div className='grid grid-cols-3 gap-3 py-2'>
+        <button
+          type='button'
+          className={cn(
+            'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            theme === 'light' ? 'border-primary/60 bg-primary/5 text-primary' : 'border-muted text-muted-foreground'
+          )}
+          onClick={() => setTheme('light')}
+        >
+          <Sun className='mb-2 h-5 w-5' />
+          <span className='text-xs font-medium'>浅色模式</span>
+        </button>
+        <button
+          type='button'
+          className={cn(
+            'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            theme === 'dark' ? 'border-primary/60 bg-primary/5 text-primary' : 'border-muted text-muted-foreground'
+          )}
+          onClick={() => setTheme('dark')}
+        >
+          <Moon className='mb-2 h-5 w-5' />
+          <span className='text-xs font-medium'>深色模式</span>
+        </button>
+        <button
+          type='button'
+          className={cn(
+            'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            theme === 'system'
+              ? 'border-primary/60 bg-primary/5 text-primary'
+              : 'border-muted text-muted-foreground'
+          )}
+          onClick={() => setTheme('system')}
+        >
+          <Monitor className='mb-2 h-5 w-5' />
+          <span className='text-xs font-medium'>系统模式</span>
+        </button>
+      </div>
+    </>
+  )
+}
+
+export function UserAvatarTrigger() {
   const [showThemeDialog, setShowThemeDialog] = useState(false)
   const user = defaultUserProfile
 
@@ -74,7 +129,12 @@ export function UserAvatarTrigger() {
               <CircleUserRound />
               帐户
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => setShowThemeDialog(true)}>
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+                setShowThemeDialog(true)
+              }}
+            >
               <PaintBucket />
               主题设置
             </DropdownMenuItem>
@@ -86,49 +146,15 @@ export function UserAvatarTrigger() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={showThemeDialog} onOpenChange={setShowThemeDialog}>
-        <DialogContent className='overflow-hidden rounded-[12px] border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] sm:max-w-[440px]'>
-          <DialogHeader>
-            <DialogTitle className='text-(--module-panel-text)'>主题设置</DialogTitle>
-            <DialogDescription className='text-(--module-panel-text-muted)'>选择您喜欢的主题模式</DialogDescription>
-          </DialogHeader>
-          <div className='grid grid-cols-3 gap-3 py-2'>
-            <button
-              type='button'
-              className={cn(
-                'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground',
-                theme === 'light' ? 'border-primary/60 bg-primary/5 text-primary' : 'border-muted text-muted-foreground'
-              )}
-              onClick={() => setTheme('light')}
-            >
-              <Sun className='mb-2 h-5 w-5' />
-              <span className='text-xs font-medium'>浅色模式</span>
-            </button>
-            <button
-              type='button'
-              className={cn(
-                'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground',
-                theme === 'dark' ? 'border-primary/60 bg-primary/5 text-primary' : 'border-muted text-muted-foreground'
-              )}
-              onClick={() => setTheme('dark')}
-            >
-              <Moon className='mb-2 h-5 w-5' />
-              <span className='text-xs font-medium'>深色模式</span>
-            </button>
-            <button
-              type='button'
-              className={cn(
-                'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground',
-                theme === 'system'
-                  ? 'border-primary/60 bg-primary/5 text-primary'
-                  : 'border-muted text-muted-foreground'
-              )}
-              onClick={() => setTheme('system')}
-            >
-              <Monitor className='mb-2 h-5 w-5' />
-              <span className='text-xs font-medium'>系统模式</span>
-            </button>
-          </div>
+      <Dialog key='theme-dialog' open={showThemeDialog} onOpenChange={setShowThemeDialog}>
+        <DialogContent
+          className='z-[60] overflow-hidden rounded-[12px] border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] sm:max-w-[440px]'
+          onInteractOutside={(e) => {
+            // 阻止点击外部关闭对话框
+            e.preventDefault()
+          }}
+        >
+          <ThemeDialogContent />
         </DialogContent>
       </Dialog>
     </>

@@ -28,8 +28,9 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
   const activeOption = BASE_MAP_OPTIONS.find((option) => option.key === activeBaseLayer) ?? BASE_MAP_OPTIONS[0]
 
   return (
-    <div className='absolute bottom-12 left-4 z-10'>
-      <Popover open={open} onOpenChange={setOpen}>
+    <div className='pointer-events-none absolute bottom-12 left-4 z-10'>
+      <div className='pointer-events-auto'>
+        <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
             type='button'
@@ -111,6 +112,7 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
           </div>
         </PopoverContent>
       </Popover>
+      </div>
     </div>
   )
 }

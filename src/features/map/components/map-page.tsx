@@ -41,8 +41,8 @@ function MapPageInner() {
       <div className='relative h-screen w-full overflow-hidden text-neutral-900 dark:text-white'>
         <div className='absolute inset-0 flex h-full w-full overflow-hidden'>
           <div className='relative h-full min-w-0 flex-1 overflow-hidden'>
-            <section className='absolute inset-0 overflow-hidden'>
-              <div ref={containerRef} className='absolute inset-0 z-0' />
+            <section className='pointer-events-none absolute inset-0 overflow-hidden'>
+              <div ref={containerRef} className='pointer-events-auto absolute inset-0 z-0' />
               <BaseLayer activeBaseLayer={state.activeBaseLayer} onChange={mapActions.switchBaseLayer} />
             </section>
 
