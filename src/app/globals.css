@@ -61,7 +61,7 @@
   --sidebar-ring: oklch(0.708 0 0);
   --module-panel-bg: rgba(255, 255, 255, 0.9);
   --module-panel-bg-solid: #ffffff;
-  --module-panel-bg-subtle: rgba(255, 255, 255, 0.82);
+  --module-panel-bg-subtle: rgba(255, 255, 255, 0.6);
   --module-panel-bg-muted: rgba(245, 245, 245, 0.86);
   --module-panel-border: rgba(229, 229, 229, 0.9);
   --module-panel-border-strong: rgba(212, 212, 212, 0.95);
@@ -109,7 +109,7 @@
   --sidebar-ring: oklch(0.556 0 0);
   --module-panel-bg: rgba(20, 20, 20, 0.92);
   --module-panel-bg-solid: #141414;
-  --module-panel-bg-subtle: rgba(20, 20, 20, 0.8);
+  --module-panel-bg-subtle: rgba(10, 10, 10, 0.5);
   --module-panel-bg-muted: rgba(30, 30, 30, 0.78);
   --module-panel-border: rgba(38, 38, 38, 0.9);
   --module-panel-border-strong: rgba(64, 64, 64, 0.92);
@@ -153,24 +153,7 @@
   }
 
   .leaflet-control-attribution {
-    border: 1px solid rgba(229, 231, 235, 0.9);
-    background: rgba(255, 255, 255, 0.82);
-    color: #404040;
-    backdrop-filter: blur(10px);
-
-    a {
-      color: #2563eb;
-    }
-
-    :where(.dark &) {
-      border: 1px solid rgba(38, 38, 38, 0.9);
-      background: rgba(10, 10, 10, 0.78);
-      color: #e5e7eb;
-
-      a {
-        color: #93c5fd;
-      }
-    }
+    display: none;
   }
 
   .map-draw-marker {

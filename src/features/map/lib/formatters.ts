@@ -16,5 +16,5 @@ export function formatAttribution(activeBaseLayer: BaseLayerType) {
   const sceneLabel =
     activeBaseLayer === 'satellite' ? '影像场景' : activeBaseLayer === 'light' ? '浅色场景' : '深色场景'
 
-  return `OmniSpatial AI · ${sceneLabel} · 数据归因`
+  return `${sceneLabel} · 数据归因`
 }

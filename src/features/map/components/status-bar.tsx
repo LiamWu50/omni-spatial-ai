@@ -6,9 +6,9 @@ interface MapStatusProps {
 
 export function Status({ state }: MapStatusProps) {
   return (
-    <footer className='pointer-events-none absolute w-full bottom-0 z-20 flex h-8 items-center justify-between bg-(--module-panel-bg-subtle) px-4 text-[10px] leading-none text-neutral-600 shadow-(--module-panel-shadow) backdrop-blur-xl dark:text-neutral-300'>
+    <footer className='pointer-events-none absolute w-full bottom-0 z-20 flex h-8 items-center justify-between bg-(--module-panel-bg-subtle) px-4 text-[10px] leading-none text-neutral-600 shadow-(--module-panel-shadow) backdrop-blur-xl dark:text-neutral-400'>
       <div className='flex items-center gap-2 text-[10px] text-(--module-panel-text-muted)'>
-        <span className='font-semibold text-neutral-900 dark:text-neutral-50'>OmniSpatial AI</span>
+        <span className='font-semibold text-neutral-900 dark:text-neutral-200'>OmniSpatial AI</span>
         <span className='h-1 w-1 rounded-full bg-(--module-panel-border)' />
         <span>{state.attribution}</span>
       </div>
