@@ -107,10 +107,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --module-panel-bg: rgba(10, 10, 10, 0.9);
-  --module-panel-bg-solid: #0a0a0a;
-  --module-panel-bg-subtle: rgba(10, 10, 10, 0.74);
-  --module-panel-bg-muted: rgba(23, 23, 23, 0.72);
+  --module-panel-bg: rgba(20, 20, 20, 0.92);
+  --module-panel-bg-solid: #141414;
+  --module-panel-bg-subtle: rgba(20, 20, 20, 0.8);
+  --module-panel-bg-muted: rgba(30, 30, 30, 0.78);
   --module-panel-border: rgba(38, 38, 38, 0.9);
   --module-panel-border-strong: rgba(64, 64, 64, 0.92);
   --module-panel-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);

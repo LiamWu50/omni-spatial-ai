@@ -13,10 +13,10 @@ interface MapNavProps {
   onZoomOut: () => void
 }
 
-const mapControlButtonClass = 'shadow-sm shadow-black/10 duration-200 ease-out dark:shadow-black/30'
+const mapControlButtonClass = 'shadow-sm shadow-black/10 border border-transparent duration-200 ease-out dark:shadow-black/40 dark:border-neutral-700/30'
 
 const mapControlButtonIdleClass =
-  'bg-[#E5E5E5] text-neutral-900 hover:bg-[#D4D4D4] hover:text-neutral-950 dark:bg-[#0A0A0A] dark:text-neutral-100 dark:hover:bg-[#171717] dark:hover:text-neutral-50'
+  'bg-[#E5E5E5] text-neutral-900 hover:bg-[#D4D4D4] hover:text-neutral-950 dark:bg-[#262626] dark:text-neutral-100 dark:hover:bg-[#2F2F2F] dark:hover:text-neutral-50 dark:border dark:border-neutral-700/50'
 
 const mapControlButtonActiveClass =
   'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground'
@@ -67,7 +67,7 @@ function NavActionButton({
       className={cn(
         mapControlButtonClass,
         active ? mapControlButtonActiveClass : mapControlButtonIdleClass,
-        grouped && 'rounded-none shadow-none first:border-r first:border-border dark:first:border-border'
+        grouped && 'shadow-none first:rounded-r-none first:rounded-l-md last:rounded-l-none last:rounded-r-md first:border-r first:border-border dark:first:border-neutral-700/50'
       )}
     >
       {children}
