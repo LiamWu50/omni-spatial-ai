@@ -13,8 +13,7 @@ export function formatScale(zoom: number) {
 }
 
 export function formatAttribution(activeBaseLayer: BaseLayerType) {
-  const sceneLabel =
-    activeBaseLayer === 'satellite' ? '影像场景' : activeBaseLayer === 'light' ? '浅色场景' : '深色场景'
+  const sceneLabel = activeBaseLayer === 'light' ? '浅色场景' : '深色场景'
 
   return `${sceneLabel} · 数据归因`
 }

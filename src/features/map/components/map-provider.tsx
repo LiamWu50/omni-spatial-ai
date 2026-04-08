@@ -1,5 +1,6 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import { createContext, type PropsWithChildren, useContext, useEffect } from 'react'
 
 import { useMapRuntime, useMapRuntimeSnapshot } from '../hooks/use-map-runtime'
@@ -18,10 +19,14 @@ const MapContext = createContext<MapContextValue | null>(null)
 export function MapProvider({ children }: PropsWithChildren) {
   const runtime = useMapRuntime()
   const snapshot = useMapRuntimeSnapshot()
+  const { theme, resolvedTheme } = useTheme()
+  const currentTheme = resolvedTheme || theme
 
   useEffect(() => {
-    void runtime.syncPreferredBaseMap()
-  }, [runtime])
+    if (currentTheme) {
+      void runtime.syncBaseMapWithTheme(currentTheme)
+    }
+  }, [runtime, currentTheme])
 
   const shell = useMapShell(snapshot)
   const { actions } = useMapShellActions({ runtime, shell })

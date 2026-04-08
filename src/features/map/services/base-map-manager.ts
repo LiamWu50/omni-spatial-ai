@@ -73,21 +73,6 @@ export class BaseMapManager {
   }
 
   private resolveTileLayer(baseMap: BaseMapDescriptor | null): TileLayerConfig {
-    if (baseMap?.imageryUrl) {
-      return {
-        attribution: this.resolveAttribution(baseMap),
-        url: baseMap.imageryUrl
-      }
-    }
-
-    if (baseMap?.id === 'imagery') {
-      return {
-        attribution: 'Tiles © Esri',
-        maxZoom: 18,
-        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-      }
-    }
-
     if (baseMap?.id === 'light') {
       return {
         attribution: '© OpenStreetMap contributors © CARTO',
@@ -99,13 +84,5 @@ export class BaseMapManager {
       attribution: '© OpenStreetMap contributors © CARTO',
       url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
     }
-  }
-
-  private resolveAttribution(baseMap: BaseMapDescriptor) {
-    if (baseMap.id === 'imagery') {
-      return 'Tiles © Esri'
-    }
-
-    return '© OpenStreetMap contributors © CARTO'
   }
 }

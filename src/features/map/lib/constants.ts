@@ -15,11 +15,6 @@ export const LAYER_UPLOAD_MAX_SIZE_MB = 100
 
 export const BASE_MAP_OPTIONS: BaseMapOption[] = [
   {
-    key: 'satellite',
-    label: '影像',
-    previewClassName: 'bg-[linear-gradient(135deg,#86efac_0%,#38bdf8_42%,#1d4ed8_100%)]'
-  },
-  {
     key: 'light',
     label: '浅色模式',
     previewClassName: 'bg-[linear-gradient(135deg,#d9f99d_0%,#86efac_26%,#7dd3fc_56%,#cbd5e1_100%)]'

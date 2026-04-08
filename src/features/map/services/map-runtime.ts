@@ -27,7 +27,6 @@ const DEFAULT_BASE_MAPS = defaultBaseMaps()
 
 const BASE_LAYER_MAP = {
   dark: DEFAULT_BASE_MAPS.streets,
-  satellite: DEFAULT_BASE_MAPS.imagery,
   light: DEFAULT_BASE_MAPS.light
 } as const
 
@@ -171,10 +170,6 @@ export class MapRuntime {
   }
 
   getBaseLayerType(baseMap: MapRuntimeState['baseMap']): BaseLayerType {
-    if (baseMap?.id === BASE_LAYER_MAP.satellite.id) {
-      return 'satellite'
-    }
-
     if (baseMap?.id === BASE_LAYER_MAP.light.id) {
       return 'light'
     }
@@ -255,6 +250,17 @@ export class MapRuntime {
     }
 
     await this.switchBaseLayer(preferredBaseLayer)
+  }
+
+  async syncBaseMapWithTheme(theme: string) {
+    const targetLayer: BaseLayerType = theme === 'light' ? 'light' : 'dark'
+    const currentBaseLayer = this.getBaseLayerType(this.state.baseMap)
+
+    if (targetLayer === currentBaseLayer) {
+      return
+    }
+
+    await this.switchBaseLayer(targetLayer)
   }
 
   async addLayer(layer: LayerDescriptor) {

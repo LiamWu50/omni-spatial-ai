@@ -7,7 +7,7 @@ export interface MapCenter {
   lat: number
 }
 
-export type BaseLayerType = 'dark' | 'satellite' | 'light'
+export type BaseLayerType = 'dark' | 'light'
 
 export type MapTool = 'measure' | 'point' | 'geometry'
 

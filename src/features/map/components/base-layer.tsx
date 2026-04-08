@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import darkMapPreview from '@/assets/images/basemap-dark.png'
-import imageryMapPreview from '@/assets/images/basemap-satellite.png'
 import lightMapPreview from '@/assets/images/basemap-street.png'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
@@ -18,7 +17,6 @@ interface BaseLayerProps {
 
 const PREVIEW_IMAGE_MAP = {
   dark: darkMapPreview,
-  satellite: imageryMapPreview,
   light: lightMapPreview
 } as const
 
@@ -33,7 +31,7 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'
+              className='relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-neutral-300 dark:border-neutral-600 bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'
               aria-label='打开底图设置'
             >
               <Image
@@ -54,7 +52,7 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
         side='top'
         align='start'
         sideOffset={12}
-        className='z-50 w-auto rounded-2xl border border-(--module-panel-border) bg-(--module-panel-bg-solid)/95 p-3 text-neutral-900 shadow-2xl backdrop-blur-xl dark:text-neutral-50'
+        className='w-auto rounded-2xl border border-(--module-panel-border) bg-(--module-panel-bg-solid)/95 p-3 text-neutral-900 shadow-2xl backdrop-blur-xl dark:text-neutral-50'
       >
         <div className='flex items-center gap-4'>
           {BASE_MAP_OPTIONS.map((option) => {
