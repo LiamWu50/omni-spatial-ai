@@ -241,3 +241,67 @@
     display: none;
   }
 }
+
+/* Dialog 动画效果 */
+[data-slot='dialog-content'] {
+  animation-duration: 0.15s;
+  animation-timing-function: ease-out;
+}
+
+[data-slot='dialog-content'][data-state='open'] {
+  animation-name: dialog-in;
+}
+
+[data-slot='dialog-content'][data-state='closed'] {
+  animation-name: dialog-out;
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+[data-slot='dialog-overlay'] {
+  animation-duration: 0.15s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+[data-slot='dialog-overlay'][data-state='open'] {
+  animation-name: overlay-in;
+}
+
+[data-slot='dialog-overlay'][data-state='closed'] {
+  animation-name: overlay-out;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
