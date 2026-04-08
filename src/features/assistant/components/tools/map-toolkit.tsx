@@ -34,16 +34,20 @@ function buildToolCard(
   const config = mapAssistantToolCardConfig[toolName]
   const StatusIcon = status.type === 'complete' ? CheckCircle2 : Loader
   const iconClassName =
-    status.type === 'complete' ? 'text-emerald-400' : status.type === 'incomplete' ? 'text-red-400' : 'text-400'
+    status.type === 'complete'
+      ? 'text-emerald-500 dark:text-emerald-400'
+      : status.type === 'incomplete'
+        ? 'text-red-500 dark:text-red-400'
+        : 'text-cyan-500 dark:text-cyan-400'
 
   return (
-    <div className='mb-2 w-full max-w-[320px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/75 shadow-sm backdrop-blur-md'>
+    <div className='mb-2 w-full max-w-[320px] overflow-hidden rounded-2xl border border-neutral-200/50 bg-white/75 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-neutral-900/75'>
       <div className='flex items-center gap-2.5 px-3 py-2'>
         <div className={`shrink-0 ${iconClassName}`}>
           <StatusIcon size={14} className={status.type === 'running' ? 'animate-spin' : undefined} />
         </div>
         <div className='min-w-0 flex-1'>
-          <span className='block truncate text-[12px] leading-5 text-neutral-200'>{config.displayName}</span>
+          <span className='block truncate text-[12px] leading-5 text-neutral-700 dark:text-neutral-200'>{config.displayName}</span>
         </div>
       </div>
     </div>

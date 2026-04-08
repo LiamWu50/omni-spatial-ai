@@ -23,22 +23,22 @@ export function ToolFallback({ toolName, result: _result, status }: ToolCallMess
           : LoaderCircle
   const iconClassName =
     status.type === 'complete'
-      ? 'text-emerald-400'
+      ? 'text-emerald-500 dark:text-emerald-400'
       : status.type === 'incomplete'
-        ? 'text-red-400'
+        ? 'text-red-500 dark:text-red-400'
         : status.type === 'requires-action'
-          ? 'text-amber-400'
-          : 'text-cyan-400'
+          ? 'text-amber-500 dark:text-amber-400'
+          : 'text-cyan-500 dark:text-cyan-400'
 
   return (
-    <div className='mb-2 w-full max-w-[320px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/75 shadow-sm backdrop-blur-md'>
+    <div className='mb-2 w-full max-w-[320px] overflow-hidden rounded-2xl border border-neutral-200/50 bg-white/75 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-neutral-900/75'>
       <div className='flex items-center gap-2.5 px-4 py-2.5'>
         <div className={`shrink-0 ${iconClassName}`}>
           <Icon size={14} className={status.type === 'running' ? 'animate-spin' : undefined} />
         </div>
 
         <div className='min-w-0 flex-1'>
-          <div className='truncate text-[13px] leading-5 text-neutral-200'>{label}</div>
+          <div className='truncate text-[13px] leading-5 text-neutral-700 dark:text-neutral-200'>{label}</div>
         </div>
       </div>
     </div>

@@ -305,3 +305,52 @@
     opacity: 0;
   }
 }
+
+/* AI 助手加载动画 - 旋转效果 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* AI 助手加载动画 - 呼吸效果 */
+@keyframes breathing {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.animate-breathing {
+  animation: breathing 2s ease-in-out infinite;
+}
+
+/* 给打字机光标添加呼吸效果 */
+/* 打字机光标通常是 ::after 伪元素 */
+[data-part="message-root"]::after,
+.assistant-message-root::after,
+.aui-message-root::after {
+  animation: breathing 1.5s ease-in-out infinite !important;
+}
+
+/* 隐藏 @assistant-ui/react 可能的默认加载指示器 */
+[data-part="message-root"] [data-part="loading-indicator"] {
+  display: none !important;
+}
+
+/* 确保不会显示多个加载指示器 */
+.assistant-message-root .loading-indicator,
+.aui-message .loading-indicator {
+  display: none !important;
+}
