@@ -20,6 +20,11 @@ const PREVIEW_IMAGE_MAP = {
   light: lightMapPreview
 } as const
 
+const BORDER_COLOR_MAP = {
+  dark: '#374151',
+  light: '#d1d5db'
+} as const
+
 export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
   const [open, setOpen] = useState(false)
   const activeOption = BASE_MAP_OPTIONS.find((option) => option.key === activeBaseLayer) ?? BASE_MAP_OPTIONS[0]
@@ -31,7 +36,8 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-primary-foreground bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'
+              className='relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] outline-none focus:outline-none focus-visible:outline-none'
+              style={{ borderColor: BORDER_COLOR_MAP[activeBaseLayer] + ' !important' }}
               aria-label='打开底图设置'
             >
               <Image
@@ -42,7 +48,6 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
                 sizes='40px'
                 quality={100}
               />
-              <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10' />
             </button>
           </PopoverTrigger>
         </div>
@@ -84,7 +89,6 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
                     quality={100}
                   />
                   <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100' />
-                  <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10' />
                   {active && <div className='absolute inset-0 bg-(--primary-color)/20' />}
                   <span
                     className={`absolute inset-0 flex items-center justify-center text-xs font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${
