@@ -1,6 +1,5 @@
 'use client'
 
-import { Map, X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -55,24 +54,8 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
         sideOffset={12}
         className='w-auto rounded-2xl border border-(--module-panel-border) bg-(--module-panel-bg-solid)/95 text-neutral-900 shadow-2xl backdrop-blur-xl dark:text-neutral-50'
       >
-        <div className='flex items-center justify-between pb-2'>
-          <div className='flex items-center gap-2 text-[14px] font-semibold text-neutral-900 dark:text-neutral-50'>
-            <span className='flex h-7 w-7 items-center justify-center rounded-full bg-(--module-panel-bg-muted) text-(--module-panel-icon)'>
-              <Map className='h-4 w-4' />
-            </span>
-            <span>底图设置</span>
-          </div>
-          <button
-            type='button'
-            onClick={() => setOpen(false)}
-            className='flex h-8 w-8 items-center justify-center rounded-full text-(--module-panel-icon) transition-colors duration-200 hover:bg-(--module-button-hover-bg)'
-            aria-label='关闭底图设置面板'
-          >
-            <X className='h-4 w-4' />
-          </button>
-        </div>
-        <div className='px-2.5 pb-3'>
-          <div className='flex items-center gap-3'>
+        <div>
+          <div className='flex items-center gap-5'>
             {BASE_MAP_OPTIONS.map((option) => {
               const active = option.key === activeBaseLayer
 
@@ -84,26 +67,28 @@ export function BaseLayer({ activeBaseLayer, onChange }: BaseLayerProps) {
                     onChange(option.key)
                   }}
                   className={
-                    'group relative flex flex-col items-center gap-2 rounded-xl p-2 transition-all duration-200'
+                    'group relative flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden transition-all duration-200'
                   }
+                  style={{
+                    border: `3px solid ${active ? 'var(--color-blue-500)' : 'transparent'}`,
+                    borderRadius: '0'
+                  }}
                   aria-label={`切换到底图：${option.label}`}
                 >
-                  <div className='relative h-10 w-14 overflow-hidden'>
-                    <Image
-                      src={PREVIEW_IMAGE_MAP[option.key]}
-                      alt={`${option.label}底图预览`}
-                      fill
-                      className='object-cover'
-                      sizes='36px'
-                      quality={100}
-                    />
-                    <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10' />
-                    {active && <div className='absolute inset-0 bg-(--primary-color)/20' />}
-                  </div>
-
+                  <Image
+                    src={PREVIEW_IMAGE_MAP[option.key]}
+                    alt={`${option.label}底图预览`}
+                    fill
+                    className='object-cover'
+                    sizes='80px'
+                    quality={100}
+                  />
+                  <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100' />
+                  <div className='absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10' />
+                  {active && <div className='absolute inset-0 bg-(--primary-color)/20' />}
                   <span
-                    className={`text-xs font-medium ${
-                      active ? 'text-(--primary-color)' : 'text-neutral-600 dark:text-neutral-400'
+                    className={`absolute inset-0 flex items-center justify-center text-xs font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${
+                      active ? 'text-white' : ''
                     }`}
                   >
                     {option.label}
