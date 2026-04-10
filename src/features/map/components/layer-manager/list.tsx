@@ -21,7 +21,7 @@ export function List({ actions, data }: ListProps) {
   if (layers.length === 0) {
     return (
       <section>
-        <div className='flex flex-col items-center justify-center gap-2 px-3 py-4 text-xs text-(--module-panel-text-muted)'>
+        <div className='flex flex-col items-center justify-center gap-2 px-3 py-4 text-xs text-text-muted font-body'>
           <Button size='icon-sm' variant='secondary'>
             <Layers2 />
           </Button>
@@ -40,20 +40,20 @@ export function List({ actions, data }: ListProps) {
           return (
             <BaseItem
               key={layer.id}
-              className='flex-nowrap gap-2.5 rounded-[18px] border-0 bg-neutral-100/85 px-3 py-2.5 dark:bg-white/2'
+              className='flex-nowrap gap-2.5 rounded-0 border border-border bg-surface-subtle px-3 py-2.5'
             >
               <ItemMedia
                 variant='icon'
-                className='size-8 rounded-lg border-none bg-neutral-200/80 text-(--module-panel-icon) dark:bg-white/2'
+                className='size-8 rounded-0 border-none bg-surface-hover text-text-secondary'
               >
                 <LayerIcon className='size-3.5' />
               </ItemMedia>
 
               <ItemContent className='min-w-0 flex-1 gap-0'>
-                <ItemTitle className='min-w-0 text-[13px] leading-5 text-neutral-900 dark:text-neutral-50'>
+                <ItemTitle className='min-w-0 text-xs leading-5 text-foreground font-body'>
                   <span className='block truncate'>{layer.name}</span>
                 </ItemTitle>
-                <ItemDescription className='text-[11px] leading-4 text-(--module-panel-text-muted)'>
+                <ItemDescription className='text-[11px] leading-4 text-text-muted font-body'>
                   {layer.featureCount} 个要素 · {formatGeometryLabel(layer.geometryType)}
                 </ItemDescription>
               </ItemContent>
@@ -63,39 +63,36 @@ export function List({ actions, data }: ListProps) {
                   <DropdownMenuTrigger asChild>
                     <button
                       type='button'
-                      className='flex h-8 w-8 items-center justify-center rounded-full text-(--module-panel-icon) transition-all duration-200 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text) active:scale-95 focus-visible:ring-2 focus-visible:ring-neutral-200 dark:focus-visible:ring-neutral-800'
+                      className='flex h-8 w-8 items-center justify-center rounded-0 text-text-secondary transition-all duration-200 hover:bg-surface-hover hover:opacity-50 active:scale-95 focus-visible:ring-2 focus-visible:ring-ring/50'
                       aria-label='打开图层操作菜单'
                     >
                       <MoreHorizontal className='h-4 w-4' />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
-                    className='min-w-[120px] rounded-xl border-neutral-200/60 p-1 shadow-xl dark:border-neutral-800/60'
+                    className='min-w-[120px] rounded-0 border border-border p-1'
                     align='end'
                     side='bottom'
                     sideOffset={4}
                   >
                     <DropdownMenuItem
-                      className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-neutral-700 transition-colors focus:bg-neutral-100 focus:text-neutral-900 dark:text-neutral-300 dark:focus:bg-neutral-800 dark:focus:text-neutral-50'
                       onSelect={() => void actions.onFocusLayer(layer.id)}
                     >
-                      <Search className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />
+                      <Search className='h-[14px] w-[14px]' />
                       定位图层
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-neutral-700 transition-colors focus:bg-neutral-100 focus:text-neutral-900 dark:text-neutral-300 dark:focus:bg-neutral-800 dark:focus:text-neutral-50'
                       onSelect={() => void actions.onToggleLayer(layer.id)}
                     >
                       {layer.visible ? (
-                        <Eye className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />
+                        <Eye className='h-[14px] w-[14px]' />
                       ) : (
-                        <EyeOff className='h-[14px] w-[14px] text-neutral-500 transition-colors group-focus:text-neutral-900 dark:text-neutral-400 dark:group-focus:text-neutral-50' />
+                        <EyeOff className='h-[14px] w-[14px]' />
                       )}
                       {layer.visible ? '隐藏图层' : '显示图层'}
                     </DropdownMenuItem>
-                    <div className='my-0.5 h-px bg-neutral-200/50 dark:bg-neutral-800/50' />
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className='group cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-red-600 transition-colors focus:bg-red-50 focus:text-red-700 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-300'
                       variant='destructive'
                       onSelect={() => void actions.onRemoveLayer(layer.id)}
                     >

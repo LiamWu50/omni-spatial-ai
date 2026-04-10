@@ -27,26 +27,26 @@ export const SelectModelComponent = ({ className, onOpenChange }: SelectModelPro
           type='button'
           variant='ghost'
           className={cn(
-            'h-8 w-fit max-w-[112px] justify-start gap-1.5 rounded-full px-2.5 text-[13px]! font-medium text-neutral-500 transition-colors hover:bg-neutral-100/50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800/50 dark:hover:text-neutral-200 sm:max-w-[140px]',
+            'h-8 w-fit max-w-[112px] justify-start gap-1.5 rounded-0 px-2.5 text-[13px]! font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:opacity-50 sm:max-w-[140px]',
             className
           )}
         >
-          <span className='truncate'>{selectedModelLabel}</span>
+          <span className='truncate font-body'>{selectedModelLabel}</span>
           <ChevronDown className='size-3.5 opacity-50' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className='min-w-[140px] rounded-xl border-neutral-200/60 p-1.5 shadow-xl dark:border-neutral-800/60'
+        className='min-w-[140px] rounded-0 border border-border p-1.5'
         align='start'
       >
         {CHAT_MODEL_OPTIONS.map((model) => (
           <DropdownMenuItem
             key={model.id}
             className={cn(
-              'my-0.5 cursor-pointer rounded-lg px-3 py-2 text-[13px] transition-colors',
+              'my-0.5 cursor-pointer rounded-0 px-3 py-2 text-[13px] font-body',
               selectedModel === model.id
-                ? 'bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50'
-                : 'text-neutral-600 dark:text-neutral-300'
+                ? 'bg-surface-subtle font-medium text-foreground'
+                : 'text-text-secondary'
             )}
             onSelect={() => setSelectedModel(model.id as ChatModelId)}
           >

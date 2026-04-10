@@ -6,6 +6,7 @@ import { Suspense } from 'react'
 
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { displayFont, bodyFont } from './fonts'
 
 export const metadata: Metadata = {
   title: 'OmniSpatial AI',
@@ -18,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='zh-CN' suppressHydrationWarning>
-      <body className='antialiased'>
+    <html lang='zh-CN' suppressHydrationWarning className={`${displayFont.variable} ${bodyFont.variable}`}>
+      <body className='antialiased font-sans'>
         <Suspense fallback={null}>
           <NuqsAdapter>
             <ThemeProvider attribute='class' defaultTheme='dark' enableSystem disableTransitionOnChange>

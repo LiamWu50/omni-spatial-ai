@@ -16,15 +16,15 @@ interface LayerManagerPanelProps {
 export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProps) {
   return (
     <aside
-      className={`pointer-events-none absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-[12px] bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ${
+      className={`pointer-events-none absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-0 border border-border bg-card transition-all duration-300 ${
         open ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
       }`}
     >
       <div className='pointer-events-auto cursor-default flex h-full flex-col'>
-      <div className='flex items-center justify-between p-2'>
+      <div className='flex items-center justify-between border-b border-border p-4'>
         <div className='flex-1 text-left'>
-          <div className='flex items-center gap-2 text-[14px] font-semibold text-neutral-900 dark:text-neutral-50'>
-            <span className='flex h-7 w-7 items-center justify-center rounded-full bg-(--module-panel-bg-muted) text-(--module-panel-icon)'>
+          <div className='flex items-center gap-2 text-sm font-semibold text-foreground font-display uppercase tracking-[0.14em]'>
+            <span className='flex h-7 w-7 items-center justify-center rounded-0 bg-surface-subtle text-foreground'>
               <Layers3 className='h-4 w-4' />
             </span>
             <span>图层管理</span>
@@ -33,7 +33,7 @@ export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProp
         <button
           type='button'
           onClick={actions.onToggle}
-          className='flex h-9 w-9 items-center justify-center rounded-full text-(--module-panel-icon) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)'
+          className='flex h-9 w-9 items-center justify-center rounded-0 text-text-secondary transition-colors duration-180 hover:bg-surface-hover hover:opacity-50'
           aria-label='关闭图层管理面板'
         >
           <X className='h-4 w-4' />

@@ -88,12 +88,12 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
           onSubmitCapture={handleSubmitCapture}
           onBlurCapture={isOverlay ? handleBlurCapture : undefined}
           className={cn(
-            'group flex w-full flex-col border border-(--module-panel-border) bg-(--module-panel-bg) text-neutral-900 shadow-(--module-panel-shadow) backdrop-blur-[20px] transition-all duration-300 ease-out dark:text-neutral-50',
+            'group flex w-full flex-col border border-border bg-card text-foreground transition-all duration-300 ease-out font-body',
             isOverlay
-              ? 'min-h-[36px] rounded-[12px] px-3.5 py-2 shadow-[0_12px_28px_rgba(15,23,42,0.12)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.28)] focus-within:ring-2 focus-within:ring-neutral-200 dark:focus-within:ring-neutral-800'
-              : 'min-h-[84px] gap-3 rounded-[24px] px-4 pb-3 pt-4 shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.24)] focus-within:border-neutral-300 dark:focus-within:border-neutral-700',
+              ? 'min-h-[36px] rounded-0 px-3.5 py-2 focus-within:ring-2 focus-within:ring-ring/50'
+              : 'min-h-[84px] gap-3 rounded-0 px-4 pb-3 pt-4 focus-within:border-border-strong',
             isOverlay && isExpanded
-              ? 'min-h-[88px] gap-2 rounded-[16px] px-3.5 py-2.5 shadow-[0_18px_40px_rgba(15,23,42,0.16)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.34)]'
+              ? 'min-h-[88px] gap-2 rounded-0 px-3.5 py-2.5'
               : ''
           )}
         >
@@ -104,7 +104,7 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
             )}
           >
             {isOverlay && !isExpanded ? (
-              <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-neutral-500 dark:text-neutral-400'>
+              <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-0 text-text-secondary'>
                 <Sparkles className='h-3.5 w-3.5' />
               </span>
             ) : null}
@@ -113,7 +113,7 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
               placeholder='输入地图指令或问题...'
               style={{ fontSize: '13px', lineHeight: '20px' }}
               className={cn(
-                'w-full resize-none overflow-y-auto bg-transparent p-0 text-[13px]! text-neutral-900 outline-none placeholder:text-neutral-400 dark:text-neutral-50 dark:placeholder:text-neutral-500',
+                'w-full resize-none overflow-y-auto bg-transparent p-0 text-[13px]! text-foreground outline-none placeholder:text-text-muted font-body',
                 isOverlay
                   ? isExpanded
                     ? 'min-h-[36px] max-h-[88px] leading-[20px]!'
@@ -130,10 +130,10 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
                 <button
                   type='submit'
                   className={cn(
-                    'inline-flex shrink-0 items-center justify-center bg-(--module-primary-bg) text-(--module-primary-text) transition-all duration-200 hover:bg-(--module-primary-hover-bg) disabled:cursor-not-allowed disabled:opacity-40',
+                    'inline-flex shrink-0 items-center justify-center bg-primary text-primary-foreground transition-all duration-200 hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-40',
                     isOverlay
-                      ? 'h-6 w-6 rounded-[8px]'
-                      : 'h-8 w-8 rounded-full shadow-sm hover:scale-105 active:scale-95'
+                      ? 'h-6 w-6 rounded-0'
+                      : 'h-8 w-8 rounded-0'
                   )}
                   aria-label='发送'
                 >

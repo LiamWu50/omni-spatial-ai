@@ -29,8 +29,8 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
 
   return (
     <div
-      className={`relative shrink-0 overflow-visible border-l border-neutral-200/0 transition-[width,border-color] duration-300 ease-out dark:border-neutral-800/0 ${
-        open ? 'border-neutral-200 dark:border-neutral-800' : ''
+      className={`relative shrink-0 overflow-visible border-l transition-[width,border-color] duration-300 ease-out ${
+        open ? 'border-border' : 'border-transparent'
       } ${isResizing ? 'transition-none' : ''}`}
       style={assistantPanelStyle}
     >
@@ -41,14 +41,14 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         aria-label='调整对话详情宽度'
         aria-orientation='vertical'
       >
-        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-(--module-panel-border) transition-opacity' />
+        <div className='absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border transition-opacity' />
       </div>
 
       {open ? (
         <button
           type='button'
           onClick={() => onOpenChange(false)}
-          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-(--module-panel-border) bg-(--module-panel-bg-solid) text-(--module-panel-icon) shadow-(--module-panel-shadow) transition-[background-color,border-color,color,box-shadow] duration-180 hover:bg-(--module-button-hover-bg) hover:text-(--module-button-hover-text)'
+          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-0 border border-border bg-card text-text-secondary transition-colors duration-180 hover:bg-surface-hover hover:opacity-50'
           aria-label='收起对话详情'
         >
           <PanelRightClose className='h-4 w-4' />
@@ -56,7 +56,7 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
       ) : null}
 
       <div className='h-full overflow-hidden'>
-        <div className='flex h-full min-h-0 min-w-[320px] flex-col rounded-none border-0 bg-(--module-panel-bg-solid) shadow-none'>
+        <div className='flex h-full min-h-0 min-w-[320px] flex-col rounded-none border-0 bg-card'>
           <AssistantThread open={open} />
           <div className='px-5 pb-5'>
             <Prompt key={composerResetKey} variant='docked' />

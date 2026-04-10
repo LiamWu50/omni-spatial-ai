@@ -52,19 +52,19 @@ export function Uploader({ importStatus, inputRef, onImportLayers }: LayerUpload
           void handleFiles(event.dataTransfer.files)
         }}
         className={cn(
-          'flex w-full items-center gap-3 rounded-[16px] border border-dashed px-3 py-3 text-left transition-[background-color,border-color,color] duration-200',
+          'flex w-full items-center gap-3 rounded-0 border border-dashed px-3 py-3 text-left transition-all duration-200 font-body',
           dragging
-            ? 'border-(--module-panel-border-strong) bg-(--module-button-hover-bg)'
-            : 'border-(--module-panel-border) bg-(--module-panel-bg-subtle)'
+            ? 'border-strong bg-surface-hover'
+            : 'border-border bg-surface-subtle'
         )}
       >
-        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--module-panel-bg-muted) text-(--module-panel-icon)'>
+        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-0 bg-surface-hover text-text-secondary'>
           <Upload className='h-4.5 w-4.5' />
         </div>
 
         <div className='min-w-0 flex-1'>
-          <div className='truncate text-sm font-medium text-neutral-900 dark:text-neutral-50'>上传 GeoJSON / JSON</div>
-          <div className='truncate text-xs leading-5 text-(--module-panel-text-muted)'>{importStatus}</div>
+          <div className='truncate text-sm font-medium text-foreground font-body'>上传 GeoJSON / JSON</div>
+          <div className='truncate text-xs leading-5 text-text-muted font-body'>{importStatus}</div>
         </div>
       </button>
       <input

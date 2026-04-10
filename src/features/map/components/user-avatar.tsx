@@ -42,15 +42,15 @@ function ThemeDialogContent() {
   return (
     <>
       <DialogHeader>
-        <DialogTitle className='text-(--module-panel-text)'>主题设置</DialogTitle>
-        <DialogDescription className='text-(--module-panel-text-muted)'>选择您喜欢的主题模式</DialogDescription>
+        <DialogTitle>主题设置</DialogTitle>
+        <DialogDescription>选择您喜欢的主题模式</DialogDescription>
       </DialogHeader>
       <div className='grid grid-cols-3 gap-3 py-2'>
         <button
           type='button'
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            theme === 'light' ? 'border-primary/60 bg-primary/5 text-primary' : 'border-muted text-muted-foreground'
+            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover hover:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
+            theme === 'light' ? 'border-strong bg-surface-subtle text-foreground' : 'border-border text-text-secondary'
           )}
           onClick={() => setTheme('light')}
         >
@@ -60,8 +60,8 @@ function ThemeDialogContent() {
         <button
           type='button'
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            theme === 'dark' ? 'border-primary/60 bg-primary/5 text-primary' : 'border-muted text-muted-foreground'
+            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover hover:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
+            theme === 'dark' ? 'border-strong bg-surface-subtle text-foreground' : 'border-border text-text-secondary'
           )}
           onClick={() => setTheme('dark')}
         >
@@ -71,10 +71,10 @@ function ThemeDialogContent() {
         <button
           type='button'
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-lg border px-2 py-3 transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover hover:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
             theme === 'system'
-              ? 'border-primary/60 bg-primary/5 text-primary'
-              : 'border-muted text-muted-foreground'
+              ? 'border-strong bg-surface-subtle text-foreground'
+              : 'border-border text-text-secondary'
           )}
           onClick={() => setTheme('system')}
         >
@@ -96,7 +96,7 @@ export function UserAvatarTrigger() {
         <DropdownMenuTrigger asChild>
           <button
             type='button'
-            className='flex h-10 w-10 items-center justify-center rounded-full border border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px]'
+            className='flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card'
             aria-label='打开页面设置'
           >
             <Avatar className='h-9 w-9 cursor-pointer rounded-full grayscale'>
@@ -106,7 +106,7 @@ export function UserAvatarTrigger() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+          className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-0'
           side='bottom'
           align='start'
           sideOffset={10}
@@ -148,7 +148,7 @@ export function UserAvatarTrigger() {
 
       <Dialog key='theme-dialog' open={showThemeDialog} onOpenChange={setShowThemeDialog}>
         <DialogContent
-          className='z-[60] overflow-hidden rounded-[12px] border-(--module-panel-border) bg-(--module-panel-bg) shadow-(--module-panel-shadow) backdrop-blur-[20px] sm:max-w-[440px]'
+          className='z-[60] overflow-hidden rounded-0 border border-border bg-card sm:max-w-[440px]'
           onInteractOutside={(e) => {
             // 阻止点击外部关闭对话框
             e.preventDefault()
