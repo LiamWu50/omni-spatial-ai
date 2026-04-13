@@ -1,257 +1,246 @@
-# Design System Inspired by xAI
+# Design System Inspired by Spotify
 
 ## 1. Visual Theme & Atmosphere
 
-xAI's website is a masterclass in dark-first, monospace-driven brutalist minimalism -- a design system that feels like it was built by engineers who understand that restraint is the ultimate form of sophistication. The entire experience is anchored to an almost-black background (`#1f2228`) with pure white text (`#ffffff`), creating a high-contrast, terminal-inspired aesthetic that signals deep technical credibility. There are no gradients, no decorative illustrations, no color accents competing for attention. This is a site that communicates through absence.
+Spotify's web interface is a dark, immersive music player that wraps listeners in a near-black cocoon (`#121212`, `#181818`, `#1f1f1f`) where album art and content become the primary source of color. The design philosophy is "content-first darkness" — the UI recedes into shadow so that music, podcasts, and playlists can glow. Every surface is a shade of charcoal, creating a theater-like environment where the only true color comes from the iconic Spotify Green (`#1ed760`) and the album artwork itself.
 
-The typographic system is split between two carefully chosen typefaces. `GeistMono` (Vercel's monospace font) handles display-level headlines at an extraordinary 320px with weight 300, and also serves as the button typeface in uppercase with tracked-out letter-spacing (1.4px). `universalSans` handles all body and secondary heading text with a clean, geometric sans-serif voice. The monospace-as-display-font choice is the defining aesthetic decision -- it positions xAI not as a consumer product but as infrastructure, as something built by people who live in terminals.
+The typography uses SpotifyMixUI and SpotifyMixUITitle — proprietary fonts from the CircularSp family (Circular by Lineto, customized for Spotify) with an extensive fallback stack that includes Arabic, Hebrew, Cyrillic, Greek, Devanagari, and CJK fonts, reflecting Spotify's global reach. The type system is compact and functional: 700 (bold) for emphasis and navigation, 600 (semibold) for secondary emphasis, and 400 (regular) for body. Buttons use uppercase with positive letter-spacing (1.4px–2px) for a systematic, label-like quality.
 
-The spacing system operates on an 8px base grid with values concentrated at the small end (4px, 8px, 24px, 48px), reflecting a dense, information-focused layout philosophy. Border radius is minimal -- the site barely rounds anything, maintaining sharp, architectural edges. There are no decorative shadows, no gradients, no layered elevation. Depth is communicated purely through contrast and whitespace.
+What distinguishes Spotify is its pill-and-circle geometry. Primary buttons use 500px–9999px radius (full pill), circular play buttons use 50% radius, and search inputs are 500px pills. Combined with heavy shadows (`rgba(0,0,0,0.5) 0px 8px 24px`) on elevated elements and a unique inset border-shadow combo (`rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset`), the result is an interface that feels like a premium audio device — tactile, rounded, and built for touch.
 
 **Key Characteristics:**
-- Pure dark theme: `#1f2228` background with `#ffffff` text -- no gray middle ground
-- GeistMono at extreme display sizes (320px, weight 300) -- monospace as luxury
-- Uppercase monospace buttons with 1.4px letter-spacing -- technical, commanding
-- universalSans for body text at 16px/1.5 and headings at 30px/1.2 -- clean contrast
-- Zero decorative elements: no shadows, no gradients, no colored accents
-- 8px spacing grid with a sparse, deliberate scale
-- Heroicons SVG icon system -- minimal, functional
-- Tailwind CSS with arbitrary values -- utility-first engineering approach
+- Near-black immersive dark theme (`#121212`–`#1f1f1f`) — UI disappears behind content
+- Spotify Green (`#1ed760`) as singular brand accent — never decorative, always functional
+- SpotifyMixUI/CircularSp font family with global script support
+- Pill buttons (500px–9999px) and circular controls (50%) — rounded, touch-optimized
+- Uppercase button labels with wide letter-spacing (1.4px–2px)
+- Heavy shadows on elevated elements (`rgba(0,0,0,0.5) 0px 8px 24px`)
+- Semantic colors: negative red (`#f3727f`), warning orange (`#ffa42b`), announcement blue (`#539df5`)
+- Album art as the primary color source — the UI is achromatic by design
 
 ## 2. Color Palette & Roles
 
-### Primary
-- **Pure White** (`#ffffff`): The singular text color, link color, and all foreground elements. In xAI's system, white is not a background -- it is the voice.
-- **Dark Background** (`#1f2228`): The canvas. A warm near-black with a subtle blue undertone (not pure black, not neutral gray). This specific hue prevents the harsh eye strain of `#000000` while maintaining deep darkness.
+### Primary Brand
+- **Spotify Green** (`#1ed760`): Primary brand accent — play buttons, active states, CTAs
+- **Near Black** (`#121212`): Deepest background surface
+- **Dark Surface** (`#181818`): Cards, containers, elevated surfaces
+- **Mid Dark** (`#1f1f1f`): Button backgrounds, interactive surfaces
 
-### Interactive
-- **White Default** (`#ffffff`): Link and interactive element color in default state.
-- **White Muted** (`rgba(255, 255, 255, 0.5)`): Hover state for links -- a deliberate dimming rather than brightening, which is unusual and distinctive.
-- **White Subtle** (`rgba(255, 255, 255, 0.2)`): Borders, dividers, and subtle surface treatments.
-- **Ring Blue** (`rgb(59, 130, 246) / 0.5`): Tailwind's default focus ring color (`--tw-ring-color`), used for keyboard accessibility focus states.
+### Text
+- **White** (`#ffffff`): `--text-base`, primary text
+- **Silver** (`#b3b3b3`): Secondary text, muted labels, inactive nav
+- **Near White** (`#cbcbcb`): Slightly brighter secondary text
+- **Light** (`#fdfdfd`): Near-pure white for maximum emphasis
 
-### Surface & Borders
-- **Surface Elevated** (`rgba(255, 255, 255, 0.05)`): Subtle card backgrounds and hover surfaces -- barely visible lift.
-- **Surface Hover** (`rgba(255, 255, 255, 0.08)`): Slightly more visible hover state for interactive containers.
-- **Border Default** (`rgba(255, 255, 255, 0.1)`): Standard border for cards, dividers, and containers.
-- **Border Strong** (`rgba(255, 255, 255, 0.2)`): Emphasized borders for active states and button outlines.
+### Semantic
+- **Negative Red** (`#f3727f`): `--text-negative`, error states
+- **Warning Orange** (`#ffa42b`): `--text-warning`, warning states
+- **Announcement Blue** (`#539df5`): `--text-announcement`, info states
 
-### Functional
-- **Text Primary** (`#ffffff`): All headings, body text, labels.
-- **Text Secondary** (`rgba(255, 255, 255, 0.7)`): Descriptions, captions, supporting text.
-- **Text Tertiary** (`rgba(255, 255, 255, 0.5)`): Muted labels, placeholder text, timestamps.
-- **Text Quaternary** (`rgba(255, 255, 255, 0.3)`): Disabled text, very subtle annotations.
+### Surface & Border
+- **Dark Card** (`#252525`): Elevated card surface
+- **Mid Card** (`#272727`): Alternate card surface
+- **Border Gray** (`#4d4d4d`): Button borders on dark
+- **Light Border** (`#7c7c7c`): Outlined button borders, muted links
+- **Separator** (`#b3b3b3`): Divider lines
+- **Light Surface** (`#eeeeee`): Light-mode buttons (rare)
+- **Spotify Green Border** (`#1db954`): Green accent border variant
+
+### Shadows
+- **Heavy** (`rgba(0,0,0,0.5) 0px 8px 24px`): Dialogs, menus, elevated panels
+- **Medium** (`rgba(0,0,0,0.3) 0px 8px 8px`): Cards, dropdowns
+- **Inset Border** (`rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset`): Input border-shadow combo
 
 ## 3. Typography Rules
 
-### Font Family
-- **Display / Buttons**: `GeistMono`, with fallback: `ui-monospace, SFMono-Regular, Roboto Mono, Menlo, Monaco, Liberation Mono, DejaVu Sans Mono, Courier New`
-- **Body / Headings**: `universalSans`, with fallback: `universalSans Fallback`
+### Font Families
+- **Title**: `SpotifyMixUITitle`, fallbacks: `CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek, CircularSp-Deva, Helvetica Neue, helvetica, arial, Hiragino Sans, Hiragino Kaku Gothic ProN, Meiryo, MS Gothic`
+- **UI / Body**: `SpotifyMixUI`, same fallback stack
 
 ### Hierarchy
 
-| Role | Font | Size | Weight | Line Height | Letter Spacing | Transform | Notes |
-|------|------|------|--------|-------------|----------------|-----------|-------|
-| Display Hero | GeistMono | 320px (20rem) | 300 | 1.50 | normal | none | Extreme scale, monospace luxury |
-| Section Heading | universalSans | 30px (1.88rem) | 400 | 1.20 (tight) | normal | none | Clean sans-serif contrast |
-| Body | universalSans | 16px (1rem) | 400 | 1.50 | normal | none | Standard reading text |
-| Button | GeistMono | 14px (0.88rem) | 400 | 1.43 | 1.4px | uppercase | Tracked monospace, commanding |
-| Label / Caption | universalSans | 14px (0.88rem) | 400 | 1.50 | normal | none | Supporting text |
-| Small / Meta | universalSans | 12px (0.75rem) | 400 | 1.50 | normal | none | Timestamps, footnotes |
+| Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
+|------|------|------|--------|-------------|----------------|-------|
+| Section Title | SpotifyMixUITitle | 24px (1.50rem) | 700 | normal | normal | Bold title weight |
+| Feature Heading | SpotifyMixUI | 18px (1.13rem) | 600 | 1.30 (tight) | normal | Semibold section heads |
+| Body Bold | SpotifyMixUI | 16px (1.00rem) | 700 | normal | normal | Emphasized text |
+| Body | SpotifyMixUI | 16px (1.00rem) | 400 | normal | normal | Standard body |
+| Button Uppercase | SpotifyMixUI | 14px (0.88rem) | 600–700 | 1.00 (tight) | 1.4px–2px | `text-transform: uppercase` |
+| Button | SpotifyMixUI | 14px (0.88rem) | 700 | normal | 0.14px | Standard button |
+| Nav Link Bold | SpotifyMixUI | 14px (0.88rem) | 700 | normal | normal | Navigation |
+| Nav Link | SpotifyMixUI | 14px (0.88rem) | 400 | normal | normal | Inactive nav |
+| Caption Bold | SpotifyMixUI | 14px (0.88rem) | 700 | 1.50–1.54 | normal | Bold metadata |
+| Caption | SpotifyMixUI | 14px (0.88rem) | 400 | normal | normal | Metadata |
+| Small Bold | SpotifyMixUI | 12px (0.75rem) | 700 | 1.50 | normal | Tags, counts |
+| Small | SpotifyMixUI | 12px (0.75rem) | 400 | normal | normal | Fine print |
+| Badge | SpotifyMixUI | 10.5px (0.66rem) | 600 | 1.33 | normal | `text-transform: capitalize` |
+| Micro | SpotifyMixUI | 10px (0.63rem) | 400 | normal | normal | Smallest text |
 
 ### Principles
-- **Monospace as display**: GeistMono at 320px is not a gimmick -- it is the brand statement. The fixed-width characters at extreme scale create a rhythmic, architectural quality that no proportional font can achieve.
-- **Light weight at scale**: Weight 300 for the 320px headline prevents the monospace from feeling heavy or brutish at extreme sizes. It reads as precise, not overwhelming.
-- **Uppercase buttons**: All button text is uppercase GeistMono with 1.4px letter-spacing. This creates a distinctly technical, almost command-line aesthetic for interactive elements.
-- **Sans-serif for reading**: universalSans at 16px/1.5 provides excellent readability for body content, creating a clean contrast against the monospace display elements.
-- **Two-font clarity**: The system uses exactly two typefaces with clear roles -- monospace for impact and interaction, sans-serif for information and reading. No overlap, no ambiguity.
+- **Bold/regular binary**: Most text is either 700 (bold) or 400 (regular), with 600 used sparingly. This creates a clear visual hierarchy through weight contrast rather than size variation.
+- **Uppercase buttons as system**: Button labels use uppercase + wide letter-spacing (1.4px–2px), creating a systematic "label" voice distinct from content text.
+- **Compact sizing**: The range is 10px–24px — narrower than most systems. Spotify's type is compact and functional, designed for scanning playlists, not reading articles.
+- **Global script support**: The extensive fallback stack (Arabic, Hebrew, Cyrillic, Greek, Devanagari, CJK) reflects Spotify's 180+ market reach.
 
 ## 4. Component Stylings
 
 ### Buttons
 
-**Primary (White on Dark)**
-- Background: `#ffffff`
-- Text: `#1f2228`
-- Padding: 12px 24px
-- Radius: 0px (sharp corners)
-- Font: GeistMono 14px weight 400, uppercase, letter-spacing 1.4px
-- Hover: `rgba(255, 255, 255, 0.9)` background
-- Use: Primary CTA ("TRY GROK", "GET STARTED")
+**Dark Pill**
+- Background: `#1f1f1f`
+- Text: `#ffffff` or `#b3b3b3`
+- Padding: 8px 16px
+- Radius: 9999px (full pill)
+- Use: Navigation pills, secondary actions
 
-**Ghost / Outlined**
+**Dark Large Pill**
+- Background: `#181818`
+- Text: `#ffffff`
+- Padding: 0px 43px
+- Radius: 500px
+- Use: Primary app navigation buttons
+
+**Light Pill**
+- Background: `#eeeeee`
+- Text: `#181818`
+- Radius: 500px
+- Use: Light-mode CTAs (cookie consent, marketing)
+
+**Outlined Pill**
 - Background: transparent
 - Text: `#ffffff`
-- Padding: 12px 24px
-- Radius: 0px
-- Border: `1px solid rgba(255, 255, 255, 0.2)`
-- Font: GeistMono 14px weight 400, uppercase, letter-spacing 1.4px
-- Hover: `rgba(255, 255, 255, 0.05)` background
-- Use: Secondary actions ("LEARN MORE", "VIEW API")
+- Border: `1px solid #7c7c7c`
+- Padding: 4px 16px 4px 36px (asymmetric for icon)
+- Radius: 9999px
+- Use: Follow buttons, secondary actions
 
-**Text Link**
-- Background: none
+**Circular Play**
+- Background: `#1f1f1f`
 - Text: `#ffffff`
-- Font: universalSans 16px weight 400
-- Hover: `rgba(255, 255, 255, 0.5)` -- dims on hover
-- Use: Inline links, navigation items
+- Padding: 12px
+- Radius: 50% (circle)
+- Use: Play/pause controls
 
 ### Cards & Containers
-- Background: `rgba(255, 255, 255, 0.03)` or transparent
-- Border: `1px solid rgba(255, 255, 255, 0.1)`
-- Radius: 0px (sharp) or 4px (subtle)
-- Shadow: none -- xAI does not use box shadows
-- Hover: border shifts to `rgba(255, 255, 255, 0.2)`
+- Background: `#181818` or `#1f1f1f`
+- Radius: 6px–8px
+- No visible borders on most cards
+- Hover: slight background lightening
+- Shadow: `rgba(0,0,0,0.3) 0px 8px 8px` on elevated
+
+### Inputs
+- Search input: `#1f1f1f` background, `#ffffff` text
+- Radius: 500px (pill)
+- Padding: 12px 96px 12px 48px (icon-aware)
+- Focus: border becomes `#000000`, outline `1px solid`
 
 ### Navigation
-- Dark background matching page (`#1f2228`)
-- Brand logotype: white text, left-aligned
-- Links: universalSans 14px weight 400, `#ffffff` text
-- Hover: `rgba(255, 255, 255, 0.5)` text color
-- CTA: white primary button, right-aligned
-- Mobile: hamburger toggle
-
-### Badges / Tags
-**Monospace Tag**
-- Background: transparent
-- Text: `#ffffff`
-- Padding: 4px 8px
-- Border: `1px solid rgba(255, 255, 255, 0.2)`
-- Radius: 0px
-- Font: GeistMono 12px uppercase, letter-spacing 1px
-
-### Inputs & Forms
-- Background: transparent or `rgba(255, 255, 255, 0.05)`
-- Border: `1px solid rgba(255, 255, 255, 0.2)`
-- Radius: 0px
-- Focus: ring with `rgb(59, 130, 246) / 0.5`
-- Text: `#ffffff`
-- Placeholder: `rgba(255, 255, 255, 0.3)`
-- Label: `rgba(255, 255, 255, 0.7)`, universalSans 14px
+- Dark sidebar with SpotifyMixUI 14px weight 700 for active, 400 for inactive
+- `#b3b3b3` muted color for inactive items, `#ffffff` for active
+- Circular icon buttons (50% radius)
+- Spotify logo top-left in green
 
 ## 5. Layout Principles
 
 ### Spacing System
 - Base unit: 8px
-- Scale: 4px, 8px, 24px, 48px
-- The scale is deliberately sparse -- xAI avoids granular spacing distinctions, preferring large jumps that create clear visual hierarchy through whitespace alone
+- Scale: 1px, 2px, 3px, 4px, 5px, 6px, 8px, 10px, 12px, 14px, 15px, 16px, 20px
 
 ### Grid & Container
-- Max content width: approximately 1200px
-- Hero: full-viewport height with massive centered monospace headline
-- Feature sections: simple vertical stacking with generous section padding (48px-96px)
-- Two-column layouts for feature descriptions at desktop
-- Full-width dark sections maintain the single dark background throughout
+- Sidebar (fixed) + main content area
+- Grid-based album/playlist cards
+- Full-width now-playing bar at bottom
+- Responsive content area fills remaining space
 
 ### Whitespace Philosophy
-- **Extreme generosity**: xAI uses vast amounts of whitespace. The 320px headline with 48px+ surrounding padding creates a sense of emptiness that is itself a design statement -- the content is so important it needs room to breathe.
-- **Vertical rhythm over horizontal density**: Content stacks vertically with large gaps between sections rather than packing horizontally. This creates a scroll-driven experience that feels deliberate and cinematic.
-- **No visual noise**: The absence of decorative elements, borders between sections, and color variety means whitespace is the primary structural tool.
-
-### Breakpoints
-- 2000px, 1536px, 1280px, 1024px, 1000px, 768px, 640px
-- Tailwind responsive modifiers drive breakpoint behavior
+- **Dark compression**: Spotify packs content densely — playlist grids, track lists, and navigation are all tightly spaced. The dark background provides visual rest between elements without needing large gaps.
+- **Content density over breathing room**: This is an app, not a marketing site. Every pixel serves the listening experience.
 
 ### Border Radius Scale
-- Sharp (0px): Primary treatment for buttons, cards, inputs -- the default
-- Subtle (4px): Occasional softening on secondary containers
-- The near-zero radius philosophy is core to the brand's brutalist identity
+- Minimal (2px): Badges, explicit tags
+- Subtle (4px): Inputs, small elements
+- Standard (6px): Album art containers, cards
+- Comfortable (8px): Sections, dialogs
+- Medium (10px–20px): Panels, overlay elements
+- Large (100px): Large pill buttons
+- Pill (500px): Primary buttons, search input
+- Full Pill (9999px): Navigation pills, search
+- Circle (50%): Play buttons, avatars, icons
 
 ## 6. Depth & Elevation
 
 | Level | Treatment | Use |
 |-------|-----------|-----|
-| Flat (Level 0) | No shadow, no border | Page background, body content |
-| Surface (Level 1) | `rgba(255,255,255,0.03)` background | Subtle card surfaces |
-| Bordered (Level 2) | `1px solid rgba(255,255,255,0.1)` border | Cards, containers, dividers |
-| Active (Level 3) | `1px solid rgba(255,255,255,0.2)` border | Hover states, active elements |
-| Focus (Accessibility) | `ring` with `rgb(59,130,246)/0.5` | Keyboard focus indicator |
+| Base (Level 0) | `#121212` background | Deepest layer, page background |
+| Surface (Level 1) | `#181818` or `#1f1f1f` | Cards, sidebar, containers |
+| Elevated (Level 2) | `rgba(0,0,0,0.3) 0px 8px 8px` | Dropdown menus, hover cards |
+| Dialog (Level 3) | `rgba(0,0,0,0.5) 0px 8px 24px` | Modals, overlays, menus |
+| Inset (Border) | `rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset` | Input borders |
 
-**Elevation Philosophy**: xAI rejects the conventional shadow-based elevation system entirely. There are no box-shadows anywhere on the site. Instead, depth is communicated through three mechanisms: (1) opacity-based borders that brighten on interaction, creating a sense of elements "activating" rather than lifting; (2) extremely subtle background opacity shifts (`0.03` to `0.08`) that create barely-perceptible surface differentiation; and (3) the massive scale contrast between the 320px display type and 16px body text, which creates typographic depth. This is elevation through contrast and opacity, not through simulated light and shadow.
+**Shadow Philosophy**: Spotify uses notably heavy shadows for a dark-themed app. The 0.5 opacity shadow at 24px blur creates a dramatic "floating in darkness" effect for dialogs and menus, while the 0.3 opacity at 8px blur provides a more subtle card lift. The unique inset border-shadow combination on inputs creates a recessed, tactile quality.
 
 ## 7. Do's and Don'ts
 
 ### Do
-- Use `#1f2228` as the universal background -- never pure black `#000000`
-- Use GeistMono for all display headlines and button text -- monospace IS the brand
-- Apply uppercase + 1.4px letter-spacing to all button labels
-- Use weight 300 for the massive display headline (320px)
-- Keep borders at `rgba(255, 255, 255, 0.1)` -- barely visible, not absent
-- Dim interactive elements on hover to `rgba(255, 255, 255, 0.5)` -- the reverse of convention
-- Maintain sharp corners (0px radius) as the default -- brutalist precision
-- Use universalSans for all body and reading text at 16px/1.5
+- Use near-black backgrounds (`#121212`–`#1f1f1f`) — depth through shade variation
+- Apply Spotify Green (`#1ed760`) only for play controls, active states, and primary CTAs
+- Use pill shape (500px–9999px) for all buttons — circular (50%) for play controls
+- Apply uppercase + wide letter-spacing (1.4px–2px) on button labels
+- Keep typography compact (10px–24px range) — this is an app, not a magazine
+- Use heavy shadows (`0.3–0.5 opacity`) for elevated elements on dark backgrounds
+- Let album art provide color — the UI itself is achromatic
 
 ### Don't
-- Don't use box-shadows -- xAI has zero shadow elevation
-- Don't introduce color accents beyond white and the dark background -- the monochromatic palette is sacred
-- Don't use large border-radius (8px+, pill shapes) -- the sharp edge is intentional
-- Don't use bold weights (600-700) for headlines -- weight 300-400 only
-- Don't brighten elements on hover -- xAI dims to `0.5` opacity instead
-- Don't add decorative gradients, illustrations, or color blocks
-- Don't use proportional fonts for buttons -- GeistMono uppercase is mandatory
-- Don't use colored status indicators unless absolutely necessary -- keep everything in the white/dark spectrum
+- Don't use Spotify Green decoratively or on backgrounds — it's functional only
+- Don't use light backgrounds for primary surfaces — the dark immersion is core
+- Don't skip the pill/circle geometry on buttons — square buttons break the identity
+- Don't use thin/subtle shadows — on dark backgrounds, shadows need to be heavy to be visible
+- Don't add additional brand colors — green + achromatic grays is the complete palette
+- Don't use relaxed line-heights — Spotify's typography is compact and dense
+- Don't expose raw gray borders — use shadow-based or inset borders instead
 
 ## 8. Responsive Behavior
 
 ### Breakpoints
 | Name | Width | Key Changes |
 |------|-------|-------------|
-| Mobile | <640px | Single column, hero headline scales dramatically down |
-| Small Tablet | 640-768px | Slight increase in padding |
-| Tablet | 768-1024px | Two-column layouts begin, heading sizes increase |
-| Desktop | 1024-1280px | Full layout, generous whitespace |
-| Large | 1280-1536px | Wider containers, more breathing room |
-| Extra Large | 1536-2000px | Maximum content width, centered |
-| Ultra | >2000px | Content stays centered, extreme margins |
-
-### Touch Targets
-- Buttons use 12px 24px padding for comfortable touch
-- Navigation links spaced with 24px gaps
-- Minimum tap target: 44px height
-- Mobile: full-width buttons for easy thumb reach
+| Mobile Small | <425px | Compact mobile layout |
+| Mobile | 425–576px | Standard mobile |
+| Tablet | 576–768px | 2-column grid |
+| Tablet Large | 768–896px | Expanded layout |
+| Desktop Small | 896–1024px | Sidebar visible |
+| Desktop | 1024–1280px | Full desktop layout |
+| Large Desktop | >1280px | Expanded grid |
 
 ### Collapsing Strategy
-- Hero: 320px monospace headline scales down dramatically (to ~48px-64px on mobile)
-- Navigation: horizontal links collapse to hamburger menu
-- Feature sections: two-column to single-column stacking
-- Section padding: 96px -> 48px -> 24px across breakpoints
-- Massive display type is the first thing to resize -- it must remain impactful but not overflow
-
-### Image Behavior
-- Minimal imagery -- the site relies on typography and whitespace
-- Any product screenshots maintain sharp corners
-- Full-width media scales proportionally with viewport
+- Sidebar: full → collapsed → hidden
+- Album grid: 5 columns → 3 → 2 → 1
+- Now-playing bar: maintained at all sizes
+- Search: pill input maintained, width adjusts
+- Navigation: sidebar → bottom bar on mobile
 
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
-- Background: Dark (`#1f2228`)
-- Text Primary: White (`#ffffff`)
-- Text Secondary: White 70% (`rgba(255, 255, 255, 0.7)`)
-- Text Muted: White 50% (`rgba(255, 255, 255, 0.5)`)
-- Text Disabled: White 30% (`rgba(255, 255, 255, 0.3)`)
-- Border Default: White 10% (`rgba(255, 255, 255, 0.1)`)
-- Border Strong: White 20% (`rgba(255, 255, 255, 0.2)`)
-- Surface Subtle: White 3% (`rgba(255, 255, 255, 0.03)`)
-- Surface Hover: White 8% (`rgba(255, 255, 255, 0.08)`)
-- Focus Ring: Blue (`rgb(59, 130, 246)` at 50% opacity)
-- Button Primary BG: White (`#ffffff`), text Dark (`#1f2228`)
+- Background: Near Black (`#121212`)
+- Surface: Dark Card (`#181818`)
+- Text: White (`#ffffff`)
+- Secondary text: Silver (`#b3b3b3`)
+- Accent: Spotify Green (`#1ed760`)
+- Border: `#4d4d4d`
+- Error: Negative Red (`#f3727f`)
 
 ### Example Component Prompts
-- "Create a hero section on #1f2228 background. Headline in GeistMono at 72px weight 300, color #ffffff, centered. Subtitle in universalSans 18px weight 400, rgba(255,255,255,0.7), max-width 600px centered. Two buttons: primary (white bg, #1f2228 text, 0px radius, GeistMono 14px uppercase, 1.4px letter-spacing, 12px 24px padding) and ghost (transparent bg, 1px solid rgba(255,255,255,0.2), white text, same font treatment)."
-- "Design a card: transparent or rgba(255,255,255,0.03) background, 1px solid rgba(255,255,255,0.1) border, 0px radius, 24px padding. No shadow. Title in universalSans 22px weight 400, #ffffff. Body in universalSans 16px weight 400, rgba(255,255,255,0.7), line-height 1.5. Hover: border changes to rgba(255,255,255,0.2)."
-- "Build navigation: #1f2228 background, full-width. Brand text left (GeistMono 14px uppercase). Links in universalSans 14px #ffffff with hover to rgba(255,255,255,0.5). White primary button right-aligned (GeistMono 14px uppercase, 1.4px letter-spacing)."
-- "Create a form: dark background #1f2228. Label in universalSans 14px rgba(255,255,255,0.7). Input with transparent bg, 1px solid rgba(255,255,255,0.2) border, 0px radius, white text 16px universalSans. Focus: blue ring rgb(59,130,246)/0.5. Placeholder: rgba(255,255,255,0.3)."
-- "Design a monospace tag/badge: transparent bg, 1px solid rgba(255,255,255,0.2), 0px radius, GeistMono 12px uppercase, 1px letter-spacing, white text, 4px 8px padding."
+- "Create a dark card: #181818 background, 8px radius. Title at 16px SpotifyMixUI weight 700, white text. Subtitle at 14px weight 400, #b3b3b3. Shadow rgba(0,0,0,0.3) 0px 8px 8px on hover."
+- "Design a pill button: #1f1f1f background, white text, 9999px radius, 8px 16px padding. 14px SpotifyMixUI weight 700, uppercase, letter-spacing 1.4px."
+- "Build a circular play button: Spotify Green (#1ed760) background, #000000 icon, 50% radius, 12px padding."
+- "Create search input: #1f1f1f background, white text, 500px radius, 12px 48px padding. Inset border: rgb(124,124,124) 0px 0px 0px 1px inset."
+- "Design navigation sidebar: #121212 background. Active items: 14px weight 700, white. Inactive: 14px weight 400, #b3b3b3."
 
 ### Iteration Guide
-1. Always start with `#1f2228` background -- never use pure black or gray backgrounds
-2. GeistMono for display and buttons, universalSans for everything else -- never mix these roles
-3. All buttons must be GeistMono uppercase with 1.4px letter-spacing -- this is non-negotiable
-4. No shadows, ever -- depth comes from border opacity and background opacity only
-5. Borders are always white with low opacity (0.1 default, 0.2 for emphasis)
-6. Hover behavior dims to 0.5 opacity rather than brightening -- the reverse of most systems
-7. Sharp corners (0px) by default -- only use 4px for specific secondary containers
-8. Body text at 16px universalSans with 1.5 line-height for comfortable reading
-9. Generous section padding (48px-96px) -- let content breathe in the darkness
-10. The monochromatic white-on-dark palette is absolute -- resist adding color unless critical for function
+1. Start with #121212 — everything lives in near-black darkness
+2. Spotify Green for functional highlights only (play, active, CTA)
+3. Pill everything — 500px for large, 9999px for small, 50% for circular
+4. Uppercase + wide tracking on buttons — the systematic label voice
+5. Heavy shadows (0.3–0.5 opacity) for elevation — light shadows are invisible on dark
+6. Album art provides all the color — the UI stays achromatic

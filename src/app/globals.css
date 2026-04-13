@@ -14,23 +14,23 @@
   --foreground: #ffffff;
 
   /* Surface Colors */
-  --card: rgba(255, 255, 255, 0.10);
+  --card: #25282d;
   --card-foreground: #ffffff;
-  --popover: rgba(255, 255, 255, 0.10);
+  --popover: #25282d;
   --popover-foreground: #ffffff;
 
   /* Interactive Colors */
   --primary: #ffffff;
   --primary-foreground: #1f2228;
-  --secondary: rgba(255, 255, 255, 0.15);
+  --secondary: #2b2f36;
   --secondary-foreground: #ffffff;
 
   /* Muted States */
-  --muted: rgba(255, 255, 255, 0.10);
+  --muted: #25282d;
   --muted-foreground: rgba(255, 255, 255, 0.5);
 
   /* Accents */
-  --accent: rgba(255, 255, 255, 0.15);
+  --accent: #2b2f36;
   --accent-foreground: #ffffff;
 
   /* Destructive */
@@ -54,9 +54,9 @@
   --sidebar-ring: oklch(0.556 0 0);
 
   /* xAI Design Tokens */
-  --surface-subtle: rgba(255, 255, 255, 0.08);
-  --surface-hover: rgba(255, 255, 255, 0.15);
-  --surface-strong: rgba(255, 255, 255, 0.20);
+  --surface-subtle: #23262b;
+  --surface-hover: #2a2e35;
+  --surface-strong: #323740;
 
   /* Text Opacities */
   --text-primary: #ffffff;
@@ -81,23 +81,23 @@
   --foreground: #1a1a1a;
 
   /* Surface Colors */
-  --card: rgba(0, 0, 0, 0.10);
+  --card: #ebebeb;
   --card-foreground: #1a1a1a;
-  --popover: rgba(0, 0, 0, 0.10);
+  --popover: #ebebeb;
   --popover-foreground: #1a1a1a;
 
   /* Interactive Colors */
   --primary: #1a1a1a;
   --primary-foreground: #f5f5f5;
-  --secondary: rgba(0, 0, 0, 0.15);
+  --secondary: #dedede;
   --secondary-foreground: #1a1a1a;
 
   /* Muted States */
-  --muted: rgba(0, 0, 0, 0.10);
+  --muted: #ebebeb;
   --muted-foreground: rgba(0, 0, 0, 0.5);
 
   /* Accents */
-  --accent: rgba(0, 0, 0, 0.15);
+  --accent: #dedede;
   --accent-foreground: #1a1a1a;
 
   /* Destructive */
@@ -121,9 +121,9 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* xAI Design Tokens - Light Mode */
-  --surface-subtle: rgba(0, 0, 0, 0.08);
-  --surface-hover: rgba(0, 0, 0, 0.15);
-  --surface-strong: rgba(0, 0, 0, 0.20);
+  --surface-subtle: #efefef;
+  --surface-hover: #e5e5e5;
+  --surface-strong: #d8d8d8;
 
   /* Text Opacities */
   --text-primary: #1a1a1a;
