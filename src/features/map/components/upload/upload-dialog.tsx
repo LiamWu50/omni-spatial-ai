@@ -42,7 +42,7 @@ export function UploadDialog({ importStatus, onImportLayers, triggerClassName }:
 
       <DialogContent
         showCloseButton={false}
-        className='overflow-hidden border border-border bg-card duration-200 data-[state=closed]:slide-out-to-top-2 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-4 data-[state=open]:zoom-in-95 sm:max-w-110'
+        className='overflow-hidden border border-border bg-surface-strong duration-200 data-[state=closed]:slide-out-to-top-2 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-4 data-[state=open]:zoom-in-95 sm:max-w-110'
       >
         <DialogHeader className='gap-3'>
           <div className='flex items-center justify-between gap-3'>

@@ -54,11 +54,11 @@ export function Uploader({ importStatus, inputRef, onImportLayers }: LayerUpload
         className={cn(
           'flex w-full items-center gap-3 rounded-0 border border-dashed px-3 py-3 text-left transition-all duration-200 font-body',
           dragging
-            ? 'border-strong bg-surface-hover'
-            : 'border-border bg-surface-subtle'
+            ? 'border-strong bg-surface-strong'
+            : 'border-border bg-surface-hover'
         )}
       >
-        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-0 bg-surface-hover text-text-secondary'>
+        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-0 bg-surface-strong text-text-secondary'>
           <Upload className='h-4.5 w-4.5' />
         </div>
 
