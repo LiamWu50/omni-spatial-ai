@@ -16,15 +16,15 @@ interface LayerManagerPanelProps {
 export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProps) {
   return (
     <aside
-      className={`pointer-events-none absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-0 border border-border bg-card transition-all duration-300 ${
+      className={`pointer-events-none absolute left-5 top-24 z-20 flex max-h-[calc(100vh-7rem)] w-[300px] flex-col overflow-hidden rounded-[8px] border border-border bg-card shadow-card transition-all duration-300 ${
         open ? 'translate-x-0 opacity-100' : '-translate-x-[110%] opacity-0'
       }`}
     >
       <div className='pointer-events-auto cursor-default flex h-full flex-col'>
       <div className='flex items-center justify-between border-b border-border p-4'>
         <div className='flex-1 text-left'>
-          <div className='flex items-center gap-2 text-sm font-semibold text-foreground font-display uppercase tracking-[0.14em]'>
-            <span className='flex h-7 w-7 items-center justify-center rounded-0 bg-surface-subtle text-foreground'>
+          <div className='flex items-center gap-2 text-sm font-bold text-foreground font-display uppercase tracking-[1.4px]'>
+            <span className='flex h-7 w-7 items-center justify-center rounded-full bg-surface-subtle text-foreground'>
               <Layers3 className='h-4 w-4' />
             </span>
             <span>图层管理</span>
@@ -33,7 +33,7 @@ export function LayerManagerPanel({ actions, data, open }: LayerManagerPanelProp
         <button
           type='button'
           onClick={actions.onToggle}
-          className='flex h-9 w-9 items-center justify-center rounded-0 text-text-secondary transition-colors duration-180 hover:bg-surface-hover hover:opacity-50'
+          className='flex h-9 w-9 items-center justify-center rounded-full text-text-secondary transition-colors duration-180 hover:bg-surface-hover'
           aria-label='关闭图层管理面板'
         >
           <X className='h-4 w-4' />

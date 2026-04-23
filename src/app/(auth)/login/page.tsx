@@ -2,25 +2,25 @@ import Link from 'next/link'
 
 export default function LoginPage() {
   return (
-    <main className='flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#262626_0%,#0a0a0a_45%,#000000_100%)] px-6 text-neutral-50'>
-      <section className='w-full max-w-md rounded-[32px] border border-neutral-800/90 bg-neutral-950/90 p-8 shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl'>
+    <main className='flex min-h-screen items-center justify-center bg-[#121212] px-6 text-foreground'>
+      <section className='w-full max-w-md rounded-[8px] border border-border bg-card p-8 shadow-dialog'>
         <div className='mb-8'>
-          <div className='inline-flex rounded-full border border-neutral-800 bg-neutral-900 px-3 py-1 text-xs tracking-[0.18em] text-neutral-400'>
-            AUTH PLACEHOLDER
+          <div className='inline-flex rounded-full border border-border bg-surface-subtle px-3 py-1 text-xs tracking-[1.8px] text-text-secondary font-bold uppercase'>
+            Auth Placeholder
           </div>
-          <h1 className='mt-4 text-3xl font-semibold'>登录模块待接入</h1>
-          <p className='mt-3 text-sm leading-6 text-neutral-400'>
+          <h1 className='mt-4 text-3xl font-bold'>登录模块待接入</h1>
+          <p className='mt-3 text-sm leading-6 text-text-secondary font-body'>
             本轮先收敛地图主线与目录结构。登录页已降级为可独立编译的占位页，后续可在此处接回真实认证表单。
           </p>
         </div>
 
         <div className='space-y-3'>
-          <div className='rounded-2xl border border-neutral-800 bg-neutral-900/60 px-4 py-3 text-sm text-neutral-300'>
+          <div className='rounded-[6px] border border-border bg-surface-subtle px-4 py-3 text-sm text-text-muted'>
             规划中的能力：账户登录、会话恢复、模型偏好配置。
           </div>
           <Link
             href='/'
-            className='inline-flex h-11 w-full items-center justify-center rounded-full bg-neutral-50 text-sm font-medium text-neutral-900 transition hover:bg-neutral-200'
+            className='inline-flex h-11 w-full items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground transition hover:bg-primary/90 font-display uppercase tracking-[1.4px]'
           >
             返回地图首页
           </Link>

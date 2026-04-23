@@ -3,137 +3,171 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ========================================
-   xAI Design System - CSS Variables
+   Spotify Design System - CSS Variables
    ======================================== */
 
 :root {
   color-scheme: dark;
 
-  /* xAI Design System - Dark Mode (Default) */
-  --background: #1f2228;
+  /* Spotify Design System - Dark Mode (Default) */
+  --background: #121212;
   --foreground: #ffffff;
 
   /* Surface Colors */
-  --card: #25282d;
+  --card: #181818;
   --card-foreground: #ffffff;
-  --popover: #25282d;
+  --popover: #181818;
   --popover-foreground: #ffffff;
 
   /* Interactive Colors */
   --primary: #ffffff;
-  --primary-foreground: #1f2228;
-  --secondary: #2b2f36;
+  --primary-foreground: #121212;
+  --secondary: #1f1f1f;
   --secondary-foreground: #ffffff;
 
   /* Muted States */
-  --muted: #25282d;
-  --muted-foreground: rgba(255, 255, 255, 0.5);
+  --muted: #181818;
+  --muted-foreground: #b3b3b3;
 
   /* Accents */
-  --accent: #2b2f36;
+  --accent: #1f1f1f;
   --accent-foreground: #ffffff;
 
+  /* Spotify Green - Brand Accent */
+  --brand-green: #1ed760;
+  --brand-green-hover: #1fdf64;
+  --brand-green-foreground: #000000;
+
+  /* Semantic Colors */
+  --text-negative: #f3727f;
+  --text-warning: #ffa42b;
+  --text-announcement: #539df5;
+
   /* Destructive */
-  --destructive: oklch(0.704 0.191 22.216);
+  --destructive: #f3727f;
 
   /* Borders */
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.15);
 
   /* Focus Ring */
-  --ring: rgb(59, 130, 246);
+  --ring: #1ed760;
 
   /* Sidebar */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #121212;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #1ed760;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1f1f1f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #1ed760;
 
-  /* xAI Design Tokens */
-  --surface-subtle: #23262b;
-  --surface-hover: #2a2e35;
-  --surface-strong: #323740;
+  /* Spotify Design Tokens */
+  --surface-subtle: #121212;
+  --surface-hover: #1f1f1f;
+  --surface-strong: #252525;
 
   /* Text Opacities */
   --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-secondary: #b3b3b3;
+  --text-muted: #727272;
   --text-disabled: rgba(255, 255, 255, 0.3);
 
   /* Border Opacities */
-  --border-default: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
 
   /* Typography */
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+
+  /* Border Radius - Spotify pill and circle system */
+  --radius-0: 0px;
+  --radius-subtle: 4px;
+  --radius-standard: 6px;
+  --radius-comfortable: 8px;
+  --radius-pill: 500px;
+  --radius-full-pill: 9999px;
+  --radius-circle: 50%;
+
+  /* Shadows - Spotify heavy shadows for dark theme */
+  --shadow-card: rgba(0, 0, 0, 0.3) 0px 8px 8px;
+  --shadow-dialog: rgba(0, 0, 0, 0.5) 0px 8px 24px;
+  --shadow-inset: rgb(18, 18, 18) 0px 1px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset;
 }
 
 .light {
   color-scheme: light;
 
-  /* xAI Design System - Light Mode (Complementary Variant) */
-  --background: #f5f5f5;
-  --foreground: #1a1a1a;
+  /* Spotify Design System - Light Mode (Complementary Variant) */
+  --background: #ffffff;
+  --foreground: #191414;
 
   /* Surface Colors */
-  --card: #ebebeb;
-  --card-foreground: #1a1a1a;
-  --popover: #ebebeb;
-  --popover-foreground: #1a1a1a;
+  --card: #f8f8f8;
+  --card-foreground: #191414;
+  --popover: #f8f8f8;
+  --popover-foreground: #191414;
 
   /* Interactive Colors */
-  --primary: #1a1a1a;
-  --primary-foreground: #f5f5f5;
-  --secondary: #dedede;
-  --secondary-foreground: #1a1a1a;
+  --primary: #191414;
+  --primary-foreground: #ffffff;
+  --secondary: #e8e8e8;
+  --secondary-foreground: #191414;
 
   /* Muted States */
-  --muted: #ebebeb;
-  --muted-foreground: rgba(0, 0, 0, 0.5);
+  --muted: #f8f8f8;
+  --muted-foreground: #6a6a6a;
 
   /* Accents */
-  --accent: #dedede;
-  --accent-foreground: #1a1a1a;
+  --accent: #e8e8e8;
+  --accent-foreground: #191414;
+
+  /* Spotify Green remains consistent in light mode */
+  --brand-green: #1ed760;
+  --brand-green-hover: #1fdf64;
+  --brand-green-foreground: #000000;
+
+  /* Semantic Colors */
+  --text-negative: #e91429;
+  --text-warning: #ffa42b;
+  --text-announcement: #0077e5;
 
   /* Destructive */
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: #e91429;
 
   /* Borders */
-  --border: rgba(0, 0, 0, 0.1);
-  --input: rgba(0, 0, 0, 0.2);
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.15);
 
   /* Focus Ring */
-  --ring: rgb(59, 130, 246);
+  --ring: #1ed760;
 
   /* Sidebar */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #191414;
+  --sidebar-primary: #1ed760;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #f0f0f0;
+  --sidebar-accent-foreground: #191414;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #1ed760;
 
-  /* xAI Design Tokens - Light Mode */
-  --surface-subtle: #efefef;
-  --surface-hover: #e5e5e5;
-  --surface-strong: #d8d8d8;
+  /* Spotify Design Tokens - Light Mode */
+  --surface-subtle: #fafafa;
+  --surface-hover: #f0f0f0;
+  --surface-strong: #e0e0e0;
 
   /* Text Opacities */
-  --text-primary: #1a1a1a;
-  --text-secondary: rgba(26, 26, 26, 0.7);
-  --text-muted: rgba(26, 26, 26, 0.5);
-  --text-disabled: rgba(26, 26, 26, 0.3);
+  --text-primary: #191414;
+  --text-secondary: #6a6a6a;
+  --text-muted: #9a9a9a;
+  --text-disabled: rgba(0, 0, 0, 0.3);
 
   /* Border Opacities */
-  --border-default: rgba(0, 0, 0, 0.1);
-  --border-strong: rgba(0, 0, 0, 0.2);
+  --border-default: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.15);
 
   /* Typography */
   --font-display: var(--font-display);
@@ -168,7 +202,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* xAI Design System Extensions */
+  /* Spotify Design System Extensions */
   --color-surface-subtle: var(--surface-subtle);
   --color-surface-hover: var(--surface-hover);
   --color-surface-strong: var(--surface-strong);
@@ -178,15 +212,26 @@
   --color-text-disabled: var(--text-disabled);
   --color-border-default: var(--border-default);
   --color-border-strong: var(--border-strong);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-hover: var(--brand-green-hover);
+  --color-brand-green-foreground: var(--brand-green-foreground);
+  --color-text-negative: var(--text-negative);
+  --color-text-warning: var(--text-warning);
+  --color-text-announcement: var(--text-announcement);
 
   /* Font Families */
   --font-display: var(--font-display);
   --font-body: var(--font-body);
 
-  /* Border Radius - xAI uses sharp corners */
-  --radius-0: 0px;
-  --radius-subtle: 4px;
-  --radius-default: 0px;
+  /* Border Radius - Spotify pill and circle system */
+  --radius-0: var(--radius-0);
+  --radius-subtle: var(--radius-subtle);
+  --radius-standard: var(--radius-standard);
+  --radius-comfortable: var(--radius-comfortable);
+  --radius-pill: var(--radius-pill);
+  --radius-full-pill: var(--radius-full-pill);
+  --radius-circle: var(--radius-circle);
+  --radius-default: var(--radius-full-pill);
 }
 
 @layer base {
@@ -201,7 +246,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 300;
+    font-weight: 700;
     line-height: 1.2;
   }
 
@@ -220,7 +265,8 @@
   button {
     font-family: var(--font-display);
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 1.4px;
+    font-weight: 700;
   }
 }
 
@@ -248,8 +294,8 @@
     height: 18px;
     border-radius: 9999px;
     border: 3px solid rgba(255, 255, 255, 0.95);
-    background: #8b5cf6;
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.28);
+    background: #1ed760;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
   }
 
   .map-tool-preview-line {
@@ -420,25 +466,56 @@
 }
 
 /* ========================================
-   xAI Design System Utilities
+   Spotify Design System Utilities
    ======================================== */
 
-/* Hover dim effect - reverse of convention */
-.hover-dim:hover {
-  opacity: 0.5;
+/* Hover brightness effect - Spotify style */
+.hover-brighten:hover {
+  background-color: var(--surface-hover);
 }
 
-/* Border brightness on hover */
-.hover-border-brighten:hover {
-  border-color: var(--border-strong);
+/* Pill buttons */
+.btn-pill {
+  border-radius: var(--radius-full-pill);
 }
 
-/* Focus ring utilities */
-.focus-ring:focus-visible {
-  outline: none;
-  ring: 2px;
-  ring-color: var(--ring);
-  ring-opacity: 0.5;
+.btn-large-pill {
+  border-radius: var(--radius-pill);
+}
+
+.btn-circle {
+  border-radius: var(--radius-circle);
+}
+
+/* Spotify green accents */
+.text-brand-green {
+  color: var(--brand-green);
+}
+
+.bg-brand-green {
+  background-color: var(--brand-green);
+}
+
+/* Heavy shadows for elevated elements */
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-dialog {
+  box-shadow: var(--shadow-dialog);
+}
+
+/* Typography utilities - Spotify weights */
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-regular {
+  font-weight: 400;
 }
 
 /* Spacing utilities - 8px grid */
@@ -499,13 +576,4 @@
 
 .surface-hover {
   background-color: var(--surface-hover);
-}
-
-/* Sharp corners by default */
-.rounded-xai {
-  border-radius: 0;
-}
-
-.rounded-xai-subtle {
-  border-radius: 4px;
 }

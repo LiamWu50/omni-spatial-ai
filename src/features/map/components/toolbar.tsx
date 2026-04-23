@@ -18,13 +18,13 @@ interface MapToolbarProps {
   onToggleLayerManager: () => void
 }
 
-const mapControlButtonClass = 'border border-border duration-200 ease-out'
+const mapControlButtonClass = 'border border-border duration-200 ease-out rounded-full'
 
 const mapControlButtonIdleClass =
-  'bg-surface-subtle text-foreground hover:bg-surface-hover hover:opacity-50'
+  'bg-surface-subtle text-foreground hover:bg-surface-hover'
 
 const mapControlButtonActiveClass =
-  'bg-primary text-primary-foreground hover:bg-primary/90 hover:opacity-50'
+  'bg-brand-green text-brand-green-foreground hover:bg-brand-green-hover'
 
 export function Toolbar({
   actions,

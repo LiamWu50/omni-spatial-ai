@@ -13,13 +13,13 @@ interface MapNavProps {
   onZoomOut: () => void
 }
 
-const mapControlButtonClass = 'border border-border duration-200 ease-out'
+const mapControlButtonClass = 'border border-border duration-200 ease-out !rounded-[4px]'
 
 const mapControlButtonIdleClass =
-  'bg-surface-subtle text-foreground hover:bg-surface-hover hover:opacity-50'
+  'bg-surface-subtle text-foreground hover:bg-surface-hover'
 
 const mapControlButtonActiveClass =
-  'bg-primary text-primary-foreground hover:bg-primary/90 hover:opacity-50'
+  'bg-brand-green text-brand-green-foreground hover:bg-brand-green-hover'
 
 export function Nav({ onLocate, onResetView, onZoomIn, onZoomOut }: MapNavProps) {
   return (
@@ -31,7 +31,7 @@ export function Nav({ onLocate, onResetView, onZoomIn, onZoomOut }: MapNavProps)
         <NavActionButton label='重置视角' onClick={onResetView}>
           <Home className='h-4 w-4' />
         </NavActionButton>
-        <div className='flex items-center overflow-hidden rounded-0 border border-border'>
+        <div className='flex items-center overflow-hidden rounded-[4px] border border-border'>
           <NavActionButton label='缩小' onClick={onZoomOut} grouped>
             <Minus className='h-4 w-4' />
           </NavActionButton>

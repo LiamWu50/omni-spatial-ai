@@ -1,20 +1,23 @@
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
 /**
- * Display Font - JetBrains Mono
+ * Display Font - Circular/SpotifyMixUI fallback
+ * Spotify uses proprietary CircularSp fonts with extensive fallbacks
+ * We use Inter as a close approximation for web
  * Used for: Headlines, buttons, display text
- * Characteristics: Monospace, technical, commanding
- * Alternative to GeistMono, available via Google Fonts
+ * Characteristics: Geometric, rounded, clean
  */
-export const displayFont = JetBrains_Mono({
+export const displayFont = Inter({
   variable: '--font-display',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
+  weight: ['400', '600', '700'],
+  style: ['normal'],
 })
 
 /**
- * Body Font - Inter
+ * Body Font - Circular/SpotifyMixUI fallback
+ * Same font family for display and body (Spotify approach)
  * Used for: Body text, descriptions, labels, captions
  * Characteristics: Geometric sans-serif, clean, readable
  */
@@ -22,6 +25,7 @@ export const bodyFont = Inter({
   variable: '--font-body',
   subsets: ['latin'],
   display: 'swap',
+  weight: ['400', '600', '700'],
 })
 
 export const fonts = {

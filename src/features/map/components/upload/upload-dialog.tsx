@@ -42,16 +42,16 @@ export function UploadDialog({ importStatus, onImportLayers, triggerClassName }:
 
       <DialogContent
         showCloseButton={false}
-        className='overflow-hidden rounded-0 border border-border bg-card duration-200 data-[state=closed]:slide-out-to-top-2 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-4 data-[state=open]:zoom-in-95 sm:max-w-110'
+        className='overflow-hidden border border-border bg-card duration-200 data-[state=closed]:slide-out-to-top-2 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-4 data-[state=open]:zoom-in-95 sm:max-w-110'
       >
         <DialogHeader className='gap-3'>
           <div className='flex items-center justify-between gap-3'>
-            <DialogTitle className='text-base leading-none text-foreground font-display uppercase tracking-[0.14em]'>上传图层</DialogTitle>
+            <DialogTitle className='text-base leading-none text-foreground font-display uppercase tracking-[1.4px]'>上传图层</DialogTitle>
             <DialogClose asChild>
               <button
                 type='button'
                 aria-label='关闭上传图层弹窗'
-                className='flex h-8 w-8 shrink-0 items-center justify-center rounded-0 text-text-secondary transition-colors duration-200 hover:bg-surface-hover hover:opacity-50'
+                className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-text-secondary transition-colors duration-200 hover:bg-surface-hover'
               >
                 <X className='h-4 w-4' />
               </button>

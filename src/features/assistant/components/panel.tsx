@@ -48,7 +48,7 @@ export function AssistantPanel({ open, onOpenChange }: AssistantPanelProps) {
         <button
           type='button'
           onClick={() => onOpenChange(false)}
-          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-0 border border-border bg-card text-text-secondary transition-colors duration-180 hover:bg-surface-hover hover:opacity-50'
+          className='absolute left-0 top-1/2 z-40 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-text-secondary transition-colors duration-180 hover:bg-surface-hover'
           aria-label='收起对话详情'
         >
           <PanelRightClose className='h-4 w-4' />

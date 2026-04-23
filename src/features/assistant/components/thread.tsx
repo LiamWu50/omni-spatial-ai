@@ -53,7 +53,7 @@ export function AssistantThread({ open }: AssistantThreadProps) {
           />
           <ThreadPrimitive.ScrollToBottom
             behavior='smooth'
-            className='absolute bottom-4 right-7 z-20 flex h-9 w-9 items-center justify-center rounded-0 border border-border bg-card text-text-secondary transition-all duration-200 hover:bg-surface-hover hover:opacity-50 disabled:pointer-events-none disabled:translate-y-1 disabled:opacity-0'
+            className='absolute bottom-4 right-7 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-text-secondary transition-all duration-200 hover:bg-surface-hover disabled:pointer-events-none disabled:translate-y-1 disabled:opacity-0'
             aria-label='回到底部'
           >
             <ChevronDown className='h-4 w-4' />

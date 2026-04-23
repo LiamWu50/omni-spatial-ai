@@ -28,10 +28,10 @@ function AssistantEdgeTrigger({ onOpen }: { onOpen: () => void }) {
     <button
       type='button'
       onClick={onOpen}
-      className='group absolute right-0 top-0 z-10 h-full w-6 cursor-pointer bg-transparent'
+      className='group absolute right-0 top-0 z-10 h-full w-6 cursor-pointer bg-transparent hover:bg-surface-hover/50 transition-colors'
       aria-label='打开对话详情'
     >
-      <span className='absolute inset-y-0 left-3 w-px bg-border opacity-0 transition-opacity duration-300 group-hover:opacity-50' />
+      <span className='absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-border opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:bg-brand-green' />
     </button>
   )
 }

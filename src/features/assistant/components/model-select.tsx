@@ -27,7 +27,7 @@ export const SelectModelComponent = ({ className, onOpenChange }: SelectModelPro
           type='button'
           variant='ghost'
           className={cn(
-            'h-8 w-fit max-w-[112px] justify-start gap-1.5 rounded-0 px-2.5 text-[13px]! font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:opacity-50 sm:max-w-[140px]',
+            'h-8 w-fit max-w-[112px] justify-start gap-1.5 rounded-full px-2.5 text-[13px]! font-medium text-text-secondary transition-colors hover:bg-surface-hover sm:max-w-[140px]',
             className
           )}
         >
@@ -36,14 +36,14 @@ export const SelectModelComponent = ({ className, onOpenChange }: SelectModelPro
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className='min-w-[140px] rounded-0 border border-border p-1.5'
+        className='min-w-[140px] rounded-[6px] border border-border shadow-card p-1.5'
         align='start'
       >
         {CHAT_MODEL_OPTIONS.map((model) => (
           <DropdownMenuItem
             key={model.id}
             className={cn(
-              'my-0.5 cursor-pointer rounded-0 px-3 py-2 text-[13px] font-body',
+              'my-0.5 cursor-pointer rounded-[4px] px-3 py-2 text-[13px] font-body',
               selectedModel === model.id
                 ? 'bg-surface-subtle font-medium text-foreground'
                 : 'text-text-secondary'

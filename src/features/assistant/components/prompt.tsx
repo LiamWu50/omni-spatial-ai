@@ -88,12 +88,12 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
           onSubmitCapture={handleSubmitCapture}
           onBlurCapture={isOverlay ? handleBlurCapture : undefined}
           className={cn(
-            'group flex w-full flex-col border border-border bg-card text-foreground transition-all duration-300 ease-out font-body',
+            'group flex w-full flex-col border border-border bg-card text-foreground transition-all duration-300 ease-out font-body shadow-sm',
             isOverlay
-              ? 'min-h-[36px] rounded-0 px-3.5 py-2 focus-within:ring-2 focus-within:ring-ring/50'
-              : 'min-h-[84px] gap-3 rounded-0 px-4 pb-3 pt-4 focus-within:border-border-strong',
+              ? 'min-h-[36px] rounded-[24px] px-3.5 py-2 focus-within:ring-2 focus-within:ring-brand-green/60 focus-within:border-brand-green focus-within:shadow-[0_0_0_4px_rgba(30,215,96,0.15)]'
+              : 'min-h-[84px] gap-3 rounded-[8px] px-4 pb-3 pt-4 focus-within:border-brand-green focus-within:ring-2 focus-within:ring-brand-green/40 focus-within:shadow-[0_0_0_3px_rgba(30,215,96,0.1)]',
             isOverlay && isExpanded
-              ? 'min-h-[88px] gap-2 rounded-0 px-3.5 py-2.5'
+              ? 'min-h-[88px] gap-2 rounded-[12px] px-3.5 py-2.5'
               : ''
           )}
         >
@@ -104,7 +104,7 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
             )}
           >
             {isOverlay && !isExpanded ? (
-              <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-0 text-text-secondary'>
+              <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-text-secondary'>
                 <Sparkles className='h-3.5 w-3.5' />
               </span>
             ) : null}
@@ -130,10 +130,10 @@ export function Prompt({ variant = 'overlay', onSubmitted }: PromptProps) {
                 <button
                   type='submit'
                   className={cn(
-                    'inline-flex shrink-0 items-center justify-center bg-primary text-primary-foreground transition-all duration-200 hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-40',
+                    'inline-flex shrink-0 items-center justify-center bg-primary text-primary-foreground transition-all duration-200 hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40',
                     isOverlay
-                      ? 'h-6 w-6 rounded-0'
-                      : 'h-8 w-8 rounded-0'
+                      ? 'h-6 w-6 rounded-full'
+                      : 'h-8 w-8 rounded-full'
                   )}
                   aria-label='发送'
                 >

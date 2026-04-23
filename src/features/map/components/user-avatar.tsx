@@ -49,7 +49,7 @@ function ThemeDialogContent() {
         <button
           type='button'
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover hover:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
+            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
             theme === 'light' ? 'border-strong bg-surface-subtle text-foreground' : 'border-border text-text-secondary'
           )}
           onClick={() => setTheme('light')}
@@ -60,7 +60,7 @@ function ThemeDialogContent() {
         <button
           type='button'
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover hover:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
+            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
             theme === 'dark' ? 'border-strong bg-surface-subtle text-foreground' : 'border-border text-text-secondary'
           )}
           onClick={() => setTheme('dark')}
@@ -71,7 +71,7 @@ function ThemeDialogContent() {
         <button
           type='button'
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover hover:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
+            'flex cursor-pointer flex-col items-center justify-center rounded-0 border px-2 py-3 transition-all hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 font-body',
             theme === 'system'
               ? 'border-strong bg-surface-subtle text-foreground'
               : 'border-border text-text-secondary'
@@ -106,7 +106,7 @@ export function UserAvatarTrigger() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-0'
+          className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-[6px]'
           side='bottom'
           align='start'
           sideOffset={10}
@@ -148,7 +148,7 @@ export function UserAvatarTrigger() {
 
       <Dialog key='theme-dialog' open={showThemeDialog} onOpenChange={setShowThemeDialog}>
         <DialogContent
-          className='z-[60] overflow-hidden rounded-0 border border-border bg-card sm:max-w-[440px]'
+          className='z-[60] overflow-hidden border border-border bg-card sm:max-w-[440px]'
           onInteractOutside={(e) => {
             // 阻止点击外部关闭对话框
             e.preventDefault()
